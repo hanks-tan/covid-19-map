@@ -1,8 +1,8 @@
 <template>
   <div>
     <map-options class="map-options" ref="mapOpts"
-      @layerTypeChange="handleDataTypeChange"
-      @dataTypeChange="handleLayerTypeChange"
+      @dataTypeChange="handleDataTypeChange"
+      @layerTypeChange="handleLayerTypeChange"
     ></map-options>
     <div id="map">
       <time-line class="timeline-container" v-if="!isLatestData" ref="timeLine"
@@ -53,6 +53,8 @@ export default {
         mapObj: this.mapObj,
         $mapEvtBus: this.$mapEvtBus
       })
+      this.date = moment()
+      this.changeMap()
     },
     changeMap () {
       this.$mapEvtBus.$emit(mapUtil.mapUpdate.render, ({

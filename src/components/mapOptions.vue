@@ -22,7 +22,7 @@ export default {
   methods: {
     clickDataType () {
       this.isLatestData = !this.isLatestData
-      this.$emit('layerTypeChange', this.isLatestData)
+      this.$emit('dataTypeChange', this.isLatestData)
     },
     clickLayerType () {
       this.layerType = this.layerType !== mapUtil.layerType.point ? mapUtil.layerType.point : mapUtil.layerType.polygon

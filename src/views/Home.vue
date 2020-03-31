@@ -7,11 +7,22 @@
 <script>
 // @ is an alias to /src
 import mapView from '@/components/mapView.vue'
+import mapHttp from '../https/mapHttp'
 
 export default {
   name: 'Home',
   components: {
     mapView
+  },
+  created () {
+    this.loadDate()
+  },
+  methods: {
+    loadDate () {
+      mapHttp.getTimeSeriesData().then(data => {
+        console.log('data load done!')
+      })
+    }
   }
 }
 </script>

@@ -1,5 +1,4 @@
 import axios from 'axios'
-import testData from '../map/data/testData'
 
 // 数据源： https://lab.isaaclin.cn/nCoV/
 const remoteURL = 'https://lab.isaaclin.cn/nCoV'
@@ -8,8 +7,8 @@ const dataURL = {
   provinceData: remoteURL + '/api/provinceName', // 返回数据库内有数据条目的国家、省份、地区、直辖市列表
   area: remoteURL + '/api/area',
   news: remoteURL + '/api/news',
-  // historyData: 'https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv'
-  historyData: 'http://localhost:5550/covidData_csv'
+  historyData: 'https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv'
+  // historyData: 'http://localhost:5550/covidData_csv'
 }
 
 export default {
