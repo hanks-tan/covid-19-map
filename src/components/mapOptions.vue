@@ -34,13 +34,10 @@ export default {
 <style lang="less">
   .map-btn{
     display: inline;
-    margin-left: auto;
-    margin-right : auto;
     li{
       display: inline-block;
       width: 101px;
       box-sizing: border-box;
-      float: left;
       border-right: 1px solid #ccc;
       padding: 0 10px;
     }

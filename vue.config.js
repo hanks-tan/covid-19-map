@@ -10,7 +10,7 @@ module.exports = {
       entry: 'src/main.js', // page 的入口,每个“page”应该有一个对应的 JavaScript 入口文件
       template: 'public/index.html', // 模板来源
       filename: 'index.html', // 在 dist/index.html 的输出
-      title: 'GIS可视化之路', // 当使用 title 选项时,在 template 中使用：<title><%= htmlWebpackPlugin.options.title %></title>
+      title: '新冠疫情地图', // 当使用 title 选项时,在 template 中使用：<title><%= htmlWebpackPlugin.options.title %></title>
       chunks: ['chunk-vendors', 'chunk-common', 'index'] // 在这个页面中包含的块，默认情况下会包含,提取出来的通用 chunk 和 vendor chunk
     }
     // subpage: 'src/subpage/main.js'// 官方解释：当使用只有入口的字符串格式时,模板会被推导为'public/subpage.html',若找不到就回退到'public/index.html',输出文件名会被推导为'subpage.html'

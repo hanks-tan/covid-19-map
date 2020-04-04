@@ -1,4 +1,5 @@
 # covid-19-map
+预览地址：https://go.t-gis.xyz/covid-19-map/
 # 感谢开源社区各位大神的无私奉献，提供疫情的数据来源。
 ## Project setup
 ```

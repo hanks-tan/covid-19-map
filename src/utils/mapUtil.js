@@ -9,16 +9,17 @@ const mapUtil = {
     point: 'point',
     polygon: 'polygon'
   },
-  mapUpdate: {
-    render: 'render'
+  mapEvt: {
+    render: 'render',
+    legendChange: 'legendChange'
   },
   dateFormat: 'YYYY-MM-DD',
-
+  colorList: ['#777279', '#DAF7A6', '#FFC300', '#FF5733', '#C70039', '#900C3F', '#800080', '#581845'],
+  levels: [-1, 0, 500, 1000, 5000, 10000, 50000, 100000],
   getColor (value) {
     // var colorList = ['#fff', '#f8765c', '#c03a76', '#4b1079', '#8B7500', '#ab2494', '#FFB90F', '#8B3A3A']
-    var colorList = ['#777279', '#DAF7A6', '#FFC300', '#FF5733', '#C70039', '#900C3F', '#800080', '#581845']
     var level = this.getLevel(value)
-    return colorList[level]
+    return this.colorList[level]
   },
   mergeCountryData (dataList) {
     var countryDataList = []
@@ -62,25 +63,29 @@ const mapUtil = {
   },
 
   getLevel (value) {
-    var level = 0
-    if (value > 100000) {
-      level = 7
-    } else if (value > 10000) {
-      level = 6
-    } else if (value > 5000) {
-      level = 5
-    } else if (value > 1000) {
-      level = 4
-    } else if (value > 500) {
-      level = 3
-    } else if (value > 100) {
-      level = 2
-    } else if (value > 0) {
-      level = 1
-    } else {
-      level = 0
+    // if (value > 100000) {
+    //   level = 7
+    // } else if (value > 10000) {
+    //   level = 6
+    // } else if (value > 5000) {
+    //   level = 5
+    // } else if (value > 1000) {
+    //   level = 4
+    // } else if (value > 500) {
+    //   level = 3
+    // } else if (value > 100) {
+    //   level = 2
+    // } else if (value > 0) {
+    //   level = 1
+    // } else {
+    //   level = 0
+    // }
+    // return level
+    for (let i = this.levels.length - 1; i >= 0; i--) {
+      if (value > this.levels[i]) {
+        return i
+      }
     }
-    return level
   }
 }
 

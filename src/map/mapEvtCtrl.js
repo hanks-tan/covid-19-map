@@ -14,7 +14,7 @@ class MapEvtCtrl {
 
   registerEvent () {
     var self = this
-    this.$mapEvtBus.$on(mapUtil.mapUpdate.render, function (params) {
+    this.$mapEvtBus.$on(mapUtil.mapEvt.render, function (params) {
       self.mapObj.clear()
       var layer = null
       if (params.layerType === mapUtil.layerType.point) {

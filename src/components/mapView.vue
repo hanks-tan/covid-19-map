@@ -11,6 +11,7 @@
         @changeDate="handleDateChange">
       </time-line>
     </div>
+    <map-legend></map-legend>
   </div>
 </template>
 <script>
@@ -19,6 +20,7 @@ import MapEvtCtrl from '../map/mapEvtCtrl'
 import mapUtil from '../utils/mapUtil'
 import timeLine from '@/components/timeLine.vue'
 import mapOptions from '@/components/mapOptions.vue'
+import mapLegend from '@/components/mapLegend.vue'
 import moment from 'moment'
 
 export default {
@@ -32,7 +34,8 @@ export default {
   },
   components: {
     timeLine,
-    mapOptions
+    mapOptions,
+    mapLegend
   },
   mounted () {
     this.initMap()
@@ -57,7 +60,7 @@ export default {
       this.changeMap()
     },
     changeMap () {
-      this.$mapEvtBus.$emit(mapUtil.mapUpdate.render, ({
+      this.$mapEvtBus.$emit(mapUtil.mapEvt.render, ({
         layerType: this.layerType,
         region: 'world',
         dataType: this.isLatestData ? mapUtil.covidDataType.latest : mapUtil.covidDataType.history,
@@ -89,8 +92,8 @@ export default {
   }
   .map-options {
     top: 0px;
-    position: fixed;
-    display: inline;
+    left: 45%;
+    position: absolute;
     margin: 5px;
     z-index: 999;
     color: rgb(34, 34, 37);
