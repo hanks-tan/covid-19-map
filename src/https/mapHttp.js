@@ -71,11 +71,13 @@ export default {
 
   parseCSV (csv, dtype) {
     var lines = csv.split('\n')
-    var keys = lines[0].split(',')
+    var startLine = lines[0].substr(0, lines[0].length - 1)
+    var keys = startLine.split(',')
     return lines.slice(1).map(function (line) {
       var values = line.split(',')
       var o = {}
       keys.forEach(function (key, index) {
+        key = key.trim()
         var type = dtype ? dtype[key] : undefined
         o[key] = type ? type(values[index]) : values[index]
       })

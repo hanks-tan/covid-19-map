@@ -1,7 +1,7 @@
 <template>
   <div class="info-contanier" v-if="visible">
     <h3>地区:{{ncovData.country}}</h3>
-    <p>现存疑似:{{ncovData.suspected}}</p>
+    <p>累计确诊:{{ncovData.confirmed}}</p>
     <p>现存疑似:{{ncovData.suspected}}</p>
     <p>累计治愈:{{ncovData.cured}}</p>
     <p>累计死亡:{{ncovData.dead}}</p>
