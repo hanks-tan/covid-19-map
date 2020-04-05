@@ -1,12 +1,10 @@
 <template>
-  <div class="info" v-if="visible">
-    <div class="header">{{ncovData.country}}</div>
-    <div class="content">
-      <div class="data-info" id="currentConfirmedCount">{{ncovData.currentConfirmedCount}}</div>
-      <div class="data-info" id="confirmedCount">{{ncovData.confirmedCount}}</div>
-      <div class="data-info" id="curedCount">{{ncovData.curedCount}}</div>
-      <div class="data-info" id="deadCount">{{ncovData.deadCount}}</div>
-    </div>
+  <div class="info-contanier" v-if="visible">
+    <h3>地区:{{ncovData.country}}</h3>
+    <p>现存疑似:{{ncovData.suspected}}</p>
+    <p>现存疑似:{{ncovData.suspected}}</p>
+    <p>累计治愈:{{ncovData.cured}}</p>
+    <p>累计死亡:{{ncovData.dead}}</p>
   </div>
 </template>
 <script>
@@ -16,10 +14,10 @@ export default {
     return {
       ncovData: {
         country: '',
-        currentConfirmedCount: 0,
-        confirmedCount: 0,
-        curedCount: 0,
-        deadCount: 0
+        confirmed: 0, // 确诊的
+        suspected: 0, // 疑似的
+        cured: 0, // 治愈的
+        dead: 0 // 死亡的
       },
       visible: false,
       overlay: undefined
@@ -45,7 +43,7 @@ export default {
         },
         offset: [30, 0],
         position: this.position,
-        positioning: 'center-center',
+        positioning: 'center-left',
         className: 'point-overlay'
       })
       this.mapObj.getOlMap().addOverlay(overlay)
@@ -54,12 +52,17 @@ export default {
 
     show () {
       if (this.properties) {
-        this.ncovData = this.properties
+        this.ncovData.country = this.properties.country
+        this.ncovData.confirmed = this.properties.confirmed
+        this.ncovData.suspected = this.properties.suspected
+        this.ncovData.cured = this.properties.cured
+        this.ncovData.dead = this.properties.dead
         this.visible = true
       }
     },
 
     close () {
+      this.mapObj.getOlMap().removeOverlay(this.overlay)
       this.visible = false
     },
 
@@ -72,3 +75,13 @@ export default {
   }
 }
 </script>
+<style lang="less">
+.info-contanier{
+  color: #bfbebe;
+  padding: 5px;
+  background: #212027ab;
+  border: 1px solid #6f6e6e;
+  border-radius: 3px;
+  text-align: left;
+}
+</style>

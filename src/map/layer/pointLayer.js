@@ -12,21 +12,21 @@ class PointLayer extends BaseLayer {
     var count = 0
     if (feature.get('data')) {
       // count = feature.get('data').currentConfirmedCount // XXX 更新接口可能导致这个字段变更
-      count = feature.get('data').confirmed
+      count = feature.get('data').confirmed // TODO 选中后消失问题
     }
-    if (count === 0) {
-      return null
+    if (count === undefined) {
+      count = 0
     }
-    var color = mapUtil.getColor(count) + '66'
+    var color = mapUtil.getColor(count)
     var level = mapUtil.getLevel(count)
     var zoom = this.mapObj.getZoom()
-    var stroke = new Stroke({ color: '#e21644', width: 0.8 })
+    var stroke = new Stroke({ color: '#e21644', width: 0.5 })
     var fill = new Fill({ color: color })
     var style = new Style({
       image: new Circle({
         radius: level * zoom,
         fill: fill,
-        stroke: stroke
+        // stroke: stroke
       })
     })
     return style

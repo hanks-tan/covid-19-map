@@ -14,10 +14,46 @@ const mapUtil = {
     legendChange: 'legendChange'
   },
   dateFormat: 'YYYY-MM-DD',
-  colorList: ['#777279', '#DAF7A6', '#FFC300', '#FF5733', '#C70039', '#900C3F', '#800080', '#581845'],
+  // colorList: ['#777279', '#DAF7A6', '#FFC300', '#FF5733', '#C70039', '#900C3F', '#800080', '#581845'],
+  colorList: [
+    'rgba(119, 114, 121, 0.7)',
+    // 'rgba(218, 247, 166, 0.7)',
+    // 'rgba(255, 195, 0, 0.7)',
+    // 'rgba(255, 87, 51, 0.7)',
+    // 'rgba(199, 0, 57, 0.7)',
+    // 'rgba(144, 12, 63, 0.7)',
+    // 'rgba(128, 0, 128, 0.7)',
+    // 'rgba(88, 24, 69, 0.7)'
+
+    // 方案二
+    // 'rgba(240, 249, 33, 0.7)',
+    // 'rgba(253, 175, 49, 0.7)',
+    // 'rgba(237, 121, 83, 0.7)',
+    // 'rgba(210, 79, 113, 0.7)',
+    // 'rgba(174, 40, 146, 0.7)',
+    // 'rgba(128, 4, 168, 0.7)',
+    // 'rgba(73, 3, 160, 0.7)'
+
+    // 方案三
+    // 'rgba(252, 253, 191, 0.7)',
+    // 'rgba(254, 180, 123, 0.7)',
+    // 'rgba(247, 114, 92, 0.7)',
+    // 'rgba(202, 62, 114, 0.7)',
+    // 'rgba(161, 48, 126, 0.7)',
+    // 'rgba(90, 22, 126, 0.7)',
+    // 'rgba(33, 17, 78, 0.7)'
+
+    // 方案四
+    'rgba(218, 247, 166, 0.7)',
+    'rgba( 253, 175, 115, 1.00 )',
+    'rgba( 252, 141, 89, 1.00 )',
+    'rgba( 239, 105, 69, 1.00 )',
+    'rgba( 227, 74, 51, 1.00 )',
+    'rgba( 114, 33, 33, 1.00 )',
+    'rgba(90, 22, 126, 0.7)'
+  ],
   levels: [-1, 0, 500, 1000, 5000, 10000, 50000, 100000],
   getColor (value) {
-    // var colorList = ['#fff', '#f8765c', '#c03a76', '#4b1079', '#8B7500', '#ab2494', '#FFB90F', '#8B3A3A']
     var level = this.getLevel(value)
     return this.colorList[level]
   },
@@ -63,26 +99,8 @@ const mapUtil = {
   },
 
   getLevel (value) {
-    // if (value > 100000) {
-    //   level = 7
-    // } else if (value > 10000) {
-    //   level = 6
-    // } else if (value > 5000) {
-    //   level = 5
-    // } else if (value > 1000) {
-    //   level = 4
-    // } else if (value > 500) {
-    //   level = 3
-    // } else if (value > 100) {
-    //   level = 2
-    // } else if (value > 0) {
-    //   level = 1
-    // } else {
-    //   level = 0
-    // }
-    // return level
     for (let i = this.levels.length - 1; i >= 0; i--) {
-      if (value > this.levels[i]) {
+      if (parseInt(value) > this.levels[i]) {
         return i
       }
     }

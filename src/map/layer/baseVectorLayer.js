@@ -10,9 +10,12 @@ class BaseVectorLayer extends BaseLayer {
 
   _styleFunc (feature) {
     var count = 0
-    if (feature.get('data')) {
+    if (feature.get('data') !== {}) {
       // count = feature.get('data').currentConfirmedCount // XXX 更新接口可能导致这个字段变更
       count = feature.get('data').confirmed
+    }
+    if (count === undefined) {
+      count = 0
     }
     var color = mapUtil.getColor(count)
     var style = new Style({

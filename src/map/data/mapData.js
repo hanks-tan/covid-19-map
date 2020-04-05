@@ -3,9 +3,7 @@ import world from './world'
 import countryLocation from './countryLocation'
 import mapUtil from '../../utils/mapUtil'
 
-var geoJson = new GeoJSON()
-const countryPointData = geoJson.readFeatures(countryLocation)
-const countryPolygonData = geoJson.readFeatures(world)
+const geoJson = new GeoJSON()
 const mapData = {
   /**
    * 获取国家地理数据
@@ -13,10 +11,11 @@ const mapData = {
    * @returns {Array(ol.Feature)} countryData
    */
   getCountryDataByCode (params) {
-    var countryData = countryPointData
+    var dataObj = Object.assign({}, countryLocation)
     if (params.layerType !== mapUtil.layerType.point) {
-      countryData = countryPolygonData
+      dataObj = Object.assign({}, world)
     }
+    var countryData = geoJson.readFeatures(dataObj)
     if (params.code) {
       return countryData.find(item => item.get('code') === params.code)
     } else {
@@ -36,7 +35,7 @@ const mapData = {
           return cov.countryCode === item.get('code')
         })
         var properties = item.getProperties()
-        properties.data = itemData !== undefined ? itemData : ''
+        properties.data = itemData !== undefined ? itemData : {}
         item.setProperties(properties)
         return item
       })

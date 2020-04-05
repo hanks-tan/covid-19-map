@@ -31,11 +31,9 @@ class AMap {
 
     this.view = new View(this.getViewOptions())
 
-    // var geoJson = dataUtils.getWorld()
     var worldData = mapData.getCountryDataByCode({layerType: mapUtil.layerType.polygon})
     this.vectorLayer = new VectorLayer({
       source: new VectorSource({
-        // features: new GeoJSON().readFeatures(geoJson)
         features: worldData
       }),
       style: defaultStyle.Polygon
@@ -57,8 +55,6 @@ class AMap {
       layers: [this.vectorLayer]
     })
 
-    this.map.on('click', this._clickHandle.bind(this))
-
     this.map.on('pointermove', this._pointerMoveHandle.bind(this))
 
     this.initMapControl()
@@ -70,6 +66,14 @@ class AMap {
       self.selectControl = new Select({
         condition: function (evt) {
           return evt.type === 'singleclick' || evt.type === 'pointermove'
+        },
+        layers: function (layer) {
+          var rlayer = self.vectorLayerList.find(item => item.name === layer.rootName)
+          if (rlayer) {
+            return rlayer.showDetails !== undefined
+          } else {
+            return false
+          }
         }
       })
 
@@ -77,17 +81,16 @@ class AMap {
       self.selectFeatures = self.selectControl.getFeatures()
 
       self.selectControl.on(['select', 'remove'], function (e) {
-        if (e.selected.length > 0) {
-          const ft = e.selected[0]
-          if (ft.showDetails) {
-            ft.showDetails(e.mapBrowserEvent.coordinate, 'select')
-          }
-        }
-
         if (e.deselected.length > 0) {
           const ft = e.deselected[0]
           if (ft.showDetails) {
             ft.showDetails(e.mapBrowserEvent.coordinate, 'romove')
+          }
+        }
+        if (e.selected.length > 0) {
+          const ft = e.selected[0]
+          if (ft.showDetails) {
+            ft.showDetails(e.mapBrowserEvent.coordinate, 'select')
           }
         }
       })
@@ -95,17 +98,6 @@ class AMap {
 
     // 注册选择事件
     registerSelectControl()
-  }
-
-  _clickHandle (evt) {
-    var features = this.map.getFeaturesAtPixel(evt.pixel)
-    if (features.length > 0) {
-      features.forEach(item => {
-        var type = item.getGeometry().getType()
-        var style = defaultStyle[type.replace('Multi')]
-        item.setStyle(style)
-      })
-    }
   }
 
   _pointerMoveHandle (evt) {
@@ -154,6 +146,7 @@ class AMap {
     var layers = this.vectorLayerList
     layers.forEach(item => {
       this.map.removeLayer(item.oLayer)
+      item.oLayer.getSource().clear()
       item = null
     })
   }

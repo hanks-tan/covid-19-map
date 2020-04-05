@@ -5,8 +5,8 @@
       <li v-else>历史</li>
     </div>
     <div class="map-btn" @click="clickLayerType">
-      <li v-if="layerType === 'point'">饼图</li>
-      <li v-else>分布图</li>
+      <li v-if="layerType === 'point'">散点图</li>
+      <li v-else>填充图</li>
     </div>
   </div>
 </template>

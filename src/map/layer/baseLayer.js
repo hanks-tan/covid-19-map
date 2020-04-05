@@ -25,6 +25,7 @@ class BaseLayer {
       source: new VectorSource(),
       style: this._styleFunc.bind(this)
     })
+    layer.rootName = this.name
     this.oLayer = layer
     this.mapObj.addLayer(this)
     this.setData(this.data)
@@ -74,13 +75,15 @@ class BaseLayer {
 
   showDetails (feature, point, status) {
     if (status === 'select') {
+      var covidData = feature.get('data')
+      covidData.country = feature.get('name')
       if (this.dialog) {
         this.dialog.refresh({
-          properties: feature.get('data'),
+          properties: covidData,
           position: point
         })
       } else {
-        this.dialog = this._createDialog(feature, point)
+        this.dialog = this._createDialog(covidData, point)
         this.dialog.show()
       }
     } else {
@@ -91,11 +94,11 @@ class BaseLayer {
     }
   }
 
-  _createDialog (feature, point) {
+  _createDialog (data, point) {
     var dialog = new DialogComp({
       data: {
         mapObj: this.mapObj,
-        properties: feature.get('data'),
+        properties: data,
         position: point
       }
     })

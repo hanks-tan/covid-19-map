@@ -37,6 +37,7 @@ class MapEvtCtrl {
           params.date = date
         }
       } else {
+        curDate = moment('20200320')
         params.date = curDate.format('YYYY-MM-DD')
       }
 
