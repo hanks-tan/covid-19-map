@@ -29,7 +29,7 @@ export default {
       mapObj: undefined, // 地图对象
       layerType: 'point', // 显示类型: point/polygon
       isLatestData: true, // 显示数据类型 最新/历史
-      date: new Date()
+      date: undefined
     }
   },
   components: {
@@ -57,7 +57,6 @@ export default {
         $mapEvtBus: this.$mapEvtBus
       })
       this.date = moment()
-      this.changeMap()
     },
     changeMap () {
       this.$mapEvtBus.$emit(mapUtil.mapEvt.render, ({

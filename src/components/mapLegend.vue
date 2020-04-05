@@ -52,12 +52,13 @@ export default {
 <style lang="less">
 .map-legend{
     right: 1%;
+    padding: 5px;
     bottom: 0px;
     text-align: left;
     position: absolute;
     background-color: rgba(54, 16, 22, 0.4);
     .legend-item{
-      color: #ffffff;
+      color: #bfbebe;
     }
   .legend-item div{
     margin-right: 10px;
