@@ -19,9 +19,9 @@ export default {
   },
   methods: {
     loadDate () {
-      mapHttp.getTimeSeriesData().then(data => {
-        console.log('data load done!')
-      })
+      // mapHttp.getTimeSeriesData().then(data => {
+      //   console.log('data load done!')  // TODO 同步执行，增加模态框
+      // })
     }
   }
 }

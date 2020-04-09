@@ -1,6 +1,24 @@
 const mapUtil = {
   // 字面量
   covidDefaultStartTime: '2019-12-01',
+  defaultRendeField: 'confirmed',
+  computed: {
+    // 现存确诊
+    curConfirm (data) {
+      return data.confirmed - data.cured - data.dead
+    },
+    // 新增
+    add (toDayData, yesterdayData) {
+      var obj = Object.assign({}, toDayData)
+      obj.add = {
+        confirmed: toDayData.confirmed - yesterdayData.confirmed,
+        suspected: toDayData.suspected - yesterdayData.suspected,
+        cured: toDayData.cured - yesterdayData.cured,
+        dead: toDayData.dead - yesterdayData.dead
+      }
+      return obj
+    }
+  },
   covidDataType: {
     latest: '1', // 最新数据
     history: '0' // 历史数据

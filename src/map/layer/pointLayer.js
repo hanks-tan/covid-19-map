@@ -11,10 +11,9 @@ class PointLayer extends BaseLayer {
   _styleFunc (feature) {
     var count = 0
     if (feature.get('data')) {
-      // count = feature.get('data').currentConfirmedCount // XXX 更新接口可能导致这个字段变更
-      count = feature.get('data').confirmed // TODO 选中后消失问题
+      count = feature.get('data').renderData
     }
-    if (count === undefined) {
+    if (count === undefined) { // 没关联到疫情数据的情况
       count = 0
     }
     var color = mapUtil.getColor(count)

@@ -115,7 +115,7 @@ class AMap {
     const zoom = this.options.zoom ? this.options.zoom : 5
     const minZoom = zoom - 3 > 0 ? zoom - 3 : zoom
     const maxZoom = zoom + 3
-    const center = this.options.center ? this.options.center : [0, 0] // TODO 默认地图中心设为西安
+    const center = this.options.center ? this.options.center : [0, 0]
     return {
       projection,
       zoom,

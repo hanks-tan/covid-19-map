@@ -12,6 +12,7 @@
 </template>
 <script>
 import mapUtil from '../utils/mapUtil'
+
 export default {
   data () {
     return {
@@ -27,6 +28,9 @@ export default {
     clickLayerType () {
       this.layerType = this.layerType !== mapUtil.layerType.point ? mapUtil.layerType.point : mapUtil.layerType.polygon
       this.$emit('layerTypeChange', this.layerType)
+    },
+    clickFieldType () {
+      this.$emit('fieldTypeChange', 'curConfirm')
     }
   }
 }

@@ -3,6 +3,7 @@
     <map-options class="map-options" ref="mapOpts"
       @dataTypeChange="handleDataTypeChange"
       @layerTypeChange="handleLayerTypeChange"
+      @fieldTypeChange="handleFieldTypeChange"
     ></map-options>
     <div id="map">
       <time-line class="timeline-container" v-if="!isLatestData" ref="timeLine"
@@ -63,7 +64,8 @@ export default {
         layerType: this.layerType,
         region: 'world',
         dataType: this.isLatestData ? mapUtil.covidDataType.latest : mapUtil.covidDataType.history,
-        date: this.date
+        date: this.date,
+        fieldType: this.fieldType
       }))
     },
     handleDataTypeChange (dataType) {
@@ -80,6 +82,10 @@ export default {
     },
     handleDateChange (date) {
       this.date = date
+    },
+    handleFieldTypeChange (fieldType) {
+      this.fieldType = fieldType
+      this.changeMap()
     }
   }
 }

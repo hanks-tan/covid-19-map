@@ -38,10 +38,21 @@ class MapEvtCtrl {
           params.date = date
         }
       } else {
+        // curDate = moment('20200405') // TODO 测试时间，用完删除
         params.date = curDate.format('YYYY-MM-DD')
       }
 
       mapHttps.getCovidData(params).then(data => {
+        params.fieldType = params.fieldType === undefined ? mapUtil.defaultRendeField : params.fieldType
+        if (data.length <= 0) {
+          return
+        }
+        if (!data[0].hasOwnProperty(params.fieldType)) {
+          console.log('rende field not found')
+        }
+        data.forEach(element => {
+          element.renderData = element[params.fieldType]
+        })
         var geoData = mapData.getCountryDataByCode(params)
         var layerData = mapData.joinCovDateToGeo(data, geoData)
         layer.setData(layerData)

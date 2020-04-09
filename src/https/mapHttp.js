@@ -1,4 +1,5 @@
 import axios from 'axios'
+import mapUtil from '../utils/mapUtil'
 
 // 数据源： https://lab.isaaclin.cn/nCoV/
 const remoteURL = 'https://lab.isaaclin.cn/nCoV'
@@ -55,6 +56,9 @@ export default {
       return res.data
     }).then(data => {
       var dataList = this.parseCSV(data)
+      dataList.forEach(item => {
+        item.curConfirm = mapUtil.computed.curConfirm(item) // 现存确诊
+      })
       this.historyData = dataList
       return dataList
     })
@@ -71,7 +75,8 @@ export default {
 
   parseCSV (csv, dtype) {
     var lines = csv.split('\n')
-    var startLine = lines[0].substr(0, lines[0].length - 1)
+    // var startLine = lines[0].substr(0, lines[0].length - 1)
+    var startLine = lines[0] // XXX 换行又没有了
     var keys = startLine.split(',')
     return lines.slice(1).map(function (line) {
       var values = line.split(',')

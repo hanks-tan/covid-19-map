@@ -2,7 +2,8 @@
   <div class="info-contanier" v-if="visible">
     <h3>地区:{{ncovData.country}}</h3>
     <p>累计确诊:{{ncovData.confirmed}}</p>
-    <p>现存疑似:{{ncovData.suspected}}</p>
+    <p>现存确诊:{{ncovData.curConfirm}}</p>
+    <!-- <p>现存疑似:{{ncovData.suspected}}</p> -->
     <p>累计治愈:{{ncovData.cured}}</p>
     <p>累计死亡:{{ncovData.dead}}</p>
   </div>
@@ -15,6 +16,7 @@ export default {
       ncovData: {
         country: '',
         confirmed: 0, // 确诊的
+        curConfirm: 0, // 现存确诊的
         suspected: 0, // 疑似的
         cured: 0, // 治愈的
         dead: 0 // 死亡的
