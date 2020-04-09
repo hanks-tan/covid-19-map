@@ -34,11 +34,13 @@ app.listen(port, function (err) {
 app.get('/covidData_csv', function (req, res) {
   try {
     var fileName = __dirname + '/data/Wuhan-2019-nCoV.csv'
-    res.sendFile(fileName, {}, function (err) {
-      if (err) {
-        console.log(err)
-      }
-    })
+    setTimeout(() => {
+      res.sendFile(fileName, {}, function (err) {
+        if (err) {
+          console.log(err)
+        }
+      })
+    }, 10000)
   } catch (err) {
     console.log(err)
   }
