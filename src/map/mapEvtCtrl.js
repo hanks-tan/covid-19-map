@@ -51,7 +51,14 @@ class MapEvtCtrl {
           console.log('rende field not found')
         }
         data.forEach(element => {
-          element.renderData = element[params.fieldType]
+          let value = 0
+          if (params.fieldType.startsWith('add')) {
+            let key = params.fieldType.replace('add', '').toLowerCase()
+            value = element.add[key]
+          } else {
+            value = element[params.fieldType]
+          }
+          element.renderData = value
         })
         var geoData = mapData.getCountryDataByCode(params)
         var layerData = mapData.joinCovDateToGeo(data, geoData)

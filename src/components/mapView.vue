@@ -96,13 +96,21 @@ export default {
     display: none;
   }
   .map-options {
-    top: 0px;
+    /* top: 0px;
     left: 45%;
     position: absolute;
     margin: 5px;
     z-index: 999;
     color: rgb(34, 34, 37);
-    border: 1px solid #848383;
+    border: 1px solid #848383; */
+    position: absolute;
+    margin: 5px;
+    padding: 5px;
+    z-index: 999;
+    color: rgb(34, 34, 37);
+    border: 1px solid #9e8a8a;
+    border-radius: 3px;
+    background-color: #9c9ab1db
   }
   #map{
     height: 100%;

@@ -28,12 +28,12 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       }
-      var loadingInstance = Loading.service(options)
-      this.fullscreenLoading = true
-      mapHttp.getTimeSeriesData().then(data => {
-        console.log('data load done!') // TODO 同步执行，增加模态框
-        loadingInstance.close()
-      })
+      // var loadingInstance = Loading.service(options)
+      // this.fullscreenLoading = true
+      // mapHttp.getTimeSeriesData().then(data => {
+      //   console.log('data load done!') // TODO 同步执行，增加模态框
+      //   loadingInstance.close()
+      // })
     }
   }
 }

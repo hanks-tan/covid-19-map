@@ -9,15 +9,21 @@ const mapUtil = {
     },
     // 新增
     add (toDayData, yesterdayData) {
-      var obj = Object.assign({}, toDayData)
-      obj.add = {
-        confirmed: toDayData.confirmed - yesterdayData.confirmed,
-        suspected: toDayData.suspected - yesterdayData.suspected,
-        cured: toDayData.cured - yesterdayData.cured,
-        dead: toDayData.dead - yesterdayData.dead
+      var obj = Object.assign({}, yesterdayData)
+      if (yesterdayData === undefined) {
+        obj.confirmed = 0
+        obj.suspected = 0
+        obj.cured = 0
+        obj.dead = 0
       }
-      return obj
+      return {
+        confirm: toDayData.confirmed - obj.confirmed,
+        suspect: toDayData.suspected - obj.suspected,
+        cure: toDayData.cured - obj.cured,
+        dead: toDayData.dead - obj.dead
+      }
     }
+
   },
   covidDataType: {
     latest: '1', // 最新数据

@@ -8,8 +8,8 @@ const dataURL = {
   provinceData: remoteURL + '/api/provinceName', // 返回数据库内有数据条目的国家、省份、地区、直辖市列表
   area: remoteURL + '/api/area',
   news: remoteURL + '/api/news',
-  historyData: 'https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv'
-  // historyData: 'http://localhost:5550/covidData_csv'
+  // historyData: 'https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv'
+  historyData: 'http://localhost:5550/covidData_csv'
 }
 
 export default {
@@ -73,7 +73,7 @@ export default {
     }
   },
 
-  parseCSV (csv, dtype) {
+  parseCSV1 (csv, dtype) {
     var lines = csv.split('\n')
     // var startLine = lines[0].substr(0, lines[0].length - 1)
     var startLine = lines[0] // XXX 换行又没有了
@@ -86,6 +86,40 @@ export default {
         var type = dtype ? dtype[key] : undefined
         o[key] = type ? type(values[index]) : values[index]
       })
+      return o
+    })
+  },
+
+  parseCSV (csv, dtype) {
+    var lines = csv.split('\n')
+    // var startLine = lines[0].substr(0, lines[0].length - 1)
+    var startLine = lines[0] // XXX 换行又没有了
+    var keys = startLine.split(',')
+    var yesterDayDataList = []
+    var todayDayDataList = []
+    var date = ''
+    return lines.slice(1).map(function (line) {
+      var values = line.split(',')
+      var o = {}
+      if (date !== values[0]) {
+        date = values[0]
+        yesterDayDataList = [].concat(todayDayDataList)
+        todayDayDataList = []
+      }
+      keys.forEach(function (key, index) {
+        key = key.trim()
+        var type = dtype ? dtype[key] : undefined
+        o[key] = type ? type(values[index]) : values[index]
+      })
+      o.curConfirm = mapUtil.computed.curConfirm(o)
+
+      let oYesterDayData = yesterDayDataList.find(item => {
+        return item.country === o.country && item.province === o.province && item.city === o.city
+      })
+
+      o.add = mapUtil.computed.add(o, oYesterDayData)
+
+      todayDayDataList.push(o)
       return o
     })
   }
