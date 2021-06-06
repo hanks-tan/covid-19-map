@@ -1,53 +1,43 @@
 <template>
   <div>
-    <!-- <div class="map-btn" @click="clickDataType">
-      <li v-if="isLatestData">最新</li>
-      <li v-else>历史</li>
-    </div>
-    <div class="map-btn" @click="clickLayerType">
-      <li v-if="layerType === 'point'">散点图</li>
-      <li v-else>填充图</li>
-    </div>
-    <div class="map-btn">
-      <select name="map-seletion" class="map-seletion">
-        <option class="select-item" value="1">累计确诊</option>
-        <option class="select-item" value="2">现存确诊</option>
-        <option class="select-item" value="2">累计死亡</option>
-        <option class="select-item" value="2">死亡率</option>
-      </select>
-    </div> -->
     <div class="map-btn">
       <el-switch
         v-model="isLatestData" active-text="最新数据" inactive-text="历史数据" @change="dataTypeHandle">
       </el-switch>
-      <el-divider direction="vertical"></el-divider>
     </div>
     <div class="map-btn">
       <el-switch
         v-model="isPointLayer" active-text="散点图" inactive-text="填充图" @change="layerTypeHandle">
       </el-switch>
-      <el-divider direction="vertical"></el-divider>
     </div>
-    <div class="map-btn">
-      <el-select v-model="renderField" placeholder="请选择" @change="fieldTypeHandle">
+    <div class="map-btn select-item">
+      <!-- <el-select v-model="renderField" placeholder="请选择" @change="fieldTypeHandle">
         <el-option
           v-for="item in renderFieldList"
           :key="item.value"
           :label="item.label"
           :value="item.value">
         </el-option>
-      </el-select>
+      </el-select> -->
+      选择一种数据
+      <el-radio
+        v-for="item in renderFieldList" :key="item.value"
+        v-model="renderField"
+        :label="item.label" >
+        {{item.label}}
+      </el-radio>
     </div>
   </div>
 </template>
 <script>
 import Vue from 'vue'
-import { Switch, Select, Option, Divider } from 'element-ui'
+import { Switch, Select, Option, Divider, Radio } from 'element-ui'
 import mapUtil from '../utils/mapUtil'
 Vue.use(Switch)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Divider)
+Vue.use(Radio)
 export default {
   data () {
     return {
@@ -104,6 +94,7 @@ export default {
 <style lang="less">
   .map-btn{
     display: inline;
+    margin-top: 10px;
     li{
       display: inline-block;
       width: 101px;
@@ -114,8 +105,10 @@ export default {
     .map-seletion{
       background-color: white;
     }
-    .select-item{
-      background-color: transparent;
-    }
+  }
+  .select-item{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
   }
 </style>

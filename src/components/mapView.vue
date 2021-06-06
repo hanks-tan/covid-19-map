@@ -96,21 +96,19 @@ export default {
     display: none;
   }
   .map-options {
-    /* top: 0px;
-    left: 45%;
     position: absolute;
-    margin: 5px;
+    margin: 10px;
+    padding: 10px;
     z-index: 999;
     color: rgb(34, 34, 37);
-    border: 1px solid #848383; */
-    position: absolute;
-    margin: 5px;
-    padding: 5px;
-    z-index: 999;
-    color: rgb(34, 34, 37);
-    border: 1px solid #9e8a8a;
-    border-radius: 3px;
-    background-color: #9c9ab1db
+    border-radius: 1rem;
+    background-color: #9c9ab142;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    line-height: 2rem;
+    box-shadow: 1rem 1rem 0.5rem #474545;
   }
   #map{
     height: 100%;

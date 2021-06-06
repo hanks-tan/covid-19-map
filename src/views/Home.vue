@@ -45,7 +45,7 @@ export default {
     padding: 0px;
     .map-container {
       background-color: #4f4f52;
-      height: 768px;
+      height: 100vh;
     }
   }
 </style>

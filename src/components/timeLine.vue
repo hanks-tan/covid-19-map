@@ -14,19 +14,18 @@
     <!-- 进度条 -->
     <div class="time-line-main">
       <!-- 进度条 -->
-      <div class="top-line">
+      <!-- <div class="top-line">
         <div class="progress" :style="{width: progress * unitLen + '%'}"></div>
         <div v-if="isVli">
           <i v-for="item in dateList" :key="item.no" :style="{left:item.offset + '%'}"></i>
         </div>
         <div class="bottom"></div>
-      </div>
+      </div> -->
       <!-- 日期 -->
-      <div>
-        <div class="date" v-for="item in dateList" :key=item.no :style="{left: item.offset + '%'}">
-          {{item.date}}
+        <div class="date-item" v-for="item in dateList" :key=item.no>
+          <div class="top-line" :class="{active: item.old}"></div>
+          <div class="date-label">{{item.date}}</div>
         </div>
-      </div>
       </div>
     </div>
 </template>
@@ -40,11 +39,10 @@ export default {
       isVli: false, // 是否显示日期
       isPlay: true, // 播放/停止
       player: null, // 播放定时器
-      progress: 0, // 进度(天)
-      unitLen: 0, // 进度条单位长
       curMonth: undefined, // 当前月
       curMonthStr: undefined, // 当前月(string),
-      isLatest: false // 最进
+      isLatest: false, // 最进
+      progress: 0
     }
   },
   props: {
@@ -73,15 +71,13 @@ export default {
   methods: {
     initDates (startDate) {
       this.curMonth = moment(startDate)
-      this.progress = 0
       var length = moment(startDate).daysInMonth()
-      this.unitLen = 100 / length
       this.dateList = []
       for (let i = 0; i < length; i++) {
         this.dateList.push({
           no: i + 1,
           date: `${i + 1}日`,
-          offset: i * this.unitLen
+          old: false
         })
       }
       console.log(this.dateList)
@@ -101,16 +97,17 @@ export default {
         }
         if (self.dateList.length > 1) {
           var nextDate = moment(self.startDate).add(self.speed, 'days').format(mapUtil.dateFormat)
+          self.dateList[self.progress].old = true
+          self.progress += 1
           if (moment(nextDate).diff(moment(self.curMonth), 'months') >= 1) {
             self.updateMonth(nextDate)
+            self.progress = 0
           }
 
           if (moment(nextDate).diff(moment(), 'days') >= 0) {
             nextDate = moment().format(mapUtil.dateFormat)
             self.isLatest = true
           }
-          self.progress = moment(nextDate).date()
-
           self.$emit('changeDate', nextDate)
         }
       }, 300)
@@ -136,12 +133,16 @@ export default {
 </script>
 <style lang="less">
   .time-line-warp{
+    height: 60px;
     .left{
       width: 6%;
+      display: flex;
+      flex-direction: column-reverse;
+      height: 100%;
       .start-btn{
         left: 25px;
         top: -15px;
-        position: relative;
+        position: absolute;
         .circle{
           width: 40px;
           height: 40px;
@@ -179,37 +180,26 @@ export default {
       top: 0px;
       width: 94%;
       position: absolute;
-      .top-line{
-        margin: 0;
-        .progress{
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      .date-item{
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        .top-line{
+          height: 20px;
+          border-left: 1px solid #fff;
+          background: #aeb3af;
           height: 10px;
-          background-color: #187b33;
-          position: absolute;
-          top: 0px;
         }
-        .bottom{
-          width: 100%;
-          height: 10px;
-          background-color: rgb(174, 179, 175);
+        .active{
+          background: #187b33;
         }
-        i{
-          display: block;
-          width: 1px;
-          height: 8px;
-          background-color: #ffffff;
-          position: absolute;
-          top: 0px;
-          margin: 0px;
+        .date-label{
+          flex-grow: 1;
+          border-left: 1px solid #9a9386;
         }
-      }
-      .date{
-        color: beige;
-        height: 40px;
-        border-left: 1px solid #9a9386;
-        position: absolute;
-        text-align: center;
-        padding-top: 15px;
-        padding-bottom: 3px;
       }
     }
   }
