@@ -60,12 +60,13 @@ export default {
       this.date = moment()
     },
     changeMap () {
+      // 渲染地图
       this.$mapEvtBus.$emit(mapUtil.mapEvt.render, ({
-        layerType: this.layerType,
+        layerType: this.layerType, // 地图图层类型
         region: 'world',
-        dataType: this.isLatestData ? mapUtil.covidDataType.latest : mapUtil.covidDataType.history,
-        date: this.date,
-        fieldType: this.fieldType
+        dataType: this.isLatestData ? mapUtil.covidDataType.latest : mapUtil.covidDataType.history, // 数据类型
+        date: this.date, // 数据日期
+        fieldType: this.fieldType // 数据字段
       }))
     },
     handleDataTypeChange (dataType) {

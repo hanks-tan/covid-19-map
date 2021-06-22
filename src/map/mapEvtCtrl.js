@@ -39,7 +39,8 @@ class MapEvtCtrl {
         }
       } else {
         // curDate = moment('20200405') // TODO 测试时间，用完删除
-        params.date = curDate.format('YYYY-MM-DD')
+        // params.date = curDate.format('YYYY-MM-DD')
+        params.date = '2020-04-11'
       }
 
       mapHttps.getCovidData(params).then(data => {

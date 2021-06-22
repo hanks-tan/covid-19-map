@@ -2,14 +2,14 @@ import axios from 'axios'
 import mapUtil from '../utils/mapUtil'
 
 // 数据源： https://lab.isaaclin.cn/nCoV/
-const remoteURL = 'https://lab.isaaclin.cn/nCoV'
+// const remoteURL = 'https://lab.isaaclin.cn/nCoV'
 const dataURL = {
-  overAll: remoteURL + '/api/overall',
-  provinceData: remoteURL + '/api/provinceName', // 返回数据库内有数据条目的国家、省份、地区、直辖市列表
-  area: remoteURL + '/api/area',
-  news: remoteURL + '/api/news',
+  // overAll: remoteURL + '/api/overall',
+  // provinceData: remoteURL + '/api/provinceName', // 返回数据库内有数据条目的国家、省份、地区、直辖市列表
+  // area: remoteURL + '/api/area',
+  // news: remoteURL + '/api/news',
   // historyData: 'https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv'
-  historyData: 'http://localhost:5550/covidData_csv'
+  historyData: process.env.BASE_URL + '/data/Wuhan-2019-nCoV1.csv'
 }
 
 export default {

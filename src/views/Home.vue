@@ -1,13 +1,13 @@
 <template>
   <div class="home">
-    <map-view class="map-container"></map-view>
+    <map-view class="map-container" v-if='dataReady'></map-view>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import mapView from '@/components/mapView.vue'
-import mapHttp from '../https/mapHttp'
+import mapHttp from '@/https/mapHttp'
 import { Loading } from 'element-ui'
 
 export default {
@@ -15,25 +15,21 @@ export default {
   components: {
     mapView
   },
-  created () {
+  data () {
+    return {
+      dataReady: false
+    }
   },
   mounted () {
-    this.loadDate()
+    this.init()
   },
   methods: {
-    loadDate () {
-      const options = {
-        lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      }
-      // var loadingInstance = Loading.service(options)
-      // this.fullscreenLoading = true
-      // mapHttp.getTimeSeriesData().then(data => {
-      //   console.log('data load done!') // TODO 同步执行，增加模态框
-      //   loadingInstance.close()
-      // })
+    init () {
+      let loadingInstance = Loading.service({ fullscreen: true })
+      mapHttp.getTimeSeriesData().then(() => {
+        loadingInstance.close()
+        this.dataReady = true
+      })
     }
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="info-contanier" v-if="visible">
     <h3>地区:{{ncovData.country}}</h3>
+    <p>截至时间：{{properties.date}}</p>
     <p>累计确诊:{{ncovData.confirmed}}</p>
     <p>现存确诊:{{ncovData.curConfirm}}</p>
     <!-- <p>现存疑似:{{ncovData.suspected}}</p> -->
@@ -83,7 +84,7 @@ export default {
   padding: 5px;
   background: #212027ab;
   border: 1px solid #6f6e6e;
-  border-radius: 3px;
+  border-radius: 10px;
   text-align: left;
 }
 </style>

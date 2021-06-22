@@ -1,31 +1,35 @@
 <template>
   <div>
-    <div class="map-btn">
-      <el-switch
-        v-model="isLatestData" active-text="最新数据" inactive-text="历史数据" @change="dataTypeHandle">
-      </el-switch>
-    </div>
-    <div class="map-btn">
-      <el-switch
-        v-model="isPointLayer" active-text="散点图" inactive-text="填充图" @change="layerTypeHandle">
-      </el-switch>
-    </div>
-    <div class="map-btn select-item">
-      <!-- <el-select v-model="renderField" placeholder="请选择" @change="fieldTypeHandle">
-        <el-option
-          v-for="item in renderFieldList"
-          :key="item.value"
+    <div class="header">地图渲染方式</div>
+    <div class="main">
+      <div class="map-btn">
+        <el-switch
+          v-model="isLatestData" active-text="最新数据" inactive-text="历史数据" @change="dataTypeHandle">
+        </el-switch>
+      </div>
+      <div class="map-btn">
+        <el-switch
+          v-model="isPointLayer" active-text="散点图" inactive-text="填充图" @change="layerTypeHandle">
+        </el-switch>
+      </div>
+      <div class="map-btn select-item">
+        <!-- <el-select v-model="renderField" placeholder="请选择" @change="fieldTypeHandle">
+          <el-option
+            v-for="item in renderFieldList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select> -->
+        选择一种数据
+        <el-radio
+          v-for="item in renderFieldList" :key="item.value"
+          v-model="renderField"
           :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select> -->
-      选择一种数据
-      <el-radio
-        v-for="item in renderFieldList" :key="item.value"
-        v-model="renderField"
-        :label="item.label" >
-        {{item.label}}
-      </el-radio>
+          class="select-radio">
+          {{item.label}}
+        </el-radio>
+      </div>
     </div>
   </div>
 </template>
@@ -60,7 +64,7 @@ export default {
         {
           value: 'dead',
           label: '累计死亡'
-        },
+        }
         // {
         //   value: 'dead',
         //   label: '死亡率'
@@ -74,7 +78,7 @@ export default {
         //   label: '治愈率'
         // }
       ],
-      renderField: 'confirmed'
+      renderField: '累计确诊'
     }
   },
   methods: {
@@ -91,24 +95,22 @@ export default {
   }
 }
 </script>
-<style lang="less">
-  .map-btn{
-    display: inline;
-    margin-top: 10px;
-    li{
-      display: inline-block;
-      width: 101px;
-      box-sizing: border-box;
-      border-right: 1px solid #ccc;
-      padding: 0 10px;
-    }
-    .map-seletion{
-      background-color: white;
-    }
+<style lang="less" scope>
+  .header{
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: left;
+    color: #bebfbf;
   }
-  .select-item{
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
+  .main{
+    .select-item{
+      display: flex;
+      flex-direction: column;
+      align-items: baseline;
+      .select-radio{
+        color: #ccc;
+        margin-top: 0.5rem;
+      }
+    }
   }
 </style>
