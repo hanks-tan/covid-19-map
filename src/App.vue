@@ -6,14 +6,7 @@
 </template>
 
 <style lang="less">
-*{
-  margin: 0px;
-  padding: 0px;
-}
-html,body{
-  height: 100%;
-  width: 100%;
-}
+@import url('./assets/main.css');
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -2,6 +2,8 @@ head,body{
   background-color: #dcdfd9;
   height: 100%;
   width: 100%;
+  margin: 0;
+  padding: 0;
 }
 .map-container{
   min-height: 800px;
@@ -18,4 +20,12 @@ head,body{
 }
 .info {
   background-color: rgba(5, 5, 5, 0.2);
+}
+.box{
+  margin: 10px;
+  padding: 10px;
+  color: rgb(34, 34, 37);
+  border-radius: 1rem;
+  background-color: #9c9ab142;
+  box-shadow: 1rem 1rem 0.5rem #474545
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="box">
     <div class="header">地图渲染方式</div>
     <div class="main">
       <div class="map-btn">

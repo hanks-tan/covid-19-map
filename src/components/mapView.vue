@@ -98,18 +98,10 @@ export default {
   }
   .map-options {
     position: absolute;
-    margin: 10px;
-    padding: 10px;
     z-index: 999;
-    color: rgb(34, 34, 37);
-    border-radius: 1rem;
-    background-color: #9c9ab142;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
     line-height: 2rem;
-    box-shadow: 1rem 1rem 0.5rem #474545;
   }
   #map{
     height: 100%;
