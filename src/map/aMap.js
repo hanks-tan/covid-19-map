@@ -10,6 +10,7 @@ import dataUtils from '../utils/dataUtils'
 import defaultStyle from './defaultStyle'
 import mapData from './data/mapData'
 import mapUtil from '../utils/mapUtil'
+import { Circle, Fill, Stroke, Style } from 'ol/style'
 
 class AMap {
   constructor (options) {
@@ -31,7 +32,7 @@ class AMap {
 
     this.view = new View(this.getViewOptions())
 
-    var worldData = mapData.getCountryDataByCode({layerType: mapUtil.layerType.polygon})
+    var worldData = mapData.getCountryDataByCode({ layerType: mapUtil.layerType.polygon })
     this.vectorLayer = new VectorLayer({
       source: new VectorSource({
         features: worldData
@@ -74,7 +75,8 @@ class AMap {
           } else {
             return false
           }
-        }
+        },
+        style: self.selectFeatureStyleFunc.bind(self)
       })
 
       self.map.addInteraction(self.selectControl)
@@ -153,6 +155,37 @@ class AMap {
 
   getOlMap () {
     return this.map
+  }
+
+  selectFeatureStyleFunc (feature) {
+    let count = 1
+    if (feature.get('data')) {
+      count = feature.get('data').renderData
+    }
+    const color = mapUtil.getColor(count)
+    const fill = new Fill({ color: color })
+    const level = mapUtil.getLevel(count)
+    const type = feature.getGeometry().getType()
+    const zoom = this.getZoom()
+    let style
+    if (type === 'Point') {
+      style = new Style({
+        image: new Circle({
+          radius: level * (zoom + 1),
+          fill: fill
+          // stroke: stroke
+        })
+      })
+    } else {
+      style = new Style({
+        fill: fill,
+        stroke: new Stroke({
+          width: 2,
+          color: '#409EFF'
+        })
+      })
+    }
+    return style
   }
 }
 

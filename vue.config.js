@@ -28,7 +28,7 @@ module.exports = {
     host: 'localhost',
     port: 8080,
     https: false,
-    hotOnly: false,
+    hotOnly: true,
     open: true, // 配置自动启动浏览器
     before (app) {
     }

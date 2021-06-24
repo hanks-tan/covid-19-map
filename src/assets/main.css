@@ -5,10 +5,6 @@ head,body{
   margin: 0;
   padding: 0;
 }
-.map-container{
-  min-height: 800px;
-  width: 100%;
-}
 .ol-zoom{
   display: none;
 }
@@ -26,6 +22,6 @@ head,body{
   padding: 10px;
   color: rgb(34, 34, 37);
   border-radius: 1rem;
-  background-color: #9c9ab142;
+  background-color: #565658b3;
   box-shadow: 1rem 1rem 0.5rem #474545
 }

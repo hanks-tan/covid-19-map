@@ -83,6 +83,7 @@ export default {
   color: #ccc;
   text-align: left;
   font-size: 14px;
+  min-width: 100px;
   .time{
     font-weight: 600;
   }

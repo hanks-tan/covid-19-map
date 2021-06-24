@@ -93,8 +93,8 @@ export default {
 </script>
 <style>
   @import url('~ol/ol.css');
-  .ol-zoom {
-    display: none;
+  #map{
+    height: 100%;
   }
   .map-options {
     position: absolute;
@@ -103,17 +103,12 @@ export default {
     flex-direction: column;
     line-height: 2rem;
   }
-  #map{
-    height: 100%;
-  }
   .timeline-container{
-    margin: 0;
-    padding: 0px;
-    top: 700px;
-    left: 0px;
     width: 100%;
     background-color: rgba(54, 16, 22, 0.4);
     position: absolute;
     z-index: 500;
+    bottom: 0;
+    display: flex;
   }
 </style>

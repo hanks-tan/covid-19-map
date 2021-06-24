@@ -137,10 +137,10 @@ export default {
     .left{
       width: 6%;
       display: flex;
-      flex-direction: column-reverse;
-      height: 100%;
+      flex-direction: column;
+      justify-content: flex-end;
       .start-btn{
-        left: 25px;
+        left: 15px;
         top: -15px;
         position: absolute;
         .circle{
@@ -157,6 +157,7 @@ export default {
             left: 13px;
             top: 7px;
             position: relative;
+            cursor: pointer;
           }
           .stop{
             width: 18px;
@@ -167,6 +168,7 @@ export default {
             top: 7px;
             left: 12px;
             position: relative;
+            cursor: pointer;
           }
         }
       }
@@ -176,13 +178,12 @@ export default {
       }
     }
     .time-line-main{
-      left: 6%;
-      top: 0px;
-      width: 94%;
-      position: absolute;
       display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
       flex-direction: row;
-      height: 100%;
+      flex-grow: 1;
       .date-item{
         flex-grow: 1;
         display: flex;

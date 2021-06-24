@@ -37,10 +37,8 @@ export default {
 <style lang="less" scoped>
   @import url("//unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css");
   .home{
-    margin: 0px;
-    padding: 0px;
-    .map-container {
-      background-color: #4f4f52;
+    background-color: #4f4f52;
+    .map-container{
       height: 100vh;
     }
   }
