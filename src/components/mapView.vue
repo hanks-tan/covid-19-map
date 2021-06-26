@@ -11,6 +11,7 @@
         :speed=1
         @changeDate="handleDateChange">
       </time-line>
+      <tips ref="tips" :aMap="mapObj"></tips>
     </div>
     <map-legend></map-legend>
   </div>
@@ -36,7 +37,8 @@ export default {
   components: {
     timeLine,
     mapOptions,
-    mapLegend
+    mapLegend,
+    tips: () => import('./overlay.vue')
   },
   mounted () {
     this.initMap()
@@ -52,6 +54,10 @@ export default {
         target: 'map',
         center: [0, 0],
         zoom: 2
+      })
+      this.mapObj.on('showDetails', (evt) => {
+        // console.log(data)
+        this.$refs.tips.setData(evt)
       })
       this.mapEvtCtrl = new MapEvtCtrl({
         mapObj: this.mapObj,

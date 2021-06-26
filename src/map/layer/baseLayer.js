@@ -6,7 +6,7 @@ import defaultStyle from '../defaultStyle'
 import Vue from 'vue'
 import tip from '../../components/tip'
 
-var DialogComp = Vue.extend(tip)
+// var DialogComp = Vue.extend(tip)
 
 class BaseLayer {
   oLayer = null
@@ -42,11 +42,11 @@ class BaseLayer {
     }
     var self = this
     var fts = this.data
-    fts.forEach(item => {
-      item.showDetails = function (point, status) {
-        self.showDetails(item, point, status)
-      }
-    })
+    // fts.forEach(item => {
+    //   item.showDetails = function (point, status) {
+    //     self.showDetails(item, point, status)
+    //   }
+    // })
     this.oLayer.getSource().addFeatures(fts)
   }
 

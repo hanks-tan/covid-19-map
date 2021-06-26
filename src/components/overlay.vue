@@ -1,8 +1,7 @@
 <template>
-<!-- // 废弃 -->
-  <div class="info-contanier box" v-if="visible">
+  <div class="info-contanier box">
     <h3>地区:{{ncovData.country}}</h3>
-    <p class="time">截至时间：{{properties.date}}</p>
+    <p class="time">截至时间：{{ncovData.date}}</p>
     <p>累计确诊:{{ncovData.confirmed}}</p>
     <p>现存确诊:{{ncovData.curConfirm}}</p>
     <!-- <p>现存疑似:{{ncovData.suspected}}</p> -->
@@ -27,20 +26,20 @@ export default {
       overlay: undefined
     }
   },
-  created () {
-    this.init()
-  },
-  watch: {
-    position (newVal) {
-      if (this.overlay) {
-        this.overlay.setPosition(newVal)
-      }
+  props: {
+    aMap: {
+      type: Object,
+      required: true
     }
+  },
+  mounted () {
+    this.init()
   },
   methods: {
     init () {
       var overlay = new Overlay({
-        element: this.$mount().$el,
+        // element: this.$mount().$el,
+        element: this.$el,
         stopEvent: false, // 设为false,允许事件传播
         autoPanAnimation: {
           duration: 250
@@ -50,30 +49,17 @@ export default {
         positioning: 'center-left',
         className: 'point-overlay'
       })
-      this.mapObj.getOlMap().addOverlay(overlay)
+      this.aMap.getOlMap().addOverlay(overlay)
       this.overlay = overlay
     },
 
-    show () {
-      if (this.properties) {
-        this.ncovData.country = this.properties.country
-        this.ncovData.confirmed = this.properties.confirmed
-        this.ncovData.suspected = this.properties.suspected
-        this.ncovData.cured = this.properties.cured
-        this.ncovData.dead = this.properties.dead
-        this.visible = true
-      }
-    },
-
-    close () {
-      this.mapObj.getOlMap().removeOverlay(this.overlay)
-      this.visible = false
-    },
-
-    refresh (params) {
-      if (params.properties) {
-        this.ncovData = params.properties
-        this.position = params.position
+    setData (evt) {
+      if (evt.position) {
+        const covidData = evt.target.get('data')
+        this.ncovData = Object.assign({}, covidData)
+        this.overlay.setPosition(evt.position)
+      } else {
+        this.overlay.setPosition(undefined)
       }
     }
   }

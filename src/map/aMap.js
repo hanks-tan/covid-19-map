@@ -2,7 +2,6 @@ import { Map, View, Overlay } from 'ol'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import Select from 'ol/interaction/Select'
-import GeoJSON from 'ol/format/GeoJSON'
 
 import TileLayer from 'ol/layer/Tile'
 import XYZ from 'ol/source/XYZ'
@@ -11,10 +10,11 @@ import defaultStyle from './defaultStyle'
 import mapData from './data/mapData'
 import mapUtil from '../utils/mapUtil'
 import { Circle, Fill, Stroke, Style } from 'ol/style'
-
-class AMap {
+import Object from 'ol/Object'
+class AMap extends Object {
   constructor (options) {
-    this.options = Object.assign({}, options)
+    super()
+    this.options = options
     this.mapCenter = options.mapCenter
     this.projection = 'EPSG:4326'
     this.view = undefined
@@ -56,7 +56,7 @@ class AMap {
       layers: [this.vectorLayer]
     })
 
-    this.map.on('pointermove', this._pointerMoveHandle.bind(this))
+    // this.map.on('pointermove', this._pointerMoveHandle.bind(this))
 
     this.initMapControl()
   }
@@ -84,16 +84,20 @@ class AMap {
 
       self.selectControl.on(['select', 'remove'], function (e) {
         if (e.deselected.length > 0) {
-          const ft = e.deselected[0]
-          if (ft.showDetails) {
-            ft.showDetails(e.mapBrowserEvent.coordinate, 'romove')
-          }
+          const ft = e.selected[0]
+          self.dispatchEvent({
+            type: 'showDetails',
+            target: ft,
+            position: undefined
+          })
         }
         if (e.selected.length > 0) {
           const ft = e.selected[0]
-          if (ft.showDetails) {
-            ft.showDetails(e.mapBrowserEvent.coordinate, 'select')
-          }
+          self.dispatchEvent({
+            type: 'showDetails',
+            target: ft,
+            position: e.mapBrowserEvent.coordinate
+          })
         }
       })
     }
