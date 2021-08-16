@@ -1,28 +1,21 @@
 # covid-19-map
-预览地址：https://go.t-gis.xyz/covid-19-map/
+预览地址：http://my.gogmap.com/covid-19-map/
 # 感谢开源社区各位大神的无私奉献，提供疫情的数据来源。
-## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# 项目功能
+项目以新冠疫情数据在地图上的可视化（本地数据 2019.12 - 2020.4）
+## 时间模式
+### 历史模式和现状模式
+历史模式支持时间轴滚动播放
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 数据维度切换（确诊、疑似、累计确诊、死亡等等）
 
-### Lints and fixes files
-```
-npm run lint
-```
+## 按国家、地区分类在地图上呈现
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 散点图和填充图两种展示方式
+
+
+
 
 TODO
 1、支持切换数据显示类型
