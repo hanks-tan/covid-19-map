@@ -1,17 +1,23 @@
 <template>
   <div>
+    <!-- 地图选项 -->
     <map-options class="map-options" ref="mapOpts"
       @dataTypeChange="handleDataTypeChange"
       @layerTypeChange="handleLayerTypeChange"
       @fieldTypeChange="handleFieldTypeChange"
     ></map-options>
+    <!-- 地图 -->
     <div id="map">
+      <!-- 时间轴 -->
       <time-line class="timeline-container" v-if="!isLatestData" ref="timeLine"
         :startDate="date"
         :speed=1
         @changeDate="handleDateChange">
       </time-line>
+      <!-- 悬浮提示 -->
       <tips ref="tips" :aMap="mapObj"></tips>
+      <!-- 排行榜 -->
+      <rank class="rank"></rank>
     </div>
     <map-legend></map-legend>
   </div>
@@ -24,6 +30,7 @@ import timeLine from '@/components/timeLine.vue'
 import mapOptions from '@/components/mapOptions.vue'
 import mapLegend from '@/components/mapLegend.vue'
 import moment from 'moment'
+import Rank from './rank.vue'
 
 export default {
   data () {
@@ -31,14 +38,16 @@ export default {
       mapObj: undefined, // 地图对象
       layerType: 'point', // 显示类型: point/polygon
       isLatestData: true, // 显示数据类型 最新/历史
-      date: undefined
+      date: undefined,
+      fieldType: 'confirmed'
     }
   },
   components: {
     timeLine,
     mapOptions,
     mapLegend,
-    tips: () => import('./overlay.vue')
+    tips: () => import('./overlay.vue'),
+    Rank
   },
   mounted () {
     this.initMap()
@@ -63,7 +72,7 @@ export default {
         mapObj: this.mapObj,
         $mapEvtBus: this.$mapEvtBus
       })
-      this.date = moment()
+      this.date = moment().format('YYYY-MM-DD')
     },
     changeMap () {
       // 渲染地图
@@ -116,5 +125,11 @@ export default {
     z-index: 500;
     bottom: 0;
     display: flex;
+  }
+  .rank{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 999;
   }
 </style>

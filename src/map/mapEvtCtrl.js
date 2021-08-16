@@ -2,8 +2,11 @@ import BaseVectorLayer from './layer/baseVectorLayer'
 import PointLayer from './layer/pointLayer'
 import mapHttps from '../https/mapHttp'
 import mapUtil from '../utils/mapUtil'
-import mapData from './data/mapData'
 import moment from 'moment'
+import query from './data/query'
+import world from './data/world'
+import countryLocation from './data/countryLocation'
+import GeoJSON from 'ol/format/GeoJSON'
 
 class MapEvtCtrl {
   constructor (options) {
@@ -14,57 +17,76 @@ class MapEvtCtrl {
 
   registerEvent () {
     var self = this
+
+    this._pointLayer = new PointLayer({
+      mapObj: this.mapObj,
+      name: 'point'
+    })
+    this._polygonLayer = new BaseVectorLayer({
+      mapObj: this.mapObj,
+      name: 'polygon'
+    })
+
     this.$mapEvtBus.$on(mapUtil.mapEvt.render, function (params) {
-      console.log(params)
-      self.mapObj.clear()
-      var layer = null
-      if (params.layerType === mapUtil.layerType.point) {
-        layer = new PointLayer({
-          mapObj: self.mapObj,
-          name: params.layerType
-        })
-      } else {
-        layer = new BaseVectorLayer({
-          mapObj: self.mapObj,
-          name: params.layerType
-        })
-      }
-      var curDate = moment()
-      if (params.dataType === mapUtil.covidDataType.history) {
-        if (!params.date) {
-          params.date = mapUtil.covidDefaultStartTime
-        } else {
-          var date = moment(params.date).format('YYYY-MM-DD')
-          params.date = date
+      self._pointLayer.clearData()
+      self._polygonLayer.clearData()
+
+      let date = params.date
+      const latestDate = '2020-04-11'
+      if (date) {
+        if (!moment(date).isBefore(latestDate)) {
+          date = latestDate
         }
-      } else {
-        // curDate = moment('20200405') // TODO 测试时间，用完删除
-        // params.date = curDate.format('YYYY-MM-DD')
-        params.date = '2020-04-11'
       }
 
-      mapHttps.getCovidData(params).then(data => {
-        params.fieldType = params.fieldType === undefined ? mapUtil.defaultRendeField : params.fieldType
-        if (data.length <= 0) {
-          return
+      const data = query.getDayCountryData(date)
+      if (data.size < 1) {
+        return
+      }
+
+      let fts
+      if (params.layerType === mapUtil.layerType.point) {
+        fts = new GeoJSON().readFeatures(countryLocation)
+      } else {
+        fts = new GeoJSON().readFeatures(world)
+      }
+
+      fts.forEach((ft) => {
+        const code = ft.get('code')
+        const thisCodeData = data.get(code)
+        if (thisCodeData) {
+          const cloneData = Object.assign({}, thisCodeData)
+          cloneData.renderData = cloneData[params.fieldType]
+          cloneData.date = params.date
+          ft.setProperties(cloneData)
         }
-        if (!data[0].hasOwnProperty(params.fieldType)) {
-          console.log('rende field not found')
-        }
-        data.forEach(element => {
-          let value = 0
-          if (params.fieldType.startsWith('add')) {
-            let key = params.fieldType.replace('add', '').toLowerCase()
-            value = element.add[key]
-          } else {
-            value = element[params.fieldType]
-          }
-          element.renderData = value
-        })
-        var geoData = mapData.getCountryDataByCode(params)
-        var layerData = mapData.joinCovDateToGeo(data, geoData)
-        layer.setData(layerData)
       })
+
+      const layer = params.layerType === mapUtil.layerType.point ? self._pointLayer : self._polygonLayer
+      layer.setData(fts)
+
+      // mapHttps.getCovidData(params).then(data => {
+      //   params.fieldType = params.fieldType === undefined ? mapUtil.defaultRendeField : params.fieldType
+      //   if (data.length <= 0) {
+      //     return
+      //   }
+      //   if (!data[0].hasOwnProperty(params.fieldType)) {
+      //     console.log('rende field not found')
+      //   }
+      //   data.forEach(element => {
+      //     let value = 0
+      //     if (params.fieldType.startsWith('add')) {
+      //       let key = params.fieldType.replace('add', '').toLowerCase()
+      //       value = element.add[key]
+      //     } else {
+      //       value = element[params.fieldType]
+      //     }
+      //     element.renderData = value
+      //   })
+      //   var geoData = mapData.getCountryDataByCode(params)
+      //   var layerData = mapData.joinCovDateToGeo(data, geoData)
+      //   layer.setData(layerData)
+      // })
     })
   }
 }

@@ -70,11 +70,7 @@ class AMap extends Object {
         },
         layers: function (layer) {
           var rlayer = self.vectorLayerList.find(item => item.name === layer.rootName)
-          if (rlayer) {
-            return rlayer.showDetails !== undefined
-          } else {
-            return false
-          }
+          return rlayer
         },
         style: self.selectFeatureStyleFunc.bind(self)
       })

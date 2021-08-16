@@ -4,7 +4,12 @@ import countryLocation from './countryLocation'
 import mapUtil from '../../utils/mapUtil'
 
 const geoJson = new GeoJSON()
+const locations = geoJson.readFeatures(countryLocation)
+const regions = geoJson.readFeatures(world)
+
 const mapData = {
+  countryPoints: locations,
+  countryPolygon: regions,
   /**
    * 获取国家地理数据
    * @param {*} params

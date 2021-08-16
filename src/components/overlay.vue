@@ -55,7 +55,7 @@ export default {
 
     setData (evt) {
       if (evt.position) {
-        const covidData = evt.target.get('data')
+        const covidData = evt.target.getProperties()
         this.ncovData = Object.assign({}, covidData)
         this.overlay.setPosition(evt.position)
       } else {

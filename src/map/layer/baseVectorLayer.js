@@ -4,17 +4,13 @@ import mapUtil from '../../utils/mapUtil'
 
 class BaseVectorLayer extends BaseLayer {
   setData (data) {
-    this.data = data
-    this._loadData()
+    this._loadData(data)
   }
 
   _styleFunc (feature) {
     var count = 0
-    if (feature.get('data') !== {}) {
-      count = feature.get('data').renderData
-    }
-    if (count === undefined) {
-      count = 0
+    if (feature.get('renderData')) {
+      count = feature.get('renderData')
     }
     var color = mapUtil.getColor(count)
     var style = new Style({

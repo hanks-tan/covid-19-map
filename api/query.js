@@ -1,3 +1,7 @@
+const axios = require('axios')
+
+let covidMapData = null
+
 /**
  * 解析csv数据
  * @param {*} csvData csv文本
@@ -59,32 +63,32 @@ function parseCSVToMap (csvData) {
   return dataMap
 }
 
-function getDayData (date) {
-  return window.cvData.get(date)
+function getDayData(date) {
+  return covidMapData.get(date)
 }
 
 /**
  * 查询某一天某个地区的数据
- * @param {*} countryCode
- * @param {*} date
- * @returns
+ * @param {*} countryCode 
+ * @param {*} date 
+ * @returns 
  */
-function getCountryOneDay (countryCode, date) {
-  if (window.cvData.get(date)) {
-    return window.cvData.get(date).get(countryCode)
+function getCountryOneDay(countryCode, date) {
+  if (covidMapData.get(date)) {
+    return covidMapData.get(date).get(countryCode)
   }
   return null
 }
 
 /**
  * 查询某一天各国的数据
- * @param {*} date
- * @returns
+ * @param {*} date 
+ * @returns 
  */
-function getDayCountryData (date) {
-  const dayData = window.cvData.get(date)
+function getDayCountryData(date) {
+  const dayData = covidMapData.get(date)
   if (dayData) {
-    const result = new Map()
+    let result = new Map()
     dayData.forEach((value, key) => {
       if (key.indexOf('-') < 0) {
         result.set(key, value)
@@ -95,9 +99,12 @@ function getDayCountryData (date) {
   return null
 }
 
-export default {
-  parseCSVToMap,
-  getDayData,
-  getCountryOneDay,
-  getDayCountryData
-}
+axios.get('http://localhost:5550/covidData_csv').then((res) => {
+  console.log('.')
+  return res.data
+}).then((data) => {
+  covidMapData = parseCSVToMap(data)
+  const allCountry = getDayCountryData('2020-01-01')
+  console.log('done')
+
+})

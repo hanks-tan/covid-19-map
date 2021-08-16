@@ -33,7 +33,7 @@ app.listen(port, function (err) {
 
 app.get('/covidData_csv', function (req, res) {
   try {
-    var fileName = __dirname + '/data/Wuhan-2019-nCoV.csv'
+    var fileName = __dirname + '/data/Wuhan-2019-nCoV2.csv'
     setTimeout(() => {
       res.sendFile(fileName, {}, function (err) {
         if (err) {

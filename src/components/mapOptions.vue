@@ -12,23 +12,16 @@
           v-model="isPointLayer" active-text="散点图" inactive-text="填充图" @change="layerTypeHandle">
         </el-switch>
       </div>
-      <div class="map-btn select-item">
-        <!-- <el-select v-model="renderField" placeholder="请选择" @change="fieldTypeHandle">
-          <el-option
-            v-for="item in renderFieldList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select> -->
+      <div class="map-btn selector">
         选择一种数据
-        <el-radio
-          v-for="item in renderFieldList" :key="item.value"
-          v-model="renderField"
-          :label="item.label"
-          class="select-radio">
-          {{item.label}}
-        </el-radio>
+        <el-radio-group v-model="renderField" @change="fieldTypeHandle" class="map-radio-group">
+          <el-radio
+            v-for="item in renderFieldList" :key="item.value"
+            :label="item.value"
+            class="select-radio">
+            {{item.label}}
+          </el-radio>
+        </el-radio-group>
       </div>
     </div>
   </div>
@@ -78,7 +71,7 @@ export default {
         //   label: '治愈率'
         // }
       ],
-      renderField: '累计确诊'
+      renderField: 'confirmed'
     }
   },
   methods: {
@@ -103,13 +96,17 @@ export default {
     color: #bebfbf;
   }
   .main{
-    .select-item{
+    .selector{
       display: flex;
       flex-direction: column;
       align-items: baseline;
+    }
+    .map-radio-group{
+      text-align: left;
       .select-radio{
         color: #ccc;
         margin-top: 0.5rem;
+        display: block;
       }
     }
   }
