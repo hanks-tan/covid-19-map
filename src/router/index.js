@@ -23,7 +23,8 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode: 'hash'
+  mode: 'history',
+  base: '/covid-19-map/'
 })
 
 export default router
