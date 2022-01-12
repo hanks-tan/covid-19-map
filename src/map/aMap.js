@@ -32,13 +32,13 @@ class AMap extends Object {
 
     this.view = new View(this.getViewOptions())
 
-    var worldData = mapData.getCountryDataByCode({ layerType: mapUtil.layerType.polygon })
-    this.vectorLayer = new VectorLayer({
-      source: new VectorSource({
-        features: worldData
-      }),
-      style: defaultStyle.Polygon
-    })
+    // var worldData = mapData.getCountryDataByCode({ layerType: mapUtil.layerType.polygon })
+    // this.vectorLayer = new VectorLayer({
+    //   source: new VectorSource({
+    //     features: worldData
+    //   }),
+    //   style: defaultStyle.Polygon
+    // })
 
     var popup = document.getElementById('popup')
     this.overlay = new Overlay({
@@ -53,7 +53,7 @@ class AMap extends Object {
       target: 'map',
       view: this.view,
       overlays: [this.overlay],
-      layers: [this.vectorLayer]
+      layers: [baseLayer]
     })
 
     // this.map.on('pointermove', this._pointerMoveHandle.bind(this))
@@ -115,8 +115,8 @@ class AMap extends Object {
   getViewOptions () {
     const projection = 'EPSG:4326'
     const zoom = this.options.zoom ? this.options.zoom : 5
-    const minZoom = zoom - 3 > 0 ? zoom - 3 : zoom
-    const maxZoom = zoom + 3
+    const minZoom = 1
+    const maxZoom = 21
     const center = this.options.center ? this.options.center : [0, 0]
     return {
       projection,

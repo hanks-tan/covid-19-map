@@ -1,15 +1,12 @@
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import defaultStyle from '../defaultStyle'
-
-// var DialogComp = Vue.extend(tip)
-
 class BaseLayer {
   oLayer = null
   constructor (options) {
     this.mapObj = options.mapObj
     this.name = options.name
-    this.styleFunc = options.styleFunc
+    this.styleFunc = options.styleFunc || this._styleFunc
     this.dialog = undefined
     this.init()
   }
