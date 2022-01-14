@@ -32,6 +32,7 @@
 <script>
 import moment from 'moment'
 import mapUtil from '../utils/mapUtil'
+const covidDataUtil = mapUtil.covidDataUtil
 export default {
   data () {
     return {
@@ -96,7 +97,7 @@ export default {
           return
         }
         if (self.dateList.length > 1) {
-          var nextDate = moment(self.startDate).add(self.speed, 'days').format(mapUtil.dateFormat)
+          var nextDate = moment(self.startDate).add(self.speed, 'days').format(covidDataUtil.dateFormat)
           self.dateList[self.progress].old = true
           self.progress += 1
           if (moment(nextDate).diff(moment(self.curMonth), 'months') >= 1) {
@@ -105,7 +106,7 @@ export default {
           }
 
           if (moment(nextDate).diff(moment(), 'days') >= 0) {
-            nextDate = moment().format(mapUtil.dateFormat)
+            nextDate = moment().format(covidDataUtil.dateFormat)
             self.isLatest = true
           }
           self.$emit('changeDate', nextDate)
@@ -117,7 +118,7 @@ export default {
       this.player = null
     },
     reset () {
-      var startDate = mapUtil.covidDefaultStartTime
+      var startDate = covidDataUtil.covidDefaultStartTime
       this.$emit('changeDate', startDate)
       this.initDates(startDate)
       this.curMonth = moment(startDate)

@@ -1,6 +1,8 @@
 import axios from 'axios'
 import mapUtil from '../utils/mapUtil'
 
+const covidDataUtil = mapUtil.covidDataUtil
+
 // 数据源： https://lab.isaaclin.cn/nCoV/
 // const remoteURL = 'https://lab.isaaclin.cn/nCoV'
 const dataURL = {
@@ -9,7 +11,7 @@ const dataURL = {
   // area: remoteURL + '/api/area',
   // news: remoteURL + '/api/news',
   // historyData: 'https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv'
-  historyData: process.env.BASE_URL + '/data/Wuhan-2019-nCoV1.csv'
+  historyData: process.env.BASE_URL + 'data/Wuhan-2019-nCoV1.csv'
 }
 
 export default {
@@ -57,7 +59,7 @@ export default {
     }).then(data => {
       var dataList = this.parseCSV(data)
       dataList.forEach(item => {
-        item.curConfirm = mapUtil.computed.curConfirm(item) // 现存确诊
+        item.curConfirm = covidDataUtil.computed.curConfirm(item) // 现存确诊
       })
       this.historyData = dataList
       return dataList
@@ -111,13 +113,13 @@ export default {
         var type = dtype ? dtype[key] : undefined
         o[key] = type ? type(values[index]) : values[index]
       })
-      o.curConfirm = mapUtil.computed.curConfirm(o)
+      o.curConfirm = covidDataUtil.computed.curConfirm(o)
 
       let oYesterDayData = yesterDayDataList.find(item => {
         return item.country === o.country && item.province === o.province && item.city === o.city
       })
 
-      o.add = mapUtil.computed.add(o, oYesterDayData)
+      o.add = covidDataUtil.computed.add(o, oYesterDayData)
 
       todayDayDataList.push(o)
       return o

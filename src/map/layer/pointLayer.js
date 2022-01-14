@@ -2,6 +2,8 @@ import BaseLayer from './baseLayer'
 import { Style, Fill, Stroke, Circle, RegularShape } from 'ol/style'
 import mapUtil from '../../utils/mapUtil'
 
+const covidDataUtil = mapUtil.covidDataUtil
+
 class PointLayer extends BaseLayer {
   setData (data) {
     this._loadData(data)
@@ -12,8 +14,8 @@ class PointLayer extends BaseLayer {
     if (feature.get('renderData')) {
       count = feature.get('renderData')
     }
-    var color = mapUtil.getColor(count)
-    var level = mapUtil.getLevel(count)
+    var color = covidDataUtil.getColor(count)
+    var level = covidDataUtil.getLevel(count)
     var zoom = this.mapObj.getZoom()
     var stroke = new Stroke({ color: '#e21644', width: 0.5 })
     var fill = new Fill({ color: color })

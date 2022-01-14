@@ -7,9 +7,6 @@
 <script>
 // @ is an alias to /src
 import mapView from '@/components/mapView.vue'
-import mapHttp from '@/https/mapHttp'
-import { Loading } from 'element-ui'
-import axios from 'axios'
 import query from '../map/data/query'
 
 export default {
@@ -27,16 +24,8 @@ export default {
   },
   methods: {
     init () {
-      let loadingInstance = Loading.service({ fullscreen: true })
-      // mapHttp.getTimeSeriesData().then(() => {
-      //   loadingInstance.close()
-      //   this.dataReady = true
-      // })
-      const url = process.env.BASE_URL + '/data/Wuhan-2019-nCoV1.csv'
-      axios.get(url).then((res) => {
-        return res.data
-      }).then((data) => {
-        window.cvData = query.parseCSVToMap(data)
+      this.$api.getCovidData().then((res) => {
+        window.cvData = query.parseCSVToMap(res.data)
         loadingInstance.close()
         this.dataReady = true
       })

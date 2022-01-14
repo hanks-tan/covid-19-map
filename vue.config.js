@@ -1,12 +1,12 @@
 var webpack = require('webpack')
 
 module.exports = {
-  publicPath: '/covid-19-map/',
+  publicPath: '/',
   outputDir: 'docs', // 运行时生成的生产环境构建文件的目录(默认''dist''，构建之前会被清除)
-  assetsDir: '', // 放置生成的静态资源(s、css、img、fonts)的(相对于 outputDir 的)目录(默认'')
+  assetsDir: 'assets', // 放置生成的静态资源(js、css、img、fonts)的(相对于 outputDir 的)目录(默认'')
   indexPath: 'index.html', // 指定生成的 index.html 的输出路径(相对于 outputDir)也可以是一个绝对路径。
-  pages: {// pages 里配置的路径和文件名在你的文档目录必须存在 否则启动服务会报错
-    index: {// 除了 entry 之外都是可选的
+  pages: { // pages 里配置的路径和文件名在你的文档目录必须存在 否则启动服务会报错
+    index: { // 除了 entry 之外都是可选的
       entry: 'src/main.js', // page 的入口,每个“page”应该有一个对应的 JavaScript 入口文件
       template: 'public/index.html', // 模板来源
       filename: 'index.html', // 在 dist/index.html 的输出
@@ -24,7 +24,7 @@ module.exports = {
     sourceMap: false, // 开启 CSS source maps
     loaderOptions: {} // css预设器配置项
   },
-  devServer: {// 环境配置
+  devServer: { // 环境配置
     host: 'localhost',
     port: 8080,
     https: false,

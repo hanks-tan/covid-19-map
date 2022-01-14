@@ -15,6 +15,7 @@
 
 <script>
 import PointLayer from '../map/layer/pointLayer'
+import mapUtil from '../utils/mapUtil'
 export default {
   data () {
     return {
@@ -30,7 +31,9 @@ export default {
               checked: true,
               layer: null,
               type: 'point',
-              dataSource: ''
+              dataSource: {
+                api: 'getStation'
+              }
             },
             {
               name: 'free',
@@ -85,11 +88,23 @@ export default {
   },
   methods: {
     init () {
-      const layerList = this.layers.flat(undefined)
+      let layerList = []
+      this.layers.forEach((item) => {
+        layerList.push(item)
+        if (item.children) {
+          layerList = layerList.concat(item.children)
+        }
+      })
+
       layerList.forEach((item) => {
         if (Object.prototype.hasOwnProperty.call(item, 'layer')) {
-          const layer = this.createLayer(item)
-          item.layer = layer
+          if (item.checked) {
+            const layer = this.createLayer(item)
+            item.layer = layer
+            if (item.dataSource) {
+              this.loadData(item)
+            }
+          }
         }
       })
     },
@@ -112,6 +127,17 @@ export default {
     },
     layerClickHandle () {
 
+    },
+    loadData (layerCf) {
+      if (layerCf.dataSource.api && layerCf.layer) {
+        const api = this.$api[layerCf.dataSource.api]
+        if (api) {
+          api().then((res) => {
+            const data = mapUtil.readGeoJSON(res.data)
+            layerCf.layer.setData(data)
+          })
+        }
+      }
     }
   }
 }

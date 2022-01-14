@@ -35,12 +35,13 @@ Vue.use(Select)
 Vue.use(Option)
 Vue.use(Divider)
 Vue.use(Radio)
+const covidDataUtil = mapUtil.covidDataUtil
 export default {
   data () {
     return {
       isLatestData: true,
       isPointLayer: true,
-      layerType: mapUtil.layerType.point,
+      layerType: covidDataUtil.layerType.point,
       renderFieldList: [
         {
           value: 'confirmed',
@@ -79,7 +80,7 @@ export default {
       this.$emit('dataTypeChange', this.isLatestData)
     },
     layerTypeHandle () {
-      this.layerType = this.isPointLayer ? mapUtil.layerType.point : mapUtil.layerType.polygon
+      this.layerType = this.isPointLayer ? covidDataUtil.layerType.point : covidDataUtil.layerType.polygon
       this.$emit('layerTypeChange', this.layerType)
     },
     fieldTypeHandle () {

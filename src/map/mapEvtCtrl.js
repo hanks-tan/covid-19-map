@@ -8,6 +8,7 @@ import world from './data/world'
 import countryLocation from './data/countryLocation'
 import GeoJSON from 'ol/format/GeoJSON'
 
+const covidDataUtil = mapUtil.covidDataUtil
 class MapEvtCtrl {
   constructor (options) {
     this.mapObj = options.mapObj
@@ -27,7 +28,7 @@ class MapEvtCtrl {
       name: 'polygon'
     })
 
-    this.$mapEvtBus.$on(mapUtil.mapEvt.render, function (params) {
+    this.$mapEvtBus.$on(covidDataUtil.mapEvt.render, function (params) {
       self._pointLayer.clearData()
       self._polygonLayer.clearData()
 
@@ -45,7 +46,7 @@ class MapEvtCtrl {
       }
 
       let fts
-      if (params.layerType === mapUtil.layerType.point) {
+      if (params.layerType === covidDataUtil.layerType.point) {
         fts = new GeoJSON().readFeatures(countryLocation)
       } else {
         fts = new GeoJSON().readFeatures(world)
@@ -62,11 +63,11 @@ class MapEvtCtrl {
         }
       })
 
-      const layer = params.layerType === mapUtil.layerType.point ? self._pointLayer : self._polygonLayer
+      const layer = params.layerType === covidDataUtil.layerType.point ? self._pointLayer : self._polygonLayer
       layer.setData(fts)
 
       // mapHttps.getCovidData(params).then(data => {
-      //   params.fieldType = params.fieldType === undefined ? mapUtil.defaultRendeField : params.fieldType
+      //   params.fieldType = params.fieldType === undefined ? covidDataUtil.defaultRendeField : params.fieldType
       //   if (data.length <= 0) {
       //     return
       //   }

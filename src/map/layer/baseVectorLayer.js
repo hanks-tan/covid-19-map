@@ -2,6 +2,7 @@ import BaseLayer from './baseLayer'
 import { Style, Fill, Stroke } from 'ol/style'
 import mapUtil from '../../utils/mapUtil'
 
+const covidDataUtil = mapUtil.covidDataUtil
 class BaseVectorLayer extends BaseLayer {
   setData (data) {
     this._loadData(data)
@@ -12,7 +13,7 @@ class BaseVectorLayer extends BaseLayer {
     if (feature.get('renderData')) {
       count = feature.get('renderData')
     }
-    var color = mapUtil.getColor(count)
+    var color = covidDataUtil.getColor(count)
     var style = new Style({
       fill: new Fill({
         color: color

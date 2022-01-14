@@ -9,6 +9,11 @@
           v-show="showLayerSwith"
           class="layer"></LayerSelector>
       </div>
+      <div class="bottom">
+        <div class="sos">
+          <el-button icon="el-icon-search" circle></el-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -68,5 +73,11 @@ export default {
       left: 0;
       z-index: 100;
     }
+  }
+  .bottom{
+    position: absolute;
+    bottom: 1rem;
+    text-align: center;
+    z-index: 100;
   }
 </style>

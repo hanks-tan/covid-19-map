@@ -11,6 +11,8 @@ import mapData from './data/mapData'
 import mapUtil from '../utils/mapUtil'
 import { Circle, Fill, Stroke, Style } from 'ol/style'
 import Object from 'ol/Object'
+
+const covidDataUtil = mapUtil.covidDataUtil
 class AMap extends Object {
   constructor (options) {
     super()
@@ -162,9 +164,9 @@ class AMap extends Object {
     if (feature.get('data')) {
       count = feature.get('data').renderData
     }
-    const color = mapUtil.getColor(count)
+    const color = covidDataUtil.getColor(count)
     const fill = new Fill({ color: color })
-    const level = mapUtil.getLevel(count)
+    const level = covidDataUtil.getLevel(count)
     const type = feature.getGeometry().getType()
     const zoom = this.getZoom()
     let style

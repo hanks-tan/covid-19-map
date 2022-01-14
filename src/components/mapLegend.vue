@@ -9,6 +9,7 @@
 <script>
 import mapUtil from '../utils/mapUtil'
 
+const covidDataUtil = mapUtil.covidDataUtil
 export default {
   data () {
     return {
@@ -22,7 +23,7 @@ export default {
   },
   methods: {
     init () {
-      var colorList = mapUtil.colorList
+      var colorList = covidDataUtil.colorList
       for (let i = 0; i < colorList.length; i++) {
         this.categoryList.push({
           no: i,
@@ -37,11 +38,11 @@ export default {
       var legendLabel = ''
       if (index === 0) {
         legendLabel = '0人'
-      } else if (index === mapUtil.levels.length - 1) {
-        legendLabel = `${mapUtil.levels[index]}人以上`
+      } else if (index === covidDataUtil.levels.length - 1) {
+        legendLabel = `${covidDataUtil.levels[index]}人以上`
       } else {
-        var min = mapUtil.levels[index]
-        var max = mapUtil.levels[index + 1]
+        var min = covidDataUtil.levels[index]
+        var max = covidDataUtil.levels[index + 1]
         legendLabel = `${min}-${max}人`
       }
       return legendLabel

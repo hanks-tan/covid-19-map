@@ -32,6 +32,7 @@ import mapLegend from '@/components/mapLegend.vue'
 import moment from 'moment'
 import Rank from './rank.vue'
 
+const covidDataUtil = mapUtil.covidDataUtil
 export default {
   data () {
     return {
@@ -76,10 +77,10 @@ export default {
     },
     changeMap () {
       // 渲染地图
-      this.$mapEvtBus.$emit(mapUtil.mapEvt.render, ({
+      this.$mapEvtBus.$emit(covidDataUtil.mapEvt.render, ({
         layerType: this.layerType, // 地图图层类型
         region: 'world',
-        dataType: this.isLatestData ? mapUtil.covidDataType.latest : mapUtil.covidDataType.history, // 数据类型
+        dataType: this.isLatestData ? covidDataUtil.covidDataType.latest : covidDataUtil.covidDataType.history, // 数据类型
         date: this.date, // 数据日期
         fieldType: this.fieldType // 数据字段
       }))
@@ -87,9 +88,9 @@ export default {
     handleDataTypeChange (dataType) {
       this.isLatestData = dataType
       if (!this.isLatestData) {
-        this.date = mapUtil.covidDefaultStartTime
+        this.date = covidDataUtil.covidDefaultStartTime
       } else {
-        this.date = moment().format(mapUtil.dateFormat)
+        this.date = moment().format(covidDataUtil.dateFormat)
       }
     },
     handleLayerTypeChange (layerType) {

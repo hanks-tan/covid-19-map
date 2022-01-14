@@ -1,4 +1,6 @@
-const mapUtil = {
+import GeoJSON from 'ol/format/GeoJSON'
+
+const covidDataUtil = {
   // 字面量
   covidDefaultStartTime: '2019-12-01',
   defaultRendeField: 'confirmed',
@@ -131,4 +133,10 @@ const mapUtil = {
   }
 }
 
-export default mapUtil
+function readGeoJSON (geojson) {
+  return new GeoJSON().readFeatures(geojson)
+}
+export default {
+  covidDataUtil,
+  readGeoJSON
+}

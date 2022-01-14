@@ -3,6 +3,8 @@ import world from './world'
 import countryLocation from './countryLocation'
 import mapUtil from '../../utils/mapUtil'
 
+const covidDataUtil = mapUtil.covidDataUtil
+
 const geoJson = new GeoJSON()
 const locations = geoJson.readFeatures(countryLocation)
 const regions = geoJson.readFeatures(world)
@@ -17,7 +19,7 @@ const mapData = {
    */
   getCountryDataByCode (params) {
     var dataObj = Object.assign({}, countryLocation)
-    if (params.layerType !== mapUtil.layerType.point) {
+    if (params.layerType !== covidDataUtil.layerType.point) {
       dataObj = Object.assign({}, world)
     }
     var countryData = geoJson.readFeatures(dataObj)
