@@ -14,7 +14,7 @@ class BaseLayer {
   init () {
     var layer = new VectorLayer({
       source: new VectorSource(),
-      style: this._styleFunc.bind(this)
+      style: this.styleFunc.bind(this)
     })
     layer.rootName = this.name
     this.oLayer = layer
@@ -53,6 +53,10 @@ class BaseLayer {
     type = type.replace('Multi', '')
     var func = defaultStyle[type]
     return func(feature)
+  }
+
+  setVisible (visible) {
+    this.oLayer.setVisible(visible)
   }
 }
 

@@ -4,9 +4,13 @@
       :key="i"
       class="item"
       :class="[item.checked ? 'active' : '']"
-      @click="layerClickHandle">
+      @click="layerGroupChange(item)">
       {{item.label}}
-      <div v-for="(sub, j) in item.children" :key="j" class="sub-item">
+      <div
+        v-for="(sub, j) in item.children"
+        :key="j"
+        @click.stop="layerChange(sub)"
+        class="sub-item">
         {{sub.label}}
       </div>
     </div>
@@ -16,31 +20,40 @@
 <script>
 import PointLayer from '../map/layer/pointLayer'
 import mapUtil from '../utils/mapUtil'
+import { Style, Fill, Stroke, Circle, Icon, RegularShape } from 'ol/style'
+
 export default {
   data () {
     return {
       layers: [
         {
-          name: 'checkPoints',
+          name: 'hsjcd',
           label: '核酸检测点',
           checked: false,
           children: [
             {
-              name: '',
+              name: 'zfjcd',
               label: '自费检测点',
               checked: true,
-              layer: null,
-              type: 'point',
-              dataSource: {
-                api: 'getStation'
+              layerOption: {
+                type: 'point',
+                dataSource: {
+                  api: 'getZfStation'
+                },
+                style: 'zfjcd' // 样式名
               }
             },
             {
-              name: 'free',
+              name: 'mfjcd',
               label: '免费检测点',
               checked: false,
-              layer: null,
-              type: 'point'
+              layerOption: {
+                type: 'point',
+                dataSource: {
+                  api: 'getStation'
+                },
+                style: 'point' // 样式名
+              }
             }
           ]
         },
@@ -48,8 +61,13 @@ export default {
           name: 'ymjzd',
           label: '疫苗接种点',
           checked: false,
-          layer: null,
-          type: 'point'
+          layerOption: {
+            type: 'point',
+            dataSource: {
+              api: 'getStation'
+            },
+            style: 'point' // 样式名
+          }
         },
         {
           name: 'fyq',
@@ -60,22 +78,37 @@ export default {
               name: 'gfxq',
               label: '高风险区',
               checked: false,
-              layer: null,
-              type: 'point'
+              layerOption: {
+                type: 'point',
+                dataSource: {
+                  api: 'getStation'
+                },
+                style: 'point' // 样式名
+              }
             },
             {
               name: 'gfxq',
               label: '中风险区',
               checked: false,
-              layer: null,
-              type: 'point'
+              layerOption: {
+                type: 'point',
+                dataSource: {
+                  api: 'getStation'
+                },
+                style: 'point' // 样式名
+              }
             },
             {
               name: 'gfxq',
               label: '低风险区',
               checked: false,
-              layer: null,
-              type: 'point'
+              layerOption: {
+                type: 'point',
+                dataSource: {
+                  api: 'getStation'
+                },
+                style: 'point' // 样式名
+              }
             }
           ]
         }
@@ -97,18 +130,18 @@ export default {
       })
 
       layerList.forEach((item) => {
-        if (Object.prototype.hasOwnProperty.call(item, 'layer')) {
-          if (item.checked) {
-            const layer = this.createLayer(item)
+        if (Object.prototype.hasOwnProperty.call(item, 'layerOption')) {
+          if (item.checked && item.layerOption) {
+            const layer = this.createLayer(item.layerOption, item.name)
             item.layer = layer
-            if (item.dataSource) {
-              this.loadData(item)
+            if (item.layerOption.dataSource) {
+              this.loadData(item.layerOption.dataSource, layer)
             }
           }
         }
       })
     },
-    createLayer (option) {
+    createLayer (option, layerName) {
       const layerClassList = {
         point: PointLayer
       }
@@ -119,24 +152,76 @@ export default {
       if (LayerC) {
         const layer = new LayerC({
           mapObj: mapObj,
-          name: option.name
+          name: layerName,
+          styleFunc: this.getStyle(option.style)
         })
         return layer
       }
       return null
     },
-    layerClickHandle () {
-
+    layerGroupChange (data) {
+      data.checked = !data.checked
+      if (data.children) {
+        data.children.forEach((item) => {
+          this.layerChange(item, data.checked)
+        })
+      }
     },
-    loadData (layerCf) {
-      if (layerCf.dataSource.api && layerCf.layer) {
-        const api = this.$api[layerCf.dataSource.api]
+    layerChange (data, checked) {
+      if (checked !== undefined) {
+        data.checked = checked
+      } else {
+        data.checked = !data.checked
+      }
+      if (data.layer) {
+        data.layer.setVisible(data.checked)
+      } else {
+        if (data.checked) {
+          data.layer = this.createLayer(data.layerOption, data.name)
+          this.loadData(data.layerOption.dataSource, data.layer)
+        }
+      }
+    },
+    loadData (source, layer) {
+      if (source.api && layer) {
+        const api = this.$api[source.api]
         if (api) {
           api().then((res) => {
             const data = mapUtil.readGeoJSON(res.data)
-            layerCf.layer.setData(data)
+            layer.setData(data)
           })
         }
+      }
+    },
+
+    getStyle (styleName) {
+      const createIconStyle = (icon) => {
+        const style = new Style({
+          image: new Icon({
+            anchor: [0.5, 0.5],
+            src: icon
+          })
+        })
+        return style
+      }
+      const styles = {
+        point: function (ft) {
+          return new Style({
+            image: new Circle({
+              radius: 5,
+              fill: new Fill({
+                color: '#fff'
+              })
+            })
+          })
+        },
+        zfjcd: function (ft) {
+          const icon = './image/pa_f.png'
+          return createIconStyle(icon)
+        }
+      }
+      if (styles[styleName]) {
+        return styles[styleName]
       }
     }
   }

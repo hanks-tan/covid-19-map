@@ -47,7 +47,7 @@ export default {
     init () {
       this.mapObj = new AMap({
         target: 'map',
-        center: [112, 32],
+        center: [114.21923, 22.717446],
         zoom: 16
       })
     }
