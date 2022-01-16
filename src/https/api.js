@@ -5,7 +5,9 @@ const apiURL = {
   // 检测站
   getStation: './data/station.geojson',
   // 自费检测点
-  getZfStation: './data/zfjcd.geojson'
+  getZfStation: './data/zfjcd.geojson',
+  // 面状风险区
+  getFxq: './data/fxq.geojson'
 }
 
 const api = {
@@ -17,6 +19,9 @@ const api = {
   },
   getZfStation () {
     return http(apiURL.getZfStation)
+  },
+  getFxq () {
+    return http(apiURL.getFxq)
   }
 }
 

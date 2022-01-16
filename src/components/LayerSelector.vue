@@ -3,12 +3,12 @@
     <div v-for="(item, i) in layers"
       :key="i"
       class="item"
-      :class="[item.checked ? 'active' : '']"
       @click="layerGroupChange(item)">
-      {{item.label}}
+      <span :class="{active: item.checked}">{{item.label}}</span>
       <div
         v-for="(sub, j) in item.children"
         :key="j"
+        :class="{active: sub.checked}"
         @click.stop="layerChange(sub)"
         class="sub-item">
         {{sub.label}}
@@ -19,6 +19,7 @@
 
 <script>
 import PointLayer from '../map/layer/pointLayer'
+import FengxianquLayer from '../map/layer/fengxianquLayer'
 import mapUtil from '../utils/mapUtil'
 import { Style, Fill, Stroke, Circle, Icon, RegularShape } from 'ol/style'
 
@@ -36,7 +37,7 @@ export default {
               label: '自费检测点',
               checked: true,
               layerOption: {
-                type: 'point',
+                type: 'point', // 对应图层类
                 dataSource: {
                   api: 'getZfStation'
                 },
@@ -79,11 +80,11 @@ export default {
               label: '高风险区',
               checked: false,
               layerOption: {
-                type: 'point',
+                type: 'fxqLayer',
                 dataSource: {
-                  api: 'getStation'
+                  api: ''
                 },
-                style: 'point' // 样式名
+                style: 'fxq' // 样式名
               }
             },
             {
@@ -91,11 +92,10 @@ export default {
               label: '中风险区',
               checked: false,
               layerOption: {
-                type: 'point',
+                type: 'fxqLayer',
                 dataSource: {
-                  api: 'getStation'
-                },
-                style: 'point' // 样式名
+                  api: 'getFxq'
+                }
               }
             },
             {
@@ -103,11 +103,11 @@ export default {
               label: '低风险区',
               checked: false,
               layerOption: {
-                type: 'point',
+                type: 'fxqLayer',
                 dataSource: {
                   api: 'getStation'
                 },
-                style: 'point' // 样式名
+                style: 'fxq' // 样式名
               }
             }
           ]
@@ -143,7 +143,8 @@ export default {
     },
     createLayer (option, layerName) {
       const layerClassList = {
-        point: PointLayer
+        point: PointLayer,
+        fxqLayer: FengxianquLayer
       }
 
       const mapObj = this.getMap()
@@ -153,7 +154,7 @@ export default {
         const layer = new LayerC({
           mapObj: mapObj,
           name: layerName,
-          styleFunc: this.getStyle(option.style)
+          styleFunc: option.style ? this.getStyle(option.style) : undefined
         })
         return layer
       }
@@ -218,6 +219,23 @@ export default {
         zfjcd: function (ft) {
           const icon = './image/pa_f.png'
           return createIconStyle(icon)
+        },
+        fxq: function (ft) {
+          const level = ft.get('level')
+          const colorMap = {
+            1: 'red',
+            2: '#e3ef2e',
+            3: '#8f8080'
+          }
+          return new Style({
+            fill: new Fill({
+              color: colorMap[level] || '#8f8080'
+            }),
+            style: new Style({
+              color: '#ccc',
+              width: 2
+            })
+          })
         }
       }
       if (styles[styleName]) {
@@ -233,9 +251,11 @@ export default {
     background: #67676cb3;
     .item{
       cursor: pointer;
+      text-align: left;
       .sub-item{
         padding-left: 2rem;
         margin: 0.5rem;
+        text-align: left;
       }
     }
     .active{
