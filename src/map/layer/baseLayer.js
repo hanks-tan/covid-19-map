@@ -4,6 +4,7 @@ import defaultStyle from '../defaultStyle'
 class BaseLayer {
   oLayer = null
   constructor (options) {
+    this.options = Object.assign({}, options)
     this.mapObj = options.mapObj
     this.name = options.name
     this.styleFunc = options.styleFunc || this._styleFunc

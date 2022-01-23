@@ -81,6 +81,7 @@ export default {
               checked: false,
               layerOption: {
                 type: 'fxqLayer',
+                showAnimaion: true,
                 dataSource: {
                   api: ''
                 },
@@ -93,6 +94,7 @@ export default {
               checked: false,
               layerOption: {
                 type: 'fxqLayer',
+                showAnimaion: true,
                 dataSource: {
                   api: 'getFxq'
                 }
@@ -104,6 +106,7 @@ export default {
               checked: false,
               layerOption: {
                 type: 'fxqLayer',
+                showAnimaion: true,
                 dataSource: {
                   api: 'getStation'
                 },
@@ -154,7 +157,8 @@ export default {
         const layer = new LayerC({
           mapObj: mapObj,
           name: layerName,
-          styleFunc: option.style ? this.getStyle(option.style) : undefined
+          styleFunc: option.style ? this.getStyle(option.style) : undefined,
+          showAnimaion: option.showAnimaion
         })
         return layer
       }
