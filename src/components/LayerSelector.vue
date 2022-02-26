@@ -51,9 +51,10 @@ export default {
               layerOption: {
                 type: 'point',
                 dataSource: {
-                  api: 'getStation'
+                  api: 'getFreeCheckPoint',
+                  type: 'pointList'
                 },
-                style: 'point' // 样式名
+                style: 'mfjcd' // 样式名
               }
             }
           ]
@@ -192,7 +193,12 @@ export default {
         const api = this.$api[source.api]
         if (api) {
           api().then((res) => {
-            const data = mapUtil.readGeoJSON(res.data)
+            let data
+            if (source.type === 'pointList') {
+              data = mapUtil.dataListToPointsFeature(res, 'longitude', 'latitude')
+            } else {
+              data = mapUtil.readGeoJSON(res.data)
+            }
             layer.setData(data)
           })
         }
@@ -222,6 +228,10 @@ export default {
         },
         zfjcd: function (ft) {
           const icon = './image/pa_f.png'
+          return createIconStyle(icon)
+        },
+        mfjcd: function (ft) {
+          const icon = './image/checkpoint_open.png'
           return createIconStyle(icon)
         },
         fxq: function (ft) {

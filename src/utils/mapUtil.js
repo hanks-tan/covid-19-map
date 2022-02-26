@@ -1,4 +1,6 @@
+import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
+import Point from 'ol/geom/Point'
 
 const covidDataUtil = {
   // 字面量
@@ -136,7 +138,28 @@ const covidDataUtil = {
 function readGeoJSON (geojson) {
   return new GeoJSON().readFeatures(geojson)
 }
+
+function dataListToPointsFeature (data, xName, yName) {
+  if (!Array.isArray(data)) {
+    return null
+  }
+  xName = xName || 'x'
+  yName = yName || 'y'
+
+  const fts = data.map((item) => {
+    const x = parseFloat(item[xName])
+    const y = parseFloat(item[yName])
+    const ft = new Feature({
+      geometry: new Point([x, y])
+    })
+    ft.setProperties(item)
+    return ft
+  })
+  return fts
+}
+
 export default {
   covidDataUtil,
-  readGeoJSON
+  readGeoJSON,
+  dataListToPointsFeature
 }

@@ -7,7 +7,9 @@ const apiURL = {
   // 自费检测点
   getZfStation: './data/zfjcd.geojson',
   // 面状风险区
-  getFxq: './data/fxq.geojson'
+  getFxq: './data/fxq.geojson',
+  // 免费核酸检查点
+  getFreeCheckPoint: './data/checkPoint.json'
 }
 
 const api = {
@@ -22,6 +24,11 @@ const api = {
   },
   getFxq () {
     return http(apiURL.getFxq)
+  },
+  getFreeCheckPoint () {
+    return http(apiURL.getFreeCheckPoint).then((res) => {
+      return res.data.data
+    })
   }
 }
 
