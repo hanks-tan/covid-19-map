@@ -99,6 +99,7 @@ export default {
     },
     handleDateChange (date) {
       this.date = date
+      this.$mapEvtBus.$emit('dateChange', date)
     },
     handleFieldTypeChange (fieldType) {
       this.fieldType = fieldType

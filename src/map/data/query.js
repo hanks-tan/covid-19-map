@@ -41,10 +41,10 @@ function parseCSVToMap (csvData) {
     const codes = regions.join('-') // 构造二级key
     const date = lineDataArray[dateIndex]
     const regionValue = {
-      confirmed: lineDataArray[confirmedIndex], // 确诊
-      suspected: lineDataArray[suspectedIndex], // 疑似
-      cured: lineDataArray[curedIndex], // 现存
-      dead: lineDataArray[deadIndex] // 死亡
+      confirmed: parseInt(lineDataArray[confirmedIndex]), // 确诊
+      suspected: parseInt(lineDataArray[suspectedIndex]), // 疑似
+      cured: parseInt(lineDataArray[curedIndex]), // 现存
+      dead: parseInt(lineDataArray[deadIndex]) // 死亡
     }
     if (dataMap.get(date)) {
       const thisDayValue = dataMap.get(date)
