@@ -1,6 +1,6 @@
 <template>
-  <div class="rank-contanier box">
-    <el-tabs type="border-card" v-model="tabsValue">
+  <div class="rank-container box">
+    <el-tabs type="border-card" v-model="tabsValue" class="tabs">
       <el-tab-pane v-for="(item, index) in tabs" :key="index" :label="item.title" :name="item.name">
         <div class="rank-header">
           <div class="">
@@ -22,6 +22,7 @@
         </ul>
       </el-tab-pane>
     </el-tabs>
+    <div class="date">截至日期：{{date}}</div>
   </div>
 </template>
 <script>
@@ -51,55 +52,70 @@ export default {
       tabsValue: 'full',
       top: 10,
       curField: 'confirmed',
-      rankData: []
+      rankData: [],
+      date: '2020-02-14',
+      regionType: 3 // 1 国家，2省，3市
+    }
+  },
+  watch: {
+    tabsValue (val) {
+      this.getRankData()
+    },
+    date () {
+      this.getRankData()
     }
   },
   mounted () {
     this.$mapEvtBus.$on('dateChange', (date) => {
-      this.getDayDate(date, this.curField, this.top)
+      this.date = date
     })
-    this.getDayDate('2020-02-03', this.curField, this.top)
+    this.getRankData()
   },
   methods: {
-    getDayDate (date, field, count) {
-      if (date) {
-        const data = query.getDayData(date)
-        const arr = Array.from(data)
-        if (Array.isArray(arr)) {
-          arr.sort((a, b) => {
-            const data1 = a[1]
-            const data2 = b[1]
-            return data2[field] - data1[field]
-          })
-
-          this.rankData = arr.slice(0, count).map((item) => {
-            return {
-              name: item[0],
-              count: item[1][this.curField]
-            }
-          })
-        }
+    getRankData () {
+      if (this.tabsValue === 'full') {
+        this.rankData = query.getDeadlineRankData(this.date, this.curField, this.top, this.regionType)
+      } else if (this.tabsValue === '24hours') {
+        this.rankData = query.get24HourRankData(this.date, this.curField, this.top, this.regionType)
+      } else {
+        this.rankData = query.get7DayRankData(this.date, this.curField, this.top, this.regionType)
       }
     }
   }
 }
 </script>
 <style lang="less" scoped>
+  @bgColor: #565658b3;
   .rank-container{
-    /deep/ .el-tabs{
-      background-color: #565658b3;
+    .date{
+      color: #ccc;
     }
-  }
-  /deep/ .rank-header{
-    display: flex;
-    justify-content: space-around;
-  }
-  /deep/ .rank-content{
-    list-style: none;
-    .row{
-      display: grid;
-      grid-template-columns: 50% 50%;
-      justify-items: center;
+    .tabs{
+      background: transparent;
+      border: 0;
+      /deep/ .el-tabs__header{
+        background: transparent;
+        border-bottom: 1px solid #606773;
+        .el-tabs__item.is-active{
+          background: #16161561;
+          border: 0;
+        }
+      }
+    }
+    /deep/ .rank-header{
+      display: flex;
+      justify-content: space-around;
+      color: #ccc;
+    }
+    /deep/ .rank-content{
+      list-style: none;
+      color: #ccc;
+      .row{
+        display: grid;
+        grid-template-columns: repeat(2, 50%);
+        justify-items: center;
+        padding: 10px 0;
+      }
     }
   }
 </style>

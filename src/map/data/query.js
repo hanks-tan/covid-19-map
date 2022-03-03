@@ -1,3 +1,52 @@
+import moment from 'moment'
+
+/**
+ * 获取一个日期的前几天的日期
+ * @param {string} date
+ * @param {number} num
+ * @returns
+ */
+function getDayBefore (date, num) {
+  return moment(date).subtract(num, 'day').format('yyyy-MM-DD')
+}
+
+/**
+ * 获取排名
+ * @param {Map} dataMap
+ * @param {string} field
+ * @param {number} topCount
+ * @param {number} regionType 国家或地区。 1-国家地区， 2-省， 3-市
+ * @returns {Array}
+ */
+function getRankData (dataMap, field, topCount, regionType) {
+  if (!regionType) {
+    regionType = 1
+  }
+
+  if (dataMap) {
+    const arr = Array.from(dataMap).filter((item) => {
+      return item[0].split('-').length === regionType
+    })
+    if (Array.isArray(arr)) {
+      arr.sort((a, b) => {
+        const data1 = a[1]
+        const data2 = b[1]
+        return data2[field] - data1[field]
+      })
+      const rankData = arr.slice(0, topCount).map((item) => {
+        const names = window.region.get(item[0])
+        const name = names[names.length - 1]
+        return {
+          name: name,
+          count: item[1][field]
+        }
+      })
+      return rankData
+    }
+  }
+  return []
+}
+
 /**
  * 解析csv数据
  * @param {*} csvData csv文本
@@ -9,6 +58,7 @@ function parseCSVToMap (csvData) {
   const keys = startLine.split(',')
   const data = lines.slice(1)
   const dataMap = new Map() // 存储新冠数据
+  const regionMap = new Map()
   /* dataMap数据结构：
   {
     'date': {                                           ------------ 1级key
@@ -54,6 +104,12 @@ function parseCSVToMap (csvData) {
       thisDayValue.set(codes, regionValue)
       dataMap.set(date, thisDayValue)
     }
+
+    const regionNameIndex = [1, 3, 5] // 国家、省、市字段索引
+    const regionName = [lineDataArray[regionNameIndex[0]], lineDataArray[regionNameIndex[1]], lineDataArray[regionNameIndex[2]]].filter((item) => item !== '')
+    regionMap.set(codes, regionName)
+
+    window.region = regionMap
   })
 
   return dataMap
@@ -95,9 +151,98 @@ function getDayCountryData (date) {
   return null
 }
 
+/**
+ * 获取截至某日期的排名
+ * @param {string} date
+ * @param {string} field
+ * @param {number} count
+ * @param {number} regionType 国家或地区。 1-国家地区， 2-省， 3-市
+ * @returns {Array}
+ */
+function getDeadlineRankData (date, field, count, regionType) {
+  if (date) {
+    const data = getDayData(date)
+    return getRankData(data, field, count, regionType)
+  }
+  return []
+}
+
+/**
+ * 获取某日前24小时增长数据
+ * @param {*} date
+ * @returns {Map}
+ */
+function get24HourData (date) {
+  const todayDataMap = getDayData(date)
+
+  const yesterday = getDayBefore(date, 1)
+  const yesterdayDataMap = getDayData(yesterday)
+  const result = new Map()
+  todayDataMap.forEach((data, key) => {
+    const yesterDayData = yesterdayDataMap.get(key)
+    let obj = data
+    if (yesterDayData) {
+      obj = {}
+      Object.keys(data).forEach((prop) => {
+        const value = yesterDayData[prop]
+        obj[prop] = data[prop] - value
+      })
+    }
+    result.set(key, obj)
+  })
+  return result
+}
+
+function get7DayData (date) {
+  const todayDataMap = getDayData(date)
+  const otherday = getDayBefore(date, 7)
+  const otherdayDataMap = getDayData(otherday)
+  const result = new Map()
+  todayDataMap.forEach((data, key) => {
+    const yesterDayData = otherdayDataMap.get(key)
+    let obj = data
+    if (yesterDayData) {
+      obj = {}
+      Object.keys(data).forEach((prop) => {
+        const value = yesterDayData[prop]
+        obj[prop] = data[prop] - value
+      })
+    }
+    result.set(key, obj)
+  })
+  return result
+}
+
+/**
+ * 获取24小时内的排名数据
+ * @param {*} date
+ * @param {*} field
+ * @param {*} count
+ * @param {*} regionType
+ * @returns {Array}
+ */
+function get24HourRankData (date, field, count, regionType) {
+  if (date) {
+    const oneDayData = get24HourData(date, field)
+    return getRankData(oneDayData, field, count, regionType)
+  }
+  return []
+}
+
+function get7DayRankData (date, field, count, regionType) {
+  if (date) {
+    const oneDayData = get7DayData(date, field)
+    return getRankData(oneDayData, field, count, regionType)
+  }
+  return []
+}
+
 export default {
   parseCSVToMap,
   getDayData,
   getCountryOneDay,
-  getDayCountryData
+  getDayCountryData,
+  getDeadlineRankData,
+  get24HourRankData,
+  get7DayRankData
 }

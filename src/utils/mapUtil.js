@@ -4,7 +4,7 @@ import Point from 'ol/geom/Point'
 
 const covidDataUtil = {
   // 字面量
-  covidDefaultStartTime: '2019-12-01',
+  covidDefaultStartTime: '2019-12-06',
   defaultRendeField: 'confirmed',
   computed: {
     // 现存确诊

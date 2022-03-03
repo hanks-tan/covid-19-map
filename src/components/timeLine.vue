@@ -43,7 +43,8 @@ export default {
       curMonth: undefined, // 当前月
       curMonthStr: undefined, // 当前月(string),
       isLatest: false, // 最进
-      progress: 0
+      progress: 0,
+      curDate: this.startDate
     }
   },
   props: {
@@ -73,11 +74,13 @@ export default {
     initDates (startDate) {
       this.curMonth = moment(startDate)
       var length = moment(startDate).daysInMonth()
+      var num = moment(startDate).get('date')
+      const countInCurMonth = length - num + 1
       this.dateList = []
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < countInCurMonth; i++) {
         this.dateList.push({
           no: i + 1,
-          date: `${i + 1}日`,
+          date: `${num + i}日`,
           old: false
         })
       }
@@ -96,22 +99,25 @@ export default {
           self.reset()
           return
         }
-        if (self.dateList.length > 1) {
-          var nextDate = moment(self.startDate).add(self.speed, 'days').format(covidDataUtil.dateFormat)
-          self.dateList[self.progress].old = true
-          self.progress += 1
-          if (moment(nextDate).diff(moment(self.curMonth), 'months') >= 1) {
-            self.updateMonth(nextDate)
-            self.progress = 0
-          }
 
-          if (moment(nextDate).diff(moment(), 'days') >= 0) {
-            nextDate = moment().format(covidDataUtil.dateFormat)
-            self.isLatest = true
-          }
-          self.$emit('changeDate', nextDate)
+        if (moment(self.curDate).get('month') !== moment(self.curMonth).get('month')) {
+          self.updateMonth(self.curDate)
+          self.progress = 0
+          return
         }
-      }, 300)
+
+        if (moment(self.curDate).diff(moment(), 'days') >= 0) {
+          self.isLatest = true
+          return
+        }
+
+        if (self.dateList.length > 0) {
+          self.dateList[self.progress].old = true
+          self.$emit('changeDate', self.curDate)
+          self.progress += self.speed
+          self.curDate = moment(self.curDate).add(self.speed, 'day').format(covidDataUtil.dateFormat)
+        }
+      }, 1000)
     },
     stopPlay () {
       window.clearInterval(this.player)
