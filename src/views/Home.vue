@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     init () {
-      let loading = this.$loading()
+      const loading = this.$loading()
       this.$api.getCovidData().then((res) => {
         window.cvData = query.parseCSVToMap(res.data)
         loading.close()

@@ -22,9 +22,9 @@
         <div class="bottom"></div>
       </div> -->
       <!-- 日期 -->
-        <div class="date-item" v-for="item in dateList" :key=item.no>
-          <div class="top-line" :class="{active: item.old}"></div>
-          <div class="date-label">{{item.date}}</div>
+        <div class="date-item" v-for="(item, index) in dateList" :key="item.no">
+          <div class="top-line" :class="{active: item.old}" @click="setProgressHandle(index)"></div>
+          <div class="date-label" @click="setProgressHandle(index)">{{item.date}}</div>
         </div>
       </div>
     </div>
@@ -65,6 +65,13 @@ export default {
     },
     curMonth (newVal) {
       this.curMonthStr = newVal.format('YYYY年MM月')
+    },
+    progress (newVal) {
+      this.dateList.forEach((date, index) => {
+        if (index > newVal) {
+          date.old = false
+        }
+      })
     }
   },
   mounted () {
@@ -134,6 +141,9 @@ export default {
     updateMonth (date) {
       this.curMonth = moment(date)
       this.initDates(date)
+    },
+    setProgressHandle (index) {
+      this.progress = index
     }
   }
 }
