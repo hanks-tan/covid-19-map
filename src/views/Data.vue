@@ -32,7 +32,157 @@ export default {
     this.init()
   },
   methods: {
-    init () {
+    init  () {
+      let vm = this
+      this.$api.getCovidData().then((csvData) => {
+        const lines = csvData.data.split('\n')
+        const data = []
+        lines.forEach((line, index) => {
+          const values = line.split(',')
+          if (index === 0) {
+            data.push(values)
+          } else {
+            // 过滤出带城市的数据
+            if (values[6]) {
+              [7, 8, 9, 10].forEach((i) => {
+                values[i] = parseInt(values[i])
+              })
+              data.push(values)
+            }
+          }
+        })
+        return data
+      }).then((data) => {
+        var chartDom = vm.$el
+        var myChart = echarts.init(chartDom)
+        var option
+
+        const updateFrequency = 1000
+        const dimension = 7
+        const countryColors = {
+          420100: '#00008b',
+          440300: '#f00',
+          440100: '#ffde00',
+          110102: '#002a8f',
+          440400: '#003580'
+        }
+
+        const dateList = []
+        data.slice(1).forEach((item) => {
+          if (!dateList.includes(item[0])) {
+            dateList.push(item[0])
+          }
+        })
+
+        const startIndex = 45
+        const startDate = dateList[startIndex]
+
+        option = {
+          grid: {
+            top: 10,
+            bottom: 30,
+            left: 150,
+            right: 80
+          },
+          xAxis: {
+            max: 'dataMax',
+            axisLabel: {
+              formatter: function (n) {
+                return Math.round(n) + ''
+              }
+            }
+          },
+          dataset: {
+            source: data.slice(1).filter(function (d) {
+              return d[0] === startDate
+            })
+          },
+          yAxis: {
+            type: 'category',
+            inverse: true,
+            max: 10,
+            axisLabel: {
+              show: true,
+              fontSize: 14,
+              formatter: function (value) {
+                return value
+              },
+              rich: {
+                flag: {
+                  fontSize: 25,
+                  padding: 5
+                }
+              }
+            },
+            animationDuration: 300,
+            animationDurationUpdate: 300
+          },
+          series: [
+            {
+              realtimeSort: true,
+              seriesLayoutBy: 'column',
+              type: 'bar',
+              itemStyle: {
+                color: function (param) {
+                  return countryColors[param.value[6]] || '#5470c6'
+                }
+              },
+              encode: {
+                x: dimension,
+                y: 5
+              },
+              label: {
+                show: true,
+                precision: 1,
+                position: 'right',
+                valueAnimation: true,
+                fontFamily: 'monospace'
+              }
+            }
+          ],
+          // Disable init animation.
+          animationDuration: 0,
+          animationDurationUpdate: updateFrequency,
+          animationEasing: 'linear',
+          animationEasingUpdate: 'linear',
+          graphic: {
+            elements: [
+              {
+                type: 'text',
+                right: 160,
+                bottom: 60,
+                style: {
+                  text: startDate,
+                  font: 'bolder 80px monospace',
+                  fill: 'rgba(100, 100, 100, 0.25)'
+                },
+                z: 100
+              }
+            ]
+          }
+        }
+
+        myChart.setOption(option)
+
+        myChart.setOption(option)
+        for (let i = startIndex; i < dateList.length - 1; ++i) {
+          (function (i) {
+            setTimeout(function () {
+              updateYear(dateList[i + 1])
+            }, (i - startIndex) * updateFrequency)
+          })(i)
+        }
+        function updateYear (date) {
+          const source = data.slice(1).filter(function (d) {
+            return d[0] === date
+          })
+          option.series[0].data = source
+          option.graphic.elements[0].style.text = date
+          myChart.setOption(option)
+        }
+      })
+    },
+    init1 () {
       let vm = this
       var ROOT_PATH =
   'https://cdn.jsdelivr.net/gh/apache/echarts-website@asf-site/examples'
