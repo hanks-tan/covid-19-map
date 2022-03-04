@@ -1,31 +1,32 @@
 <template>
   <div class="wrap">
+    <DynamicRankChart
+      v-if="rankData"
+      :colorCofig="rankData.colorCofig"
+      :dateIndex="rankData.dateIndex"
+      :labelIndex="rankData.labelIndex"
+      :labelCodeIndex="rankData.labelCodeIndex"
+      :dimension="rankData.dimension"
+      :renderData="rankData.renderData"
+      :startDateIndex="rankData.startDateIndex"
+      class="chart"
+      >
+    </DynamicRankChart>
   </div>
 </template>
 
 <script>
-import * as echarts from 'echarts/core'
-import {
-  DatasetComponent,
-  GraphicComponent,
-  GridComponent
-} from 'echarts/components'
-import { BarChart } from 'echarts/charts'
-import { CanvasRenderer } from 'echarts/renderers'
+import DynamicRankChart from '../components/charts/dynamicRankChart.vue'
 import axios from 'axios'
-
-echarts.use([
-  DatasetComponent,
-  GraphicComponent,
-  GridComponent,
-  BarChart,
-  CanvasRenderer
-])
 export default {
   data () {
     return {
-      lineChartData: undefined
+      lineChartData: undefined,
+      rankData: undefined
     }
+  },
+  components: {
+    DynamicRankChart
   },
 
   mounted () {
@@ -53,12 +54,6 @@ export default {
         })
         return data
       }).then((data) => {
-        var chartDom = vm.$el
-        var myChart = echarts.init(chartDom)
-        var option
-
-        const updateFrequency = 1000
-        const dimension = 7
         const countryColors = {
           420100: '#00008b',
           440300: '#f00',
@@ -67,119 +62,16 @@ export default {
           440400: '#003580'
         }
 
-        const dateList = []
-        data.slice(1).forEach((item) => {
-          if (!dateList.includes(item[0])) {
-            dateList.push(item[0])
-          }
-        })
-
-        const startIndex = 45
-        const startDate = dateList[startIndex]
-
-        option = {
-          grid: {
-            top: 10,
-            bottom: 30,
-            left: 150,
-            right: 80
-          },
-          xAxis: {
-            max: 'dataMax',
-            axisLabel: {
-              formatter: function (n) {
-                return Math.round(n) + ''
-              }
-            }
-          },
-          dataset: {
-            source: data.slice(1).filter(function (d) {
-              return d[0] === startDate
-            })
-          },
-          yAxis: {
-            type: 'category',
-            inverse: true,
-            max: 10,
-            axisLabel: {
-              show: true,
-              fontSize: 14,
-              formatter: function (value) {
-                return value
-              },
-              rich: {
-                flag: {
-                  fontSize: 25,
-                  padding: 5
-                }
-              }
-            },
-            animationDuration: 300,
-            animationDurationUpdate: 300
-          },
-          series: [
-            {
-              realtimeSort: true,
-              seriesLayoutBy: 'column',
-              type: 'bar',
-              itemStyle: {
-                color: function (param) {
-                  return countryColors[param.value[6]] || '#5470c6'
-                }
-              },
-              encode: {
-                x: dimension,
-                y: 5
-              },
-              label: {
-                show: true,
-                precision: 1,
-                position: 'right',
-                valueAnimation: true,
-                fontFamily: 'monospace'
-              }
-            }
-          ],
-          // Disable init animation.
-          animationDuration: 0,
-          animationDurationUpdate: updateFrequency,
-          animationEasing: 'linear',
-          animationEasingUpdate: 'linear',
-          graphic: {
-            elements: [
-              {
-                type: 'text',
-                right: 160,
-                bottom: 60,
-                style: {
-                  text: startDate,
-                  font: 'bolder 80px monospace',
-                  fill: 'rgba(100, 100, 100, 0.25)'
-                },
-                z: 100
-              }
-            ]
-          }
+        const options = {
+          renderData: data,
+          colorCofig: countryColors,
+          dimension: 7,
+          dateIndex: 0,
+          labelIndex: 5,
+          labelCodeIndex: 6,
+          startDateIndex: 40
         }
-
-        myChart.setOption(option)
-
-        myChart.setOption(option)
-        for (let i = startIndex; i < dateList.length - 1; ++i) {
-          (function (i) {
-            setTimeout(function () {
-              updateYear(dateList[i + 1])
-            }, (i - startIndex) * updateFrequency)
-          })(i)
-        }
-        function updateYear (date) {
-          const source = data.slice(1).filter(function (d) {
-            return d[0] === date
-          })
-          option.series[0].data = source
-          option.graphic.elements[0].style.text = date
-          myChart.setOption(option)
-        }
+        this.rankData = options
       })
     },
     init1 () {
