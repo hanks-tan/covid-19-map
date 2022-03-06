@@ -35,7 +35,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  @import url("//unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css");
   .home{
     background-color: #4f4f52;
     .map-container{

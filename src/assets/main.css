@@ -26,3 +26,6 @@ head,body{
   background-color: #565658b3;
   box-shadow: 0.5rem 0.5rem 0.5rem #474545
 }
+.col-label{
+  margin-right: .5rem;
+}

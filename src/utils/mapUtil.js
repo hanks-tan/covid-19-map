@@ -37,6 +37,24 @@ const covidDataUtil = {
     point: 'point',
     polygon: 'polygon'
   },
+  covidDataTypeList: [
+    {
+      value: 'confirmed',
+      label: '累计确诊'
+    },
+    {
+      value: 'cured',
+      label: '现存确诊'
+    },
+    {
+      value: 'addConfirm',
+      label: '新增确诊病例'
+    },
+    {
+      value: 'dead',
+      label: '累计死亡'
+    }
+  ],
   mapEvt: {
     render: 'render',
     legendChange: 'legendChange'

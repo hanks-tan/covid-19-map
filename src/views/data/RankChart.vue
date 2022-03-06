@@ -16,13 +16,22 @@
 </template>
 
 <script>
-import DynamicRankChart from '../components/charts/dynamicRankChart.vue'
+import DynamicRankChart from '../../components/charts/dynamicRankChart.vue'
 import axios from 'axios'
 export default {
   data () {
     return {
       lineChartData: undefined,
-      rankData: undefined
+      rankData: undefined,
+      lineRachChartOptins: {
+        renderData: [],
+        countries: [],
+        startDate: '',
+        countryColName: 'city',
+        dateColName: 'date',
+        dataItemName: '',
+        title: ''
+      }
     }
   },
   components: {
@@ -72,6 +81,42 @@ export default {
           startDateIndex: 40
         }
         this.rankData = options
+      })
+    },
+    showLineRaceChart () {
+      let vm = this
+      this.$api.getCovidData().then((csvData) => {
+        const lines = csvData.data.split('\n')
+        const data = []
+        lines.forEach((line, index) => {
+          const values = line.split(',')
+          if (index === 0) {
+            data.push(values)
+          } else {
+            // 过滤出带城市的数据
+            if (values[6]) {
+              [7, 8, 9, 10].forEach((i) => {
+                values[i] = parseInt(values[i])
+              })
+              data.push(values)
+            }
+          }
+        })
+        return data
+      }).then((data) => {
+        const citys = [
+          '武汉市',
+          '深圳市',
+          '广州市',
+          '黄冈市'
+        ]
+        vm.lineRachChartOptins.countries = citys
+        vm.lineRachChartOptins.startDate = '2020-02-14'
+        vm.lineRachChartOptins.countryColName = 'city'
+        vm.lineRachChartOptins.dateColName = 'date'
+        vm.lineRachChartOptins.dataItemName = 'confirmed'
+        vm.lineRachChartOptins.title = '增长'
+        vm.lineRachChartOptins.renderData = data
       })
     },
     init1 () {
