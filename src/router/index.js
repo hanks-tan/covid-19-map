@@ -27,19 +27,36 @@ const routes = [
   {
     path: '/data',
     name: 'Data',
-    component: () => import('../views/data/Index')
+    component: () => import('../views/data/Index'),
+    // children: [
+    //   {
+    //     path: 'top10',
+    //     name: 'rank',
+    //     component: () => import('../views/data/RankChart')
+    //   }
+    // ]
   },
   {
     path: '/testchart',
     name: 'TestChart',
     component: () => import('../views/TestChart.vue')
+  },
+  {
+    path: '/top10',
+    name: 'rank',
+    component: () => import('../views/data/RankChart')
+  },
+  {
+    path: '/increaseChart',
+    name: 'increase',
+    component: () => import('../views/data/IncreaseChart')
   }
 ]
 
 const router = new VueRouter({
   routes,
   mode: 'history',
-  base: '/covid-19-map/'
+  base: '/'
 })
 
 export default router

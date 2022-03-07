@@ -29,3 +29,6 @@ head,body{
 .col-label{
   margin-right: .5rem;
 }
+.title{
+  text-align: left;
+}

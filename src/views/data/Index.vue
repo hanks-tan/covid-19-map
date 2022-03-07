@@ -1,26 +1,36 @@
 <template>
   <div class="wrap">
-    <RankChart class="chart-box"></RankChart>
-    <IncreaseChart class="chart-box"></IncreaseChart>
-    <!-- <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
-      <li v-for="i in count" class="infinite-list-item">
-        <IncreaseChart v-if="count >= 1"></IncreaseChart>
-      </li>
-    </ul> -->
+    <div class="content">
+      <el-tabs type="border-card">
+        <el-tab-pane v-for="(item,i) in tabs" :key="i" :label="item.label">
+          <div v-if="item.code === 'domestic'">
+            <DomesticData></DomesticData>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
 <script>
-import IncreaseChart from './IncreaseChart.vue'
-import RankChart from './RankChart.vue'
+import DomesticData from './DomesticData.vue'
 export default {
   components: {
-    IncreaseChart,
-    RankChart
+    DomesticData,
   },
   data () {
     return {
-      count: 0
+      count: 0,
+      tabs: [
+        {
+          label: '国内疫情',
+          code: 'domestic'
+        },
+        {
+          label: '国际疫情',
+          code: 'international'
+        }
+      ]
     }
   },
   methods: {
@@ -33,10 +43,11 @@ export default {
 
 <style lang="less" scoped>
   .wrap{
-    padding: 10px;
-    background-color: white;
-  }
-  .chart-box{
-    padding:10px;
+    color: black;
+    .content{
+      margin: 10px;
+      background-color: white;
+      border-radius: 5px;
+    }
   }
 </style>

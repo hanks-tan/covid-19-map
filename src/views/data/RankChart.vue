@@ -1,5 +1,8 @@
 <template>
   <div class="wrap">
+    <div class="title">
+      <h2>国内 确诊病例 TOP10 的城市变化过程</h2>
+    </div>
     <DynamicRankChart
       v-if="rankData"
       :colorCofig="rankData.colorCofig"
@@ -291,9 +294,19 @@ export default {
 
 <style lang="less" scoped>
   .wrap{
-    height: 600px;
+    margin: .5rem;
+    background-color: whitesmoke;
+    min-height:  calc(100vh - 30px);
+    color: black;
+    border-radius: 5px;
+    .title{
+      padding: 0 .5rem;
+      background: #2196f34a;
+      border-radius: 5px 5px 0 0;
+    }
     .chart {
       height: 600px;
+      padding: 0 .5rem;
     }
   }
 </style>

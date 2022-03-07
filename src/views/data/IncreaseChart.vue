@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="setting-wrap">
+    <div class="setting-wrap box">
       <!-- 区域选择器 -->
       <RegionSelector @change="regionChangeHandle" class="setting-item"></RegionSelector>
       <!-- 列选择器 -->
@@ -21,7 +21,7 @@
       :options="lineRachChartOptins"
       :renderData="lineRachChartOptins.renderData"
       :title="lineRachChartOptins.title"
-      class="chart"
+      class="chart box"
       :key="this.lineChartKey"
     ></LineRace>
   </div>
@@ -125,9 +125,17 @@ export default {
 
 <style lang="less" scoped>
   .wrap{
-    height: 600px;
+    margin: .5rem;
+    min-height:  calc(100vh - 30px);
+    color: black;
+    border-radius: 5px;
+    .box {
+      border-radius: 5px;
+      background-color: white;
+    }
     .setting-wrap{
       display: flex;
+      background-color: #2196f30d;
       .setting-item{
         margin: 0 1rem;
       }
