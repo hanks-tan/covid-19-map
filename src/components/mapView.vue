@@ -121,7 +121,7 @@ export default {
     line-height: 2rem;
   }
   .timeline-container{
-    width: 100%;
+    width: calc(100% - 140px - 20px);
     background-color: rgba(54, 16, 22, 0.4);
     position: absolute;
     z-index: 500;

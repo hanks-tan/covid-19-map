@@ -1,5 +1,5 @@
 <template>
-  <div class="map-legend">
+  <div class="map-legend box">
     <div v-for="item in categoryList" class="legend-item" :key="item.no">
       <div :style="{backgroundColor:item.color}" @click="handleLegendClick"></div>
       <span>{{item.level}}</span>
@@ -52,12 +52,13 @@ export default {
 </script>
 <style lang="less">
 .map-legend{
-    right: 1%;
+    right: 0;
     padding: 5px;
     bottom: 0px;
     text-align: left;
     position: absolute;
-    background-color: rgba(54, 16, 22, 0.4);
+    width: 140px;
+    // background-color: rgba(54, 16, 22, 0.4);
     .legend-item{
       color: #bfbebe;
     }

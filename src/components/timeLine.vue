@@ -24,7 +24,7 @@
       <!-- 日期 -->
         <div class="date-item" v-for="(item, index) in dateList" :key="item.no">
           <div class="top-line" :class="{active: item.old}" @click="setProgressHandle(index)"></div>
-          <div class="date-label" @click="setProgressHandle(index)">{{item.date}}</div>
+          <div class="date-label">{{item.str}}</div>
         </div>
       </div>
     </div>
@@ -65,13 +65,6 @@ export default {
     },
     curMonth (newVal) {
       this.curMonthStr = newVal.format('YYYY年MM月')
-    },
-    progress (newVal) {
-      this.dateList.forEach((date, index) => {
-        if (index > newVal) {
-          date.old = false
-        }
-      })
     }
   },
   mounted () {
@@ -87,8 +80,9 @@ export default {
       for (let i = 0; i < countInCurMonth; i++) {
         this.dateList.push({
           no: i + 1,
-          date: `${num + i}日`,
-          old: false
+          str: `${num + i}日`,
+          old: false,
+          date: moment(startDate).add(i, 'day').format(covidDataUtil.dateFormat)
         })
       }
       console.log(this.dateList)
@@ -144,6 +138,11 @@ export default {
     },
     setProgressHandle (index) {
       this.progress = index
+      this.dateList.forEach((date, i) => {
+        date.old = i <= index
+      })
+      this.curDate = this.dateList[index].date
+      this.$emit('changeDate', this.curDate)
     }
   }
 }
@@ -210,6 +209,7 @@ export default {
           border-left: 1px solid #fff;
           background: #aeb3af;
           height: 10px;
+          cursor: pointer;
         }
         .active{
           background: #187b33;

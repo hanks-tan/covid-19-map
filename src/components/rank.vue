@@ -114,7 +114,7 @@ export default {
         display: grid;
         grid-template-columns: repeat(2, 50%);
         justify-items: center;
-        padding: 10px 0;
+        padding: 5px 0;
       }
     }
   }
