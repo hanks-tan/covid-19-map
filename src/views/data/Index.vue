@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="content">
+    <div class="content box">
       <el-tabs type="border-card">
         <el-tab-pane v-for="(item,i) in tabs" :key="i" :label="item.label">
           <div v-if="item.code === 'domestic'">

@@ -97,6 +97,10 @@ export default {
     color: #bebfbf;
   }
   .main{
+    color: #ccc;
+    /deep/ .el-switch__label{
+      color: #ccc;
+    }
     .selector{
       display: flex;
       flex-direction: column;
