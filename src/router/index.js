@@ -50,6 +50,11 @@ const routes = [
     path: '/increaseChart',
     name: 'increase',
     component: () => import('../views/data/IncreaseChart')
+  },
+  {
+    path: '/shenzhen',
+    name: 'shenzhen',
+    component: () => import('../views/shenzhen/Index')
   }
 ]
 

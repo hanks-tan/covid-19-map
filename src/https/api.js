@@ -9,7 +9,9 @@ const apiURL = {
   // 面状风险区
   getFxq: './data/fxq.geojson',
   // 免费核酸检查点
-  getFreeCheckPoint: './data/checkPoint.json'
+  getFreeCheckPoint: './data/checkPoint.json',
+  // 深圳疫情数据
+  getSzyzData: './data/sz/2022-03-09.csv'
 }
 
 const api = {
@@ -29,7 +31,27 @@ const api = {
     return http(apiURL.getFreeCheckPoint).then((res) => {
       return res.data.data
     })
+  },
+  getSzyzData () {
+    return http(apiURL.getSzyzData).then((res) => {
+      return csv2json(res.data)
+    })
   }
+}
+
+function csv2json (csvDataStr) {
+  const lines = csvDataStr.split('\r\n')
+  const head = lines[0].split(',')
+  const data = lines.slice(1)
+  const objList = data.map((l, i) => {
+    const values = l.split(',')
+    const obj = { id: i }
+    values.forEach((v, j) => {
+      obj[head[j]] = v
+    })
+    return obj
+  })
+  return objList
 }
 
 export default api
