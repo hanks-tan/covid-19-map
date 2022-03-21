@@ -150,7 +150,17 @@ const covidDataUtil = {
         return i
       }
     }
-  }
+  },
+  ageGroup1: [
+    { id: 1, label: '0-1岁', limit: [0, 1] },
+    { id: 2, label: '1-5岁', limit: [1, 5] },
+    { id: 3, label: '5-12岁', limit: [5, 12] },
+    { id: 4, label: '12-18岁', limit: [12, 18] },
+    { id: 5, label: '18-28岁', limit: [18, 28] },
+    { id: 6, label: '28-45岁', limit: [28, 45] },
+    { id: 7, label: '45-60岁', limit: [45, 60] },
+    { id: 8, label: '60岁以上', limit: [60, 999] }
+  ]
 }
 
 function readGeoJSON (geojson) {

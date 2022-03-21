@@ -1,3 +1,7 @@
+:root{
+  --border-color: #5e5f60;
+}
+
 head,body{
   background-color: #dcdfd9;
   height: 100%;
@@ -32,3 +36,5 @@ head,body{
 .title{
   text-align: left;
 }
+
+/* element-ui reset */

@@ -11,7 +11,7 @@ const apiURL = {
   // 免费核酸检查点
   getFreeCheckPoint: './data/checkPoint.json',
   // 深圳疫情数据
-  getSzyzData: './data/sz/2022-03-09.csv'
+  getSzyzData: './data/sz/all.csv'
 }
 
 const api = {
@@ -40,7 +40,10 @@ const api = {
 }
 
 function csv2json (csvDataStr) {
-  const lines = csvDataStr.split('\r\n')
+  let lines = csvDataStr.split('\r\n')
+  if (!lines[lines.length - 1]) {
+    lines = lines.slice(0, -1)
+  }
   const head = lines[0].split(',')
   const data = lines.slice(1)
   const objList = data.map((l, i) => {

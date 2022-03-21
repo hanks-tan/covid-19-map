@@ -1,75 +1,84 @@
-// 基础折线图
 <template>
-  <div class="chart"></div>
+  <div>
+
+  </div>
 </template>
 
 <script>
 import * as echarts from 'echarts/core'
 import {
-  TitleComponent,
   TooltipComponent,
   GridComponent,
-  VisualMapComponent
+  LegendComponent
 } from 'echarts/components'
 import { LineChart } from 'echarts/charts'
 import { UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 echarts.use([
-  TitleComponent,
   TooltipComponent,
   GridComponent,
-  VisualMapComponent,
+  LegendComponent,
   LineChart,
   CanvasRenderer,
   UniversalTransition
 ])
+
 export default {
   props: {
-    dataList: {
+    xData: {
       type: Array,
       required: true
     },
-    gradientLine: {
-      type: Boolean,
-      default: true
+    series: {
+      type: Array,
+      required: true
     }
+  },
+  data () {
+    return {
+
+    }
+  },
+  watch: {
+    xData () {
+      this.showChart()
+    },
+    series () {
+      this.showChart()
+    }
+  },
+  mounted () {
+    this.showChart()
   },
   methods: {
     showChart () {
-      const xList = []
-      const valueList = []
-      this.dataMap.forEach((item) => {
-        xList.push(item[0])
-        valueList.push(item[1])
+      const lineNames = []
+      const series = this.series.map((item) => {
+        const { name, data } = item
+        const type = 'line'
+        lineNames.push(name)
+        return {
+          name,
+          data,
+          type
+        }
       })
 
       const option = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: lineNames
+        },
         xAxis: {
           type: 'category',
-          data: xList
+          data: this.xData
         },
         yAxis: {
           type: 'value'
         },
-        series: [
-          {
-            data: valueList,
-            type: 'line'
-          }
-        ]
-      }
-
-      if (this.gradientLine) {
-        const visualMap = [
-          {
-            show: false,
-            type: 'continuous',
-            seriesIndex: 0,
-            // min: 0,
-            // max: 400
-          }
-        ]
-        option.visualMap = visualMap
+        series: series
       }
 
       if (!this.chart) {

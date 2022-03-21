@@ -1,13 +1,14 @@
 <template>
+  <!-- 基础柱形图 -->
   <div></div>
 </template>
 
 <script>
-import * as echarts from 'echarts/core';
-import { GridComponent } from 'echarts/components';
-import { BarChart } from 'echarts/charts';
-import { CanvasRenderer } from 'echarts/renderers';
-echarts.use([GridComponent, BarChart, CanvasRenderer]);
+import * as echarts from 'echarts/core'
+import { TitleComponent, TooltipComponent, GridComponent } from 'echarts/components'
+import { BarChart } from 'echarts/charts'
+import { CanvasRenderer } from 'echarts/renderers'
+echarts.use([TitleComponent, TooltipComponent, GridComponent, BarChart, CanvasRenderer])
 export default {
   data () {
     return {
@@ -16,7 +17,10 @@ export default {
   },
   props: {
     group: {
-      type: Object
+      type: Array
+    },
+    title: {
+      type: String
     }
   },
   watch: {
@@ -34,11 +38,26 @@ export default {
       }
       const xData = []
       const chartValues = []
-      Object.keys(this.group).forEach((key) => {
-        xData.push(key)
-        chartValues.push(this.group[key])
+      this.group.forEach((item) => {
+        xData.push(item[0])
+        chartValues.push(item[1])
       })
       const options = {
+        title: {
+          text: this.title
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '3%',
+          bottom: '3%',
+          containLabel: true
+        },
         xAxis: {
           type: 'category',
           data: xData
@@ -49,7 +68,12 @@ export default {
         series: [
           {
             data: chartValues,
-            type: 'bar'
+            type: 'bar',
+            barWidth: '30', // 柱形宽, 百分比
+            itemStyle: {
+              borderColor: 'transparent',
+              color: 'rgb(145 204 117)'
+            }
           }
         ]
       }

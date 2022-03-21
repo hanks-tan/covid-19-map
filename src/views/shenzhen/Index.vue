@@ -4,8 +4,8 @@
       <div
         @click="changeTotalType"
         >{{totalType.label}}</div>
-      <div @click="showDistributionChart = !showDistributionChart">分布图</div>
-      <div>趋势图</div>
+      <div @click="showChartHandle(0)">分布图</div>
+      <div @click="showChartHandle(1)">趋势图</div>
       <div>
 
       </div>
@@ -15,53 +15,35 @@
       ref="map">
     </Map>
     <div class="chart_wrap">
-      <DistributionChart v-if="showDistributionChart" :data="szyqData"></DistributionChart>
+      <DistributionChart v-if="showChart === 'distributionChart'" :data="szyqData"></DistributionChart>
+      <TrendChart v-else-if="showChart === 'trendChart'" :data="szyqData"></TrendChart>
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment'
 import Map from '../../components/Map.vue'
 import Heatmap from 'ol/layer/Heatmap'
 import VectorSource from 'ol/source/Vector'
 import { Feature } from 'ol'
 import { Point } from 'ol/geom'
 import DistributionChart from './DistributionChart.vue'
+import TrendChart from './TrendChart.vue'
+import mixin from './mixin'
 export default {
   components: {
     Map,
-    DistributionChart
+    DistributionChart,
+    TrendChart
   },
+  mixins: [mixin],
   data () {
     return {
       szyqData: null,
       heatlayer: null,
       mapCenter: [114.040504, 22.553397],
-      totalTypeList: [
-        {
-          code: 'day',
-          label: '昨日数据',
-          value: 2
-        },
-        {
-          code: 'day3',
-          label: '三日累计',
-          value: 4
-        },
-        {
-          code: 'day7',
-          label: '七日累计',
-          value: 8
-        },
-        {
-          code: 'day15',
-          label: '十五日累计',
-          value: 16
-        }
-      ],
       totalIndex: 0,
-      showDistributionChart: false
+      showChart: ''
     }
   },
   computed: {
@@ -120,19 +102,16 @@ export default {
       this.totalIndex = this.totalIndex >= this.totalTypeList.length - 1 ? 0 : this.totalIndex + 1
     },
     changeMapData (val) {
-      const data = this.filterMapData(this.totalTypeList[val], this.szyqData)
+      const data = this.filterMapDataBySubDate(this.totalTypeList[val].value, this.szyqData)
       this.showHeatmap(data, 1)
     },
-    filterMapData (type, data) {
-      if (!Array.isArray(data)) {
-        return
+    showChartHandle (cmd) {
+      const chartType = cmd === 0 ? 'distributionChart' : 'trendChart'
+      if (this.showChart === chartType) {
+        this.showChart = ''
+      } else {
+        this.showChart = chartType
       }
-      const endDate = moment().subtract(type.value, 'day')
-      const targetData = data.filter((item) => {
-        const dataDate = moment(item.date)
-        return dataDate.isAfter(endDate)
-      })
-      return targetData
     }
   }
 }
@@ -150,5 +129,6 @@ export default {
     left: 0;
     bottom: 0;
     margin: 5px;
+    width: 40%;
   }
 </style>
