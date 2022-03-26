@@ -11,6 +11,7 @@
         <div v-if="curTabPane === item.code">
           <!-- 头部 -->
           <div class="chart-header">
+            <span>时间范围</span>
             <el-select v-model="typeValue" placeholder="" @change="typeChangeHandle" size="small">
               <el-option
                 v-for="type in totalTypeList"
@@ -207,11 +208,11 @@ export default {
 // }
   .chart-header{
     text-align: left;
-    // /deep/ .el-input__inner{
-    //   background-color:#673ab7;
-    //   color: #9e9e9e;
-    //   border-color: #696c72;
-    // }
+    /deep/ .el-input__inner{
+      background-color:#673ab7;
+      color: #9e9e9e;
+      border-color: #696c72;
+    }
   }
   .chart-container{
     width: 100vh;

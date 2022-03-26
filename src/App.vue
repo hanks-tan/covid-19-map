@@ -6,7 +6,7 @@
 </template>
 
 <style lang="less">
-@import url('./assets/main.css');
+@import url('./assets/main.less');
 @import url('./assets/theme/index.css');
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

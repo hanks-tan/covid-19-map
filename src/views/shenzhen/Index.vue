@@ -1,11 +1,17 @@
 <template>
   <div>
+    <div class="search_wrap">
+      <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+        <el-button slot="append" icon="el-icon-search"></el-button>
+      </el-input>
+    </div>
     <div class="layer_wrap">
       <div
         @click="changeTotalType"
+        class="layer_item"
         >{{totalType.label}}</div>
-      <div @click="showChartHandle(0)">分布图</div>
-      <div @click="showChartHandle(1)">趋势图</div>
+      <div @click="showChartHandle(0)" class="layer_item">分布图</div>
+      <div @click="showChartHandle(1)" class="layer_item last_item">趋势图</div>
       <div>
 
       </div>
@@ -43,7 +49,8 @@ export default {
       heatlayer: null,
       mapCenter: [114.040504, 22.553397],
       totalIndex: 0,
-      showChart: ''
+      showChart: '',
+      input: ''
     }
   },
   computed: {
@@ -117,12 +124,31 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+  @topMargin:1rem;
+  .search_wrap{
+    position: absolute;
+    top: @topMargin;
+    left: 1rem;
+    z-index: 2;
+    width: 30%;
+  }
   .layer_wrap{
     position: absolute;
-    top: 1rem;
+    top: @topMargin;
     right: 10rem;
     z-index: 2;
+    display: inline-flex;
+    background-color: cornflowerblue;
+    border-radius: 3px;
+    padding: 10px 0;
+    .layer_item{
+      padding: 0 10px;
+      border-right: 1px solid burlywood;
+    }
+    .last_item{
+      border-right: 0;
+    }
   }
   .chart_wrap{
     position: absolute;

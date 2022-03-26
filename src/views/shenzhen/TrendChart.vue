@@ -11,9 +11,10 @@
         <div v-if="curTabPane === item.code">
           <!-- 头部 -->
           <div class="chart-header">
+            <span class="text">时间范围</span>
             <el-select v-model="typeValue" placeholder="" @change="typeChangeHandle" size="small">
               <el-option
-                v-for="type in totalTypeList"
+                v-for="type in dateRangeOptions"
                 :key="type.code"
                 :label="type.label"
                 :value="type.code">
@@ -48,10 +49,7 @@ export default {
       chartList: [
         {
           code: 'date',
-          label: '日新增总体趋势',
-          group: [],
-          groupMap: mapUtil.covidDataUtil.ageGroup1,
-          formatValue: this.formatAge
+          label: '日新增总体趋势'
         },
         {
           code: 'age',
@@ -88,11 +86,12 @@ export default {
           formatValue: this.formatRegion
         }
       ],
-      curTabPane: 'age',
-      typeValue: 'day',
+      curTabPane: 'date',
+      typeValue: 'day3',
       title: '',
       xData: [],
-      dataList: []
+      dataList: [],
+      dateRangeOptions: []
     }
   },
   props: {
@@ -106,10 +105,13 @@ export default {
     }
   },
   mounted () {
+    this.dateRangeOptions = this.totalTypeList.slice(1)
     this.showChart()
   },
   methods: {
     showChart () {
+      this.xData = []
+      this.dataList = []
       const opt = this.chartList.find((item) => item.code === this.curTabPane)
       if (opt) {
         const totalType = this.totalTypeList.find((item) => item.code === this.typeValue)
@@ -117,9 +119,9 @@ export default {
         const otherDay = moment().subtract(totalType.value, 'day')
         const targetData = this.filterMapDataByDateRange(otherDay, today, this.data)
         if (opt.code === 'date') {
-          this.dataList = this.groupByDate(otherDay, today, targetData)
+          this.groupByDate(targetData)
         } else {
-          this.dataList = this.group(otherDay, today, targetData, opt)
+          this.group(otherDay, today, targetData, opt)
         }
       }
     },
@@ -132,7 +134,6 @@ export default {
         const date = start.add(1, 'day')
         dateList.push(date.format('yyyy-MM-DD'))
       }
-      console.log('日期列表', dateList)
 
       const dataArr = options.groupMap.map((cate) => {
         return {
@@ -159,10 +160,34 @@ export default {
       })
 
       console.log('结构', dataArr)
-      return dataArr
+      this.xData = dateList
+      this.dataList = dataArr
     },
-    groupByDate () {
+    groupByDate (data) {
+      const groupMap = new Map()
+      data.forEach((item) => {
+        const key = item.date
+        const count = groupMap.get(key) || 0
+        groupMap.set(key, count + 1)
+      })
+      const groupArr = Array.from(groupMap)
+      groupArr.sort((a, b) => {
+        const atime = moment(a[0]).format('X')
+        const btime = moment(b[0]).format('X')
+        return atime - btime
+      })
 
+      const dataList = []
+      groupArr.forEach((item) => {
+        this.xData.push(item[0])
+        dataList.push(item[1])
+      })
+      this.dataList = [{
+        type: 'line',
+        data: dataList,
+        name: '日新增趋势',
+        areaStyle: {}
+      }]
     },
     typeChangeHandle (val) {
       this.showChart()
@@ -248,14 +273,17 @@ export default {
 //     }
 //   }
 // }
-  // .chart-header{
-  //   text-align: left;
-  //   /deep/ .el-input__inner{
-  //     background-color:#673ab7;
-  //     color: #9e9e9e;
-  //     border-color: #696c72;
-  //   }
-  // }
+  .chart-header{
+    text-align: left;
+    .text{
+      margin-right: 5px;
+    }
+    /deep/ .el-input__inner{
+      background-color:#673ab7;
+      color: #9e9e9e;
+      border-color: #696c72;
+    }
+  }
   .chart-container{
     width: 100%;
     height: 200px;
