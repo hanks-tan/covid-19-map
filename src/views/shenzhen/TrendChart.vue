@@ -105,7 +105,13 @@ export default {
     }
   },
   mounted () {
-    this.dateRangeOptions = this.totalTypeList.slice(1)
+    const dateRangeOptions = this.totalTypeList.slice(1)
+    dateRangeOptions.forEach((item) => {
+      if (item.label.includes('累计')) {
+        item.label = `近${item.label.replace('累计', '日新增')}`
+      }
+    })
+    this.dateRangeOptions = dateRangeOptions
     this.showChart()
   },
   methods: {
@@ -129,10 +135,10 @@ export default {
       const start = moment(startDate)
       const end = moment(endDate)
       const dist = end.diff(start, 'day')
-      const dateList = [start.format('yyyy-MM-DD')]
+      const dateList = [start.format('YYYY-MM-DD')]
       for (let i = 0; i < dist - 1; i++) {
         const date = start.add(1, 'day')
-        dateList.push(date.format('yyyy-MM-DD'))
+        dateList.push(date.format('YYYY-MM-DD'))
       }
 
       const dataArr = options.groupMap.map((cate) => {
@@ -263,29 +269,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// .tabs{
-//   background-color: #363949e8;
-//   border-color: #696c72;
-//   /deep/ .el-tabs__header{
-//     background-color: transparent;
-//     .el-tabs__item.is-active {
-//       background-color: #0a1117b5;
-//     }
-//   }
-// }
-  .chart-header{
-    text-align: left;
-    .text{
-      margin-right: 5px;
-    }
-    /deep/ .el-input__inner{
-      background-color:#673ab7;
-      color: #9e9e9e;
-      border-color: #696c72;
-    }
-  }
-  .chart-container{
-    width: 100%;
-    height: 200px;
-  }
+@import url('../../assets/css/charts.less');
 </style>

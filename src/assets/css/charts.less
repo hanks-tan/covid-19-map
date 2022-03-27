@@ -1,0 +1,28 @@
+@borderColor: #696c72;
+.chart-header{
+  text-align: left;
+  border-bottom: 1px solid @borderColor;
+  padding-bottom: 5px;
+  color: #909399;
+  display: grid;
+  grid-template-columns: 10% 28% 60%;
+  align-items: center;
+  grid-column-gap: 1%;
+  /deep/ .el-input__inner{
+    background-color:#673ab7;
+    color: #9e9e9e;
+    border-color: @borderColor;
+  }
+  /deep/ .el-range-editor .el-range-input{
+    background-color:#673ab7;
+    color: #9e9e9e;
+    border-color: @borderColor;
+  }
+}
+.chart-container{
+  width: 100%;
+  height: 200px;
+  background-color: #85a4c4;
+  border-radius: 5px;
+  margin-top: 10px;
+}

@@ -36,6 +36,11 @@ export default {
           code: 'day15',
           label: '十五日累计',
           value: 15
+        },
+        {
+          code: 'custom',
+          label: '自定义时间范围',
+          value: 0
         }
       ]
     }

@@ -71,6 +71,13 @@ export default {
         legend: {
           data: lineNames
         },
+        grid: [
+          {
+            left: '5%',
+            right: '5%',
+            bottom: '10%'
+          }
+        ],
         xAxis: {
           type: 'category',
           data: this.xData

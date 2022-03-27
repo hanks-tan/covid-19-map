@@ -11,7 +11,7 @@
         <div v-if="curTabPane === item.code">
           <!-- 头部 -->
           <div class="chart-header">
-            <span>时间范围</span>
+            <span class="text">时间范围</span>
             <el-select v-model="typeValue" placeholder="" @change="typeChangeHandle" size="small">
               <el-option
                 v-for="type in totalTypeList"
@@ -20,6 +20,19 @@
                 :value="type.code">
               </el-option>
             </el-select>
+            <div>
+              <el-date-picker
+                v-if="typeValue === 'custom'"
+                v-model="dateRang"
+                type="daterange"
+                align="right"
+                unlink-panels
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                size="small">
+              </el-date-picker>
+            </div>
           </div>
           <BaseBar
             :group="item.group"
@@ -84,7 +97,8 @@ export default {
       ],
       curTabPane: 'age',
       typeValue: 'day',
-      title: ''
+      title: '',
+      dateRang: ''
     }
   },
   props: {
@@ -196,26 +210,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// .tabs{
-//   background-color: #363949e8;
-//   border-color: #696c72;
-//   /deep/ .el-tabs__header{
-//     background-color: transparent;
-//     .el-tabs__item.is-active {
-//       background-color: #0a1117b5;
-//     }
-//   }
-// }
-  .chart-header{
-    text-align: left;
-    /deep/ .el-input__inner{
-      background-color:#673ab7;
-      color: #9e9e9e;
-      border-color: #696c72;
-    }
-  }
-  .chart-container{
-    width: 100vh;
-    height: 200px;
-  }
+@import url('../../assets/css/charts.less');
 </style>

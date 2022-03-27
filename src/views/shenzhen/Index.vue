@@ -21,8 +21,10 @@
       ref="map">
     </Map>
     <div class="chart_wrap">
-      <DistributionChart v-if="showChart === 'distributionChart'" :data="szyqData"></DistributionChart>
-      <TrendChart v-else-if="showChart === 'trendChart'" :data="szyqData"></TrendChart>
+      <transition name="chart" mode="out-in">
+        <DistributionChart v-if="showChart === 'distributionChart'" :data="szyqData"></DistributionChart>
+        <TrendChart v-else-if="showChart === 'trendChart'" :data="szyqData"></TrendChart>
+      </transition>
     </div>
   </div>
 </template>
@@ -126,10 +128,11 @@ export default {
 
 <style lang="less" scoped>
   @topMargin:1rem;
+  @leftMargin: 1rem;
   .search_wrap{
     position: absolute;
     top: @topMargin;
-    left: 1rem;
+    left: @leftMargin;
     z-index: 2;
     width: 30%;
   }
@@ -152,9 +155,14 @@ export default {
   }
   .chart_wrap{
     position: absolute;
-    left: 0;
-    bottom: 0;
-    margin: 5px;
+    left: @leftMargin;
+    bottom: 1rem;
     width: 40%;
+  }
+  .chart-enter-active, .chart-leave-active{
+    transition: opacity .3s ease;
+  }
+  .chart-enter, .chart-leave-to{
+    opacity: 0;
   }
 </style>
