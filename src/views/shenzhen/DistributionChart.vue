@@ -23,14 +23,15 @@
             <div>
               <el-date-picker
                 v-if="typeValue === 'custom'"
-                v-model="dateRang"
+                v-model="dateRange"
                 type="daterange"
                 align="right"
                 unlink-panels
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                size="small">
+                size="small"
+                @change="dataRangeChanged">
               </el-date-picker>
             </div>
           </div>
@@ -49,8 +50,8 @@
 
 <script>
 import moment from 'moment'
-import BaseBar from '../../components/charts/BaseBar.vue'
-import mapUtil from '../../utils/mapUtil'
+import BaseBar from 'comps/charts/BaseBar'
+import mapUtil from 'utils/mapUtil'
 import mixin from './mixin'
 export default {
   components: {
@@ -98,7 +99,8 @@ export default {
       curTabPane: 'age',
       typeValue: 'day',
       title: '',
-      dateRang: ''
+      dateRangeOptions: [],
+      dateRange: ''
     }
   },
   props: {
@@ -119,9 +121,16 @@ export default {
       const opt = this.chartList.find((item) => item.code === this.curTabPane)
       if (opt) {
         const totalType = this.totalTypeList.find((item) => item.code === this.typeValue)
-        const today = moment()
-        const otherDay = moment().subtract(totalType.value, 'day')
-        const targetData = this.filterMapDataByDateRange(otherDay, today, this.data)
+        let start, end
+        if (totalType.code === 'custom') {
+          [start, end] = this.dateRange
+        } else {
+          end = moment()
+          start = moment().subtract(totalType.value, 'day')
+        }
+        // const today = moment()
+        // const otherDay = moment().subtract(totalType.value, 'day')
+        const targetData = this.filterMapDataByDateRange(start, end, this.data)
         const group = this.createGroupByAge(targetData, opt.code, opt.groupMap, opt.formatValue)
         opt.group = group
         this.title = '确诊人数：' + targetData.length
@@ -204,6 +213,14 @@ export default {
       } else {
         return ''
       }
+    },
+    dataRangeChanged () {
+    //   const opt = this.chartList.find((item) => item.code === this.curTabPane)
+    //   const targetData = this.filterMapDataByDateRange(this.dateRange[0], this.dateRange[1], this.data)
+    //   const group = this.createGroupByAge(targetData, opt.code, opt.groupMap, opt.formatValue)
+    //   opt.group = group
+    //   this.title = '确诊人数：' + targetData.length
+      this.showChart()
     }
   }
 }

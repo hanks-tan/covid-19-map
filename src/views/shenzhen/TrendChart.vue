@@ -20,6 +20,20 @@
                 :value="type.code">
               </el-option>
             </el-select>
+            <div>
+              <el-date-picker
+                v-if="typeValue === 'custom'"
+                v-model="dateRange"
+                type="daterange"
+                align="right"
+                unlink-panels
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                size="small"
+                @change="dataRangeChanged">
+              </el-date-picker>
+            </div>
           </div>
           <MultiLineChart
             :xData="xData"
@@ -29,15 +43,14 @@
           </MultiLineChart>
         </div>
       </el-tab-pane>
-      <!-- <el-tab-pane label="用户管理">用户管理</el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
-import MultiLineChart from '../../components/charts/MultiLineChart.vue'
-import mapUtil from '../../utils/mapUtil'
+import MultiLineChart from 'comps/charts/MultiLineChart.vue'
+import mapUtil from 'utils/mapUtil'
 import mixin from './mixin'
 export default {
   components: {
@@ -91,7 +104,8 @@ export default {
       title: '',
       xData: [],
       dataList: [],
-      dateRangeOptions: []
+      dateRangeOptions: [],
+      dateRange: ''
     }
   },
   props: {
@@ -118,17 +132,23 @@ export default {
     showChart () {
       this.xData = []
       this.dataList = []
+      const totalType = this.dateRangeOptions.find((item) => item.code === this.typeValue)
+      let start, end
+      if (totalType.code === 'custom') {
+        [start, end] = this.dateRange
+      } else {
+        end = moment()
+        start = moment().subtract(totalType.value, 'day')
+      }
+      this.createChartData(start, end, this.data)
+    },
+    createChartData (startDate, endData, data) {
+      const targetData = this.filterMapDataByDateRange(startDate, endData, this.data)
       const opt = this.chartList.find((item) => item.code === this.curTabPane)
-      if (opt) {
-        const totalType = this.totalTypeList.find((item) => item.code === this.typeValue)
-        const today = moment()
-        const otherDay = moment().subtract(totalType.value, 'day')
-        const targetData = this.filterMapDataByDateRange(otherDay, today, this.data)
-        if (opt.code === 'date') {
-          this.groupByDate(targetData)
-        } else {
-          this.group(otherDay, today, targetData, opt)
-        }
+      if (opt.code === 'date') {
+        this.groupByDate(targetData)
+      } else {
+        this.group(startDate, endData, targetData, opt)
       }
     },
     group (startDate, endDate, data, options) {
@@ -263,6 +283,9 @@ export default {
       } else {
         return ''
       }
+    },
+    dataRangeChanged () {
+      this.showChart()
     }
   }
 }

@@ -25,10 +25,15 @@ export default {
   methods: {
     init () {
       const loading = this.$loading()
-      this.$api.getCovidData().then((res) => {
+      this.$api.getLatestCovidData().then((res) => {
         window.cvData = query.parseCSVToMap(res.data)
         loading.close()
         this.dataReady = true
+      })
+      setTimeout(() => {
+        this.$api.getCovidData().then((res) => {
+          window.cvData = query.parseCSVToMap(res.data)
+        })
       })
     }
   }

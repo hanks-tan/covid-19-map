@@ -26,7 +26,7 @@
 import AMap from '../map/aMap'
 import MapEvtCtrl from '../map/mapEvtCtrl'
 import mapUtil from '../utils/mapUtil'
-import timeLine from '@/components/timeLine.vue'
+// import timeLine from '@/components/timeLine.vue'
 import mapOptions from '@/components/mapOptions.vue'
 import mapLegend from '@/components/mapLegend.vue'
 import moment from 'moment'
@@ -44,11 +44,11 @@ export default {
     }
   },
   components: {
-    timeLine,
     mapOptions,
     mapLegend,
+    Rank,
     tips: () => import('./overlay.vue'),
-    Rank
+    timeLine: () => import('comps/timeLine')
   },
   mounted () {
     this.initMap()

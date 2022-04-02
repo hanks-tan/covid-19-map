@@ -1,7 +1,9 @@
 import http from './http'
 
 const apiURL = {
-  getCovidData: '/data/Wuhan-2019-nCoV1.csv',
+  getCovidData: process.env.NODE_ENV === 'production' ? 'http://cdn.data.gogmap.com/Wuhan-2019-nCoV.csv' : '/data/Wuhan-2019-nCoV.csv',
+  // 最近的数据（2020.4.11）
+  getLatestCovidData: '/data/latest.csv',
   // 检测站
   getStation: './data/station.geojson',
   // 自费检测点
@@ -17,6 +19,9 @@ const apiURL = {
 const api = {
   getCovidData () {
     return http.get(apiURL.getCovidData)
+  },
+  getLatestCovidData () {
+    return http.get(apiURL.getLatestCovidData)
   },
   getStation () {
     return http(apiURL.getStation)

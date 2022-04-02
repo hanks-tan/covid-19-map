@@ -26,9 +26,8 @@
   </div>
 </template>
 <script>
-import Vue from 'vue';
-import Tabs from 'element-ui'
-import TabPane from 'element-ui'
+import Vue from 'vue'
+import { Tabs, TabPane } from 'element-ui'
 import query from '../map/data/query'
 Vue.use(Tabs)
 Vue.use(TabPane)

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import LayerSelector from '../components/LayerSelector.vue'
+import LayerSelector from 'comps/LayerSelector.vue'
 import AMap from '../map/aMap'
 export default {
   data () {
