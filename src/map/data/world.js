@@ -1,3 +1,6 @@
+/**
+ * 国家范围数据（面）
+ */
 const world = {
   type: 'FeatureCollection',
   name: 'world',

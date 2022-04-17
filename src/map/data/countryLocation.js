@@ -1,3 +1,6 @@
+/**
+ * 国家位置数据（点）
+ */
 const countryLocation = {
   type: 'FeatureCollection',
   name: 'countryLocation',

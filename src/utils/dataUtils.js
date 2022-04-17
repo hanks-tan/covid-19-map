@@ -1,5 +1,5 @@
-import world from '../map/data/world'
-import countryLocation from '../map/data/countryLocation'
+import world from '../map/data/world.js'
+import countryLocation from '../map/data/countryLocation.js'
 
 var clone = function (obj) {
   return Object.assign({}, obj)
@@ -74,6 +74,7 @@ var decode = function (json) {
 var worldData = decode(world)
 
 const dataUtils = {
+  decode,
   getGeoData (params) {
     var geoData = null
     if (params.layerType === 'point') {

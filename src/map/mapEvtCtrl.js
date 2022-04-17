@@ -1,12 +1,13 @@
 import BaseVectorLayer from './layer/baseVectorLayer'
 import PointLayer from './layer/pointLayer'
-import mapHttps from '../https/mapHttp'
 import mapUtil from '../utils/mapUtil'
 import moment from 'moment'
 import query from './data/query'
 import world from './data/world'
 import countryLocation from './data/countryLocation'
 import GeoJSON from 'ol/format/GeoJSON'
+import { Point } from 'ol/geom'
+import Feature from 'ol/Feature'
 
 const covidDataUtil = mapUtil.covidDataUtil
 class MapEvtCtrl {
@@ -28,7 +29,7 @@ class MapEvtCtrl {
       name: 'polygon'
     })
 
-    this.$mapEvtBus.$on(covidDataUtil.mapEvt.render, function (params) {
+    this.$mapEvtBus.$on(covidDataUtil.mapEvt.render, async function (params) {
       self._pointLayer.clearData()
       self._polygonLayer.clearData()
 
@@ -39,22 +40,38 @@ class MapEvtCtrl {
           date = latestDate
         }
       }
-
-      const data = query.getDayCountryData(date)
-      if (data.size < 1) {
+      
+      // TODO 需要根据layerType 和 region 加载范围数据
+      let covidDatas
+      if (params.region === 'china') {
+        covidDatas = query.getDayDataByLevel(date, 1)
+      } else {
+        covidDatas = query.getDayCountryData(date)
+      }
+      if (covidDatas.size < 1) {
         return
       }
 
       let fts
       if (params.layerType === covidDataUtil.layerType.point) {
-        fts = new GeoJSON().readFeatures(countryLocation)
+        if (params.region === 'china') {
+          const result = await this.$api.getChinaPoint()
+          const geoData = result.data
+          fts = convertPointToFeatures(geoData.features)
+        } else {
+          fts = new GeoJSON().readFeatures(countryLocation)
+        }
       } else {
-        fts = new GeoJSON().readFeatures(world)
+        if (params.region === 'china') {
+
+        } else {
+          fts = new GeoJSON().readFeatures(world)
+        }
       }
 
       fts.forEach((ft) => {
         const code = ft.get('code')
-        const thisCodeData = data.get(code)
+        const thisCodeData = covidDatas.get(code)
         if (thisCodeData) {
           const cloneData = Object.assign({}, thisCodeData)
           cloneData.renderData = cloneData[params.fieldType]
@@ -89,6 +106,23 @@ class MapEvtCtrl {
       //   layer.setData(layerData)
       // })
     })
+  }
+}
+
+function convertPointToFeatures (data) {
+  if (Array.isArray(data)) {
+    const fts = data.map((item) => {
+      const point = new Point([item?.properties?.cp])
+      const ft = new Feature({
+        geometry: point
+      })
+      const prop = {}
+      prop.code = item.id
+      prop.name = item.properties.name
+      ft.setProperties(prop)
+      return ft
+    })
+    return fts
   }
 }
 

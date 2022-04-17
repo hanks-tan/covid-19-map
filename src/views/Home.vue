@@ -1,22 +1,55 @@
 <template>
-  <div class="home">
+  <!-- <div class="home">
+    <div class="header">
+
+    </div>
     <map-view class="map-container" v-if='dataReady'></map-view>
-  </div>
+  </div> -->
+  <el-container>
+    <el-header class="header" style="height: 50px">
+      <div class="title">
+        新冠疫情分布图
+      </div>
+      <div class="data-switch">
+        <div class="data-switch-item left" :class="{on:region === 'china'}" @click="region = 'china'">
+          中国
+        </div>
+        <div class="data-switch-item right" :class="{on:region === 'world'}" @click="region = 'world'">
+          全球
+        </div>
+      </div>
+      <div class="date">
+        日期：{{curDate}}
+      </div>
+    </el-header>
+    <el-main>
+      <!-- <map-view class="map-container" v-if='dataReady'></map-view> -->
+      <MapView
+        v-if='dataReady'
+        :region="region"
+        class="map-container"
+        >
+      </MapView>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
 // @ is an alias to /src
-import mapView from '@/components/mapView.vue'
+import MapView from '@/components/mapView'
 import query from '../map/data/query'
+import moment from 'moment'
 
 export default {
   name: 'Home',
   components: {
-    mapView
+    MapView
   },
   data () {
     return {
-      dataReady: false
+      dataReady: false,
+      region: 'china', // china | global
+      curDate: moment().format('YYYY-MM-DD')
     }
   },
   mounted () {
@@ -40,10 +73,47 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  .home{
-    background-color: #4f4f52;
+  .el-header{
+    display: grid;
+    grid-template-columns: repeat(3, 33.3%);
+    background-color: #1b284e;
+    align-items: center;
+    .title{
+      justify-self: start;
+      font-family: STXinwei;
+      font-size: 1.3rem;
+    }
+    .data-switch{
+      .data-switch-item{
+        background-color: #5d5da5;
+        display: inline;
+        padding: .5rem 1rem;
+        cursor: pointer;
+        color: #b1b0b0;
+      }
+      .left{
+        border-radius: 1rem 0 0 1rem;
+        border-right: 1px solid #614747;
+      }
+      .right{
+        border-radius: 0 1rem 1rem 0;
+      }
+      .on{
+        background-color: #567ae8;
+        color: rgb(249, 248, 248);
+      }
+    }
+    .date{
+      justify-self: end;
+    }
+  }
+  .el-main{
+    height: calc(100vh - 50px);
+    background-color: #24243e;
+    margin: 0;
+    padding: 0;
     .map-container{
-      height: 100vh;
+      height: 100%;
     }
   }
 </style>

@@ -8,41 +8,45 @@ const provinceCodeIndex = 4
 const cityCodeIndex = 6
 const countryList = []
 const g = [countryCodeIndex, provinceCodeIndex, cityCodeIndex]
-lines.forEach((line) => {
-  const values = line.split(',')
+const tree = []
 
-  g.reduce((prev, cur, index) => {
-    const value = values[cur]
-    if (!value) {
-      return
+const reg = /^[A-Z]{2}$|^\d{6}$/ // 匹配国家代码或者省、市代码
+
+const addNode = (values, fieldList, nodes, i = 0) => {
+  const index = fieldList[i]
+  const v = values[index]
+  if (v) {
+    // 过滤掉境外、未公布来源等等数据
+    if (!reg.test(v)) {
+      return null
     }
-    if (index > 0 && !prev) {
-      return
-    }
-    if (index === 0) {
-      const countryObj = countryList.find((item) => item.code === value)
-      if (!countryObj) {
-        const countryObj = {
-          code: value,
-          name: values[cur - 1],
-          children: []
-        }
-        countryList.push(countryObj)
+
+    let node = nodes.find((item) => item.code === v)
+    if (!node) {
+      node = {
+        code: v,
+        value: values[index - 1],
+        children: []
       }
-      return countryObj.children
+      if (i === 2) {
+        delete node.children
+      }
+      nodes.push(node)
     } else {
-      const obj = prev.find((item) => item.code === value)
-      if (!obj) {
-        const obj = {
-          code: value,
-          name: values[cur - 1],
-          children: []
-        }
-        prev.push(obj)
-      }
-      return prev.children
+      addNode(values, fieldList, node.children, i + 1)
     }
-  })
+  } else {
+    return null
+  }
+}
+
+const dataList = lines.slice(1)
+dataList.forEach((line, i) => {
+  const values = line.split(',')
+  addNode(values, g, tree)
 })
 
-console.log(countryList)
+const treeJson = JSON.stringify(tree)
+
+fs.writeFileSync('./city.json', treeJson)
+console.log('done！')

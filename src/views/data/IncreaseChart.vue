@@ -2,7 +2,7 @@
   <div class="wrap">
     <div class="setting-wrap box">
       <!-- 区域选择器 -->
-      <RegionSelector @change="regionChangeHandle" class="setting-item"></RegionSelector>
+      <RegionSelector @change="regionChangeHandle" class="setting-item region-selector"></RegionSelector>
       <!-- 列选择器 -->
       <DataTypeSelector label="类型" @change="dataTypeChangeHandle" class="setting-item"></DataTypeSelector>
       <div class="setting-item">
@@ -17,10 +17,10 @@
       </div>
     </div>
     <LineRace
-      v-if="lineRachChartOptins.renderData.length > 0"
-      :options="lineRachChartOptins"
-      :renderData="lineRachChartOptins.renderData"
-      :title="lineRachChartOptins.title"
+      v-if="lineRachChartOptions.renderData.length > 0"
+      :options="lineRachChartOptions"
+      :renderData="lineRachChartOptions.renderData"
+      :title="lineRachChartOptions.title"
       class="chart box"
       :key="this.lineChartKey"
     ></LineRace>
@@ -41,7 +41,7 @@ export default {
   },
   data () {
     return {
-      lineRachChartOptins: {
+      lineRachChartOptions: {
         renderData: [],
         countries: [
           '武汉市',
@@ -89,35 +89,32 @@ export default {
       })
     },
     showLineRaceChart () {
-      this.lineRachChartOptins.startDate = '2020-02-14'
-      this.lineRachChartOptins.countryColName = 'city'
-      this.lineRachChartOptins.dateColName = 'date'
-      this.lineRachChartOptins.dataItemName = 'confirmed'
-      this.lineRachChartOptins.title = '增长'
-      this.lineRachChartOptins.renderData = this.cvData
+      this.lineRachChartOptions.startDate = '2020-02-14'
+      this.lineRachChartOptions.countryColName = 'city'
+      this.lineRachChartOptions.dateColName = 'date'
+      this.lineRachChartOptions.dataItemName = 'confirmed'
+      this.lineRachChartOptions.title = '增长'
+      this.lineRachChartOptions.renderData = this.cvData
       this.lineChartKey += 1
     },
     regionChangeHandle (data) {
-      this.lineRachChartOptins.countries = [
-        '武汉市',
-        '深圳市'
-      ]
-      this.lineRachChartOptins.title = this.getTitle()
+      this.lineRachChartOptions.countries = data
+      this.lineRachChartOptions.title = this.getTitle()
       this.lineChartKey += 1
     },
     dataTypeChangeHandle (dataType) {
-      this.lineRachChartOptins.dataItemName = dataType
-      this.lineRachChartOptins.title = this.getTitle()
+      this.lineRachChartOptions.dataItemName = dataType
+      this.lineRachChartOptions.title = this.getTitle()
       this.lineChartKey += 1
     },
     dateChangeHandle (date) {
-      this.lineRachChartOptins.startDate = date
-      this.lineRachChartOptins.title = this.getTitle()
+      this.lineRachChartOptions.startDate = date
+      this.lineRachChartOptions.title = this.getTitle()
       this.lineChartKey += 1
     },
     getTitle () {
-      const dataType = mapUtil.covidDataUtil.covidDataTypeList.find((item) => item.value === this.lineRachChartOptins.dataItemName)
-      return `自 ${this.lineRachChartOptins.startDate} 以来的 ${dataType.label} 数据`
+      const dataType = mapUtil.covidDataUtil.covidDataTypeList.find((item) => item.value === this.lineRachChartOptions.dataItemName)
+      return `自 ${this.lineRachChartOptions.startDate} 以来的 ${dataType.label} 数据`
     }
   }
 }
@@ -138,6 +135,11 @@ export default {
       background-color: #2196f30d;
       .setting-item{
         margin: 0 1rem;
+      }
+      .region-selector{
+        /deep/ .el-cascader{
+          width: 20rem;
+        }
       }
     }
     .chart{

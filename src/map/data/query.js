@@ -142,8 +142,30 @@ function getDayCountryData (date) {
   if (dayData) {
     const result = new Map()
     dayData.forEach((value, key) => {
-      if (key.indexOf('-') < 0) {
+      if (!key.includes('-')) {
         result.set(key, value)
+      }
+    })
+    return result
+  }
+  return null
+}
+
+/**
+ * 
+ * @param {String} date
+ * @param {Number} level 0 - 2, 国、省、市 
+ * @returns {Map}
+ */
+function getDayDataByLevel (date, level) {
+  const dayData = window.cvData.get(date)
+  if (dayData) {
+    const result = new Map()
+    dayData.forEach((value, key) => {
+      const codes = key.split('-')
+      const code = codes[level]
+      if (code) {
+        result.set(code, value)
       }
     })
     return result
@@ -242,6 +264,7 @@ export default {
   getDayData,
   getCountryOneDay,
   getDayCountryData,
+  getDayDataByLevel,
   getDeadlineRankData,
   get24HourRankData,
   get7DayRankData

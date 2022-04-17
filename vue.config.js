@@ -20,7 +20,7 @@ module.exports = {
   },
   lintOnSave: true, // 是否在保存的时候检查
   runtimeCompiler: true,
-  productionSourceMap: false, // 生产环境是否生成 sourceMap 文件
+  productionSourceMap: true, // 生产环境是否生成 sourceMap 文件
   css: {
     requireModuleExtension: false,
     extract: true, // 是否使用css分离插件 ExtractTextPlugin

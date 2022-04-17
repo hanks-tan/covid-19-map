@@ -40,7 +40,7 @@ export default {
 <style lang="less" scoped>
   @import url('~ol/ol.css');
   #map{
-    height: 100vh;
+    height: 100%;
     width: 100%;
   }
 </style>

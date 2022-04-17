@@ -33,6 +33,7 @@ const covidDataUtil = {
     latest: '1', // 最新数据
     history: '0' // 历史数据
   },
+  latestDate: '2020-04-11',
   layerType: {
     point: 'point',
     polygon: 'polygon'

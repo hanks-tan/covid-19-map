@@ -13,7 +13,13 @@ const apiURL = {
   // 免费核酸检查点
   getFreeCheckPoint: './data/checkPoint.json',
   // 深圳疫情数据
-  getSzyzData: './data/sz/all.csv'
+  getSzyzData: './data/sz/all.csv',
+  // 行政区划数据
+  getRegionData: './data/city.json',
+  // 中国各省点位数据
+  chinaProvincePoint: './data/chinaProvincePoint.json',
+  // 中国各省范围数据(topojson格式)
+  chinaProvince: './data/china.json'
 }
 
 const api = {
@@ -41,6 +47,17 @@ const api = {
     return http(apiURL.getSzyzData).then((res) => {
       return csv2json(res.data)
     })
+  },
+  getRegionData () {
+    return http.get(apiURL.getRegionData)
+  },
+
+  getChinaPoint () {
+    return http(apiURL.chinaProvincePoint)
+  },
+
+  getChinaProvince () {
+    return http(apiURL.chinaProvince)
   }
 }
 

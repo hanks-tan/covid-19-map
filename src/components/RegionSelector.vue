@@ -5,6 +5,8 @@
       :options="options"
       :props="props"
       clearable
+      collapse-tags
+      filterable
       @change="changeHandle"></el-cascader>
   </div>
 </template>
@@ -13,7 +15,7 @@
 export default {
   data () {
     return {
-      props: { multiple: true },
+      props: { multiple: true, value: 'code', label: 'value', checkStrictly: true },
       options: []
     }
   },
@@ -22,45 +24,23 @@ export default {
   },
   methods: {
     getRegions () {
-      this.options = [
-        {
-          label: '中国',
-          value: 'cn',
-          children: [
-            {
-              label: '北京',
-              value: 'bj',
-              children: [
-                {
-                  label: '顺义',
-                  value: 'sy'
-                }
-              ]
-            },
-            {
-              label: '广东省',
-              value: 'gb',
-              children: [
-                {
-                  label: '深圳',
-                  value: 'sz'
-                },
-                {
-                  label: '广州',
-                  value: 'gz'
-                }
-
-              ]
-            }
-          ]
-        }
-      ]
+      this.$api.getRegionData().then((res) => {
+        const data = res.data
+        this.options = data.filter((item) => item.code === 'CN')
+      })
     },
     changeHandle (nodes) {
-      const item = nodes.map((item) => {
-
+      const data = nodes.map((item) => {
+        const node = item.reduce((prev, cur, index, arr) => {
+          const t = prev.find((c) => c.code === cur)
+          if (index === arr.length - 1) {
+            return t
+          }
+          return t.children
+        }, this.options)
+        return node.value
       })
-      this.$emit('change', nodes)
+      this.$emit('change', data)
     }
   }
 }
