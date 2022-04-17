@@ -90,11 +90,15 @@ function parseCSVToMap (csvData) {
 
     const codes = regions.join('-') // 构造二级key
     const date = lineDataArray[dateIndex]
+    const covidCount = [confirmedIndex, suspectedIndex, curedIndex, deadIndex].map((item) => {
+      return parseInt(lineDataArray[item])
+    })
     const regionValue = {
-      confirmed: parseInt(lineDataArray[confirmedIndex]), // 确诊
-      suspected: parseInt(lineDataArray[suspectedIndex]), // 疑似
-      cured: parseInt(lineDataArray[curedIndex]), // 现存
-      dead: parseInt(lineDataArray[deadIndex]) // 死亡
+      confirmed: covidCount[0], // 累计确诊
+      suspected: covidCount[1], // 疑似
+      cured: covidCount[2], // 累计治愈
+      dead: covidCount[3], // 累计死亡
+      curConfirm: covidCount[0] - covidCount[2] // 现存确诊
     }
     if (dataMap.get(date)) {
       const thisDayValue = dataMap.get(date)
@@ -152,20 +156,23 @@ function getDayCountryData (date) {
 }
 
 /**
- * 
+ *
  * @param {String} date
- * @param {Number} level 0 - 2, 国、省、市 
+ * @param {Number} level 0 - 2, 国、省、市
+ * @param {String} country 指定国家
  * @returns {Map}
  */
-function getDayDataByLevel (date, level) {
+function getDayDataByLevel (date, level, country = 'CN') {
   const dayData = window.cvData.get(date)
   if (dayData) {
     const result = new Map()
     dayData.forEach((value, key) => {
-      const codes = key.split('-')
-      const code = codes[level]
-      if (code) {
-        result.set(code, value)
+      if (key.startsWith(country)) {
+        const codes = key.split('-')
+        const code = codes[level]
+        if (code && level === (codes.length - 1)) {
+          result.set(code, value)
+        }
       }
     })
     return result

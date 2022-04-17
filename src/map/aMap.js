@@ -189,6 +189,25 @@ class AMap extends Object {
     }
     return style
   }
+
+  fit (geom) {
+    this.view.fit(geom)
+  }
+
+  fitToLayer (aLayer) {
+    if (aLayer.getDataExtent) {
+      const extent = aLayer.getDataExtent()
+      const resolution = this.view.getResolution()
+      // 范围缩小一点，要不然碰到地图边界
+      extent[0] = extent[0] - 1 * resolution
+      extent[1] = extent[1] - 1 * resolution
+      extent[2] = extent[2] + 1 * resolution
+      extent[3] = extent[3] + 1 * resolution
+      if (extent) {
+        this.fit(extent)
+      }
+    }
+  }
 }
 
 export default AMap

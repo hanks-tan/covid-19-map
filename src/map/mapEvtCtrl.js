@@ -8,6 +8,7 @@ import countryLocation from './data/countryLocation'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Point } from 'ol/geom'
 import Feature from 'ol/Feature'
+import Topojson from 'ol/format/TopoJSON'
 
 const covidDataUtil = mapUtil.covidDataUtil
 class MapEvtCtrl {
@@ -40,7 +41,7 @@ class MapEvtCtrl {
           date = latestDate
         }
       }
-      
+
       // TODO 需要根据layerType 和 region 加载范围数据
       let covidDatas
       if (params.region === 'china') {
@@ -57,13 +58,15 @@ class MapEvtCtrl {
         if (params.region === 'china') {
           const result = await this.$api.getChinaPoint()
           const geoData = result.data
-          fts = convertPointToFeatures(geoData.features)
+          fts = _convertPointToFeatures(geoData.features)
         } else {
           fts = new GeoJSON().readFeatures(countryLocation)
         }
       } else {
         if (params.region === 'china') {
-
+          const result = await this.$api.getChinaProvince()
+          const topojsonData = result.data
+          fts = _convertTopojsonToFeatures(topojsonData)
         } else {
           fts = new GeoJSON().readFeatures(world)
         }
@@ -74,7 +77,7 @@ class MapEvtCtrl {
         const thisCodeData = covidDatas.get(code)
         if (thisCodeData) {
           const cloneData = Object.assign({}, thisCodeData)
-          cloneData.renderData = cloneData[params.fieldType]
+          cloneData.renderData = cloneData[params.renderField]
           cloneData.date = params.date
           ft.setProperties(cloneData)
         }
@@ -109,10 +112,10 @@ class MapEvtCtrl {
   }
 }
 
-function convertPointToFeatures (data) {
+function _convertPointToFeatures (data) {
   if (Array.isArray(data)) {
     const fts = data.map((item) => {
-      const point = new Point([item?.properties?.cp])
+      const point = new Point(item?.properties?.cp)
       const ft = new Feature({
         geometry: point
       })
@@ -124,6 +127,18 @@ function convertPointToFeatures (data) {
     })
     return fts
   }
+}
+
+function _convertTopojsonToFeatures (data) {
+  // 挂载code属性
+  const ftData = data?.objects?.ts1?.geometries
+  if (Array.isArray(ftData)) {
+    ftData.forEach((item) => {
+      item.properties.code = item.id
+    })
+  }
+  const fts = new Topojson().readFeatures(data)
+  return fts
 }
 
 export default MapEvtCtrl

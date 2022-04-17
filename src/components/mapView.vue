@@ -44,7 +44,6 @@ import AMap from '../map/aMap'
 import MapEvtCtrl from '../map/mapEvtCtrl'
 import mapUtil from '../utils/mapUtil'
 // import timeLine from '@/components/timeLine.vue'
-import mapOptions from '@/components/mapOptions.vue'
 import mapLegend from '@/components/mapLegend.vue'
 import Rank from './rank.vue'
 import DataSwitch from './Switch.vue'
@@ -97,7 +96,6 @@ export default {
     }
   },
   components: {
-    mapOptions,
     mapLegend,
     Rank,
     DataSwitch,
@@ -149,6 +147,7 @@ export default {
       //   fieldType: this.fieldType // 数据字段
       // }))
       this.$mapEvtBus.$emit(covidDataUtil.mapEvt.render, options)
+      this.setMapView()
     },
     handleDataTypeChange (dataType) {
       this.isLatestData = dataType
@@ -169,7 +168,21 @@ export default {
     handleFieldTypeChange (fieldType) {
       this.fieldType = fieldType
       this.changeMap()
+    },
+    setMapView () {
+      const extent = this.getExtentByRegion()
+      if (this.mapObj) {
+        this.mapObj.fit(extent)
+      }
+    },
+    getExtentByRegion () {
+      let extent = [-180, -90, 180, 90]
+      if (this.region === 'china') {
+        extent = [75, 0, 149, 59]
+      }
+      return extent
     }
+
   }
 }
 </script>
