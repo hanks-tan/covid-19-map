@@ -94,6 +94,7 @@ function parseCSVToMap (csvData) {
       return parseInt(lineDataArray[item])
     })
     const regionValue = {
+      country: lineDataArray[cityCodeIndex - 1] || lineDataArray[provinceCodeIndex - 1] || lineDataArray[countryCodeIndex - 1],
       confirmed: covidCount[0], // 累计确诊
       suspected: covidCount[1], // 疑似
       cured: covidCount[2], // 累计治愈

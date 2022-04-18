@@ -1,10 +1,4 @@
 <template>
-  <!-- <div class="home">
-    <div class="header">
-
-    </div>
-    <map-view class="map-container" v-if='dataReady'></map-view>
-  </div> -->
   <el-container>
     <el-header class="header" style="height: 50px">
       <div class="title">
@@ -23,7 +17,6 @@
       </div>
     </el-header>
     <el-main>
-      <!-- <map-view class="map-container" v-if='dataReady'></map-view> -->
       <MapView
         v-if='dataReady'
         :region="region"

@@ -2,13 +2,6 @@
   <div>
     <!-- 地图 -->
     <div id="map">
-      <!-- 地图选项 -->
-      <!-- <map-options class="map-options" ref="mapOpts"
-        @dataTypeChange="handleDataTypeChange"
-        @layerTypeChange="handleLayerTypeChange"
-        @fieldTypeChange="handleFieldTypeChange"
-      >
-      </map-options> -->
       <div class="top">
         <DataSwitch
           :options="layerTypeOptions"
