@@ -51,6 +51,14 @@ export default {
   methods: {
     init () {
       const loading = this.$loading()
+      const png = './data/covid_d_20200411.png'
+      this.$api.getCovidDataFromImg()
+      this.$api.getCovidPngConfig().then((res) => {
+        query.covidPngToJson(png, res.data).then((data) => {
+          console.log('data', data)
+        })
+      })
+
       this.$api.getLatestCovidData().then((res) => {
         window.cvData = query.parseCSVToMap(res.data)
         loading.close()

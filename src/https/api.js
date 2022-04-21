@@ -1,9 +1,14 @@
 import http from './http'
 
 const apiURL = {
+  // 获取covid全量数据
   getCovidData: process.env.NODE_ENV === 'production' ? 'http://cdn.data.gogmap.com/Wuhan-2019-nCoV.csv' : '/data/Wuhan-2019-nCoV.csv',
   // 最近的数据（2020.4.11）
   getLatestCovidData: '/data/latest.csv',
+  // 获取covid全量数据图
+  getCovidImg: 'http://cdn.data.gogmap.com/covid_d_20200411.png',
+  // 全量数据图对应的配置
+  allDataPngConfig: './data/covid_d_20200411.json',
   // 检测站
   getStation: './data/station.geojson',
   // 自费检测点
@@ -58,6 +63,16 @@ const api = {
 
   getChinaProvince () {
     return http(apiURL.chinaProvince)
+  },
+  getCovidDataFromImg () {
+    fetch(apiURL.getCovidImg).then((res) => {
+      res.arrayBuffer().then((data) => {
+        return data
+      })
+    })
+  },
+  getCovidPngConfig () {
+    return http(apiURL.allDataPngConfig)
   }
 }
 

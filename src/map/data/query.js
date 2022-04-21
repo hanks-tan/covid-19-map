@@ -1,4 +1,15 @@
 import moment from 'moment'
+import { Png2csv } from 'csv2png'
+
+function covidPngToJson (img, config) {
+  const pc = new Png2csv({
+    png: img,
+    config
+  })
+  return pc.parse().then((data) => {
+    return parseCSVToMap(data, 'array')
+  })
+}
 
 /**
  * 获取一个日期的前几天的日期
@@ -49,14 +60,21 @@ function getRankData (dataMap, field, topCount, regionType) {
 
 /**
  * 解析csv数据
- * @param {*} csvData csv文本
+ * @param {string | Array} csvData
+ * @param {String} type 指定输入类型, csv或者数组
  * @returns 返回一个Map对象
  */
-function parseCSVToMap (csvData) {
-  const lines = csvData.split('\n')
-  const startLine = lines[0] // XXX 换行又没有了
-  const keys = startLine.split(',')
-  const data = lines.slice(1)
+function parseCSVToMap (csvData, type = 'csv') {
+  let data
+  if (type === 'csv') {
+    const lines = csvData.split('\n')
+    // const startLine = lines[0] // XXX 换行又没有了
+    // keys = startLine.split(',')
+    data = lines.slice(1)
+  } else {
+    // keys = csvData[0]
+    data = csvData.slice(1)
+  }
   const dataMap = new Map() // 存储新冠数据
   const regionMap = new Map()
   /* dataMap数据结构：
@@ -85,7 +103,7 @@ function parseCSVToMap (csvData) {
   const deadIndex = 10 // 死亡列索引
 
   data.forEach((d) => {
-    const lineDataArray = d.split(',')
+    const lineDataArray = type === 'csv' ? d.split(',') : d
     const regions = [lineDataArray[countryCodeIndex], lineDataArray[provinceCodeIndex], lineDataArray[cityCodeIndex]].filter((item) => item !== '')
 
     const codes = regions.join('-') // 构造二级key
@@ -268,6 +286,7 @@ function get7DayRankData (date, field, count, regionType) {
 }
 
 export default {
+  covidPngToJson,
   parseCSVToMap,
   getDayData,
   getCountryOneDay,

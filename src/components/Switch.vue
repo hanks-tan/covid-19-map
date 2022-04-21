@@ -1,11 +1,12 @@
 <template>
-  <div class="switch" :class="{radius: borderRadius}">
+  <div class="switch" :style="{borderRadius:borderRadius}">
     <div
       v-for="item in options"
       :key="item.value"
       :value="value"
       class="switch-item"
       :class="{active: curValue === item.value, radius: borderRadius}"
+      :style="{borderRadius:borderRadius}"
       @click="clickHandle(item)">
       {{item.label}}
     </div>
@@ -24,9 +25,9 @@ export default {
       required: true
     },
     borderRadius: {
-      type: Boolean,
-      required: true,
-      default: true
+      type: String,
+      required: false,
+      default: '3px'
     }
   },
   data () {
@@ -47,11 +48,12 @@ export default {
   display: inline-flex;
   align-items: center;
   background-color: #474545;
+  border-radius: 3px;
   .switch-item{
     padding: .2rem 1rem;
   }
   .active{
-    // border-radius: 1rem;
+    // border-radius: 3px;
     background-color: cadetblue;
   }
 }

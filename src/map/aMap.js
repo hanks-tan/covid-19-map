@@ -1,13 +1,8 @@
 import { Map, View, Overlay } from 'ol'
-import VectorLayer from 'ol/layer/Vector'
-import VectorSource from 'ol/source/Vector'
 import Select from 'ol/interaction/Select'
 
 import TileLayer from 'ol/layer/Tile'
 import XYZ from 'ol/source/XYZ'
-import dataUtils from '../utils/dataUtils'
-import defaultStyle from './defaultStyle'
-import mapData from './data/mapData'
 import mapUtil from '../utils/mapUtil'
 import { Circle, Fill, Stroke, Style } from 'ol/style'
 import Object from 'ol/Object'
@@ -34,14 +29,6 @@ class AMap extends Object {
 
     this.view = new View(this.getViewOptions())
 
-    // var worldData = mapData.getCountryDataByCode({ layerType: mapUtil.layerType.polygon })
-    // this.vectorLayer = new VectorLayer({
-    //   source: new VectorSource({
-    //     features: worldData
-    //   }),
-    //   style: defaultStyle.Polygon
-    // })
-
     var popup = document.getElementById('popup')
     this.overlay = new Overlay({
       element: popup,
@@ -57,8 +44,6 @@ class AMap extends Object {
       overlays: [this.overlay],
       layers: [baseLayer]
     })
-
-    // this.map.on('pointermove', this._pointerMoveHandle.bind(this))
 
     this.initMapControl()
   }

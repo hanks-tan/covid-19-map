@@ -5,8 +5,7 @@
       <div class="top">
         <DataSwitch
           :options="layerTypeOptions"
-          :curValue.sync="mapDataOptions.layerType"
-          :borderRadius="false">
+          :curValue.sync="mapDataOptions.layerType">
         </DataSwitch>
         <div>
           <el-button type="primary" icon="el-icon-edit" circle></el-button>
@@ -15,7 +14,8 @@
       <DataSwitch
         class="data-type-switch"
         :options="renderFieldList"
-        :curValue.sync="mapDataOptions.renderField">
+        :curValue.sync="mapDataOptions.renderField"
+        borderRadius="1rem">
       </DataSwitch>
       <!-- 时间轴 -->
       <TimeLine class="timeline-container" v-if="!isLatestData" ref="timeLine"
@@ -109,6 +109,7 @@ export default {
       immediate: true,
       handler (val) {
         this.changeMap()
+        this.setMapView()
       }
     }
   },
@@ -128,6 +129,7 @@ export default {
         $mapEvtBus: this.$mapEvtBus
       })
       this.mapDataOptions.layerType = 'polygon'
+      this.setMapView()
     },
     changeMap () {
       // 渲染地图
@@ -140,7 +142,6 @@ export default {
       //   fieldType: this.fieldType // 数据字段
       // }))
       this.$mapEvtBus.$emit(covidDataUtil.mapEvt.render, options)
-      this.setMapView()
     },
     handleDataTypeChange (dataType) {
       this.isLatestData = dataType
@@ -210,9 +211,9 @@ export default {
   }
   .rank{
     position: absolute;
-    right: 10px;
-    top: 10px;
-    z-index: 999;
+    right: 1rem;
+    margin-top: 1rem;
+    z-index: 100;
   }
   .data-type-switch{
     position: absolute;
@@ -222,9 +223,9 @@ export default {
   }
   .top{
     position: absolute;
-    z-index: 100;
     left: 1rem;
     margin-top: 1rem;
     display: inline;
+    z-index: 100;
   }
 </style>
