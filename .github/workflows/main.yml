@@ -29,5 +29,5 @@ jobs:
           BRANCH: master
           FOLDER: dist
           REPOSITORY_NAME: hanks-tan/covid-19-map/ # 这是我的 github page 仓库
-          TARGET_FOLDER: covid-19-map
+          TARGET_FOLDER: docs
 
