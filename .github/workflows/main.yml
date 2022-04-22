@@ -19,5 +19,14 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '14'
-        
+    - run: npm i
     - run: npm run build
+
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@3.5.9
+      with: ACCESS_TOKEN: ${{ secrets.VUE_ADMIN_TEMPLATE }} # VUE_ADMIN_TEMPLATE 是我的 secret 名称，需要替换成你的
+          BRANCH: master
+          FOLDER: dist
+          REPOSITORY_NAME: hanks-tan/covid-19-map/ # 这是我的 github page 仓库
+          TARGET_FOLDER: covid-19-map
+

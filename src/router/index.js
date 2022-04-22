@@ -58,7 +58,8 @@ const routes = [
 const router = new VueRouter({
   routes,
   mode: 'history',
-  base: '/covid/'
+  // base: '/covid/'
+  base: '/'
 })
 
 export default router
