@@ -115,7 +115,7 @@ class MapEvtCtrl {
 function _convertPointToFeatures (data) {
   if (Array.isArray(data)) {
     const fts = data.map((item) => {
-      const point = new Point(item?.properties?.cp)
+      const point = new Point(item.properties?.cp)
       const ft = new Feature({
         geometry: point
       })

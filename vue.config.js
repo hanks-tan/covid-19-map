@@ -2,10 +2,13 @@ const webpack = require('webpack')
 const path = require('path')
 const ComppressionWebpackPlugin = require('compression-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const { buildDate } = require('./version')
+process.env.VUE_APP_VERSION = buildDate
 
 module.exports = {
-  // publicPath: '/covid/',
-  publicPath: '/', // github部署跟目录
+  // publicPath: process.env.VUE_APP_ROOT ? '/covid/' : '/',
+  publicPath: '/covid/',
+  // publicPath: '/', // github部署跟目录
   outputDir: 'docs', // 运行时生成的生产环境构建文件的目录(默认''dist''，构建之前会被清除)
   assetsDir: 'assets', // 放置生成的静态资源(js、css、img、fonts)的(相对于 outputDir 的)目录(默认'')
   indexPath: 'index.html', // 指定生成的 index.html 的输出路径(相对于 outputDir)也可以是一个绝对路径。
@@ -21,7 +24,7 @@ module.exports = {
   },
   lintOnSave: true, // 是否在保存的时候检查
   runtimeCompiler: true,
-  productionSourceMap: true, // 生产环境是否生成 sourceMap 文件
+  productionSourceMap: process.env.NODE_ENV !== 'production', // 生产环境是否生成 sourceMap 文件
   css: {
     requireModuleExtension: false,
     extract: true, // 是否使用css分离插件 ExtractTextPlugin
@@ -30,7 +33,7 @@ module.exports = {
   },
   devServer: { // 环境配置
     host: 'localhost',
-    port: 8080,
+    port: 8081,
     https: false,
     hotOnly: true,
     open: true, // 配置自动启动浏览器

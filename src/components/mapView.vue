@@ -7,9 +7,9 @@
           :options="layerTypeOptions"
           :curValue.sync="mapDataOptions.layerType">
         </DataSwitch>
-        <div>
+        <!-- <div>
           <el-button type="primary" icon="el-icon-edit" circle></el-button>
-        </div>
+        </div> -->
       </div>
       <DataSwitch
         class="data-type-switch"

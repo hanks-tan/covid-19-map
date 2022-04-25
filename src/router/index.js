@@ -24,7 +24,7 @@ const routes = [
   {
     path: '/data',
     name: 'Data',
-    component: () => import('../views/data/Index'),
+    component: () => import('../views/data/Index')
     // children: [
     //   {
     //     path: 'top10',
@@ -58,8 +58,9 @@ const routes = [
 const router = new VueRouter({
   routes,
   mode: 'history',
-  // base: '/covid/'
-  base: '/'
+  // base: process.env.VUE_APP_ROOT ? '/covid' : '/'
+  base: '/covid'
+  // base: '/'
 })
 
 export default router
