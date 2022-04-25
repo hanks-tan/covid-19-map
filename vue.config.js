@@ -60,7 +60,10 @@ module.exports = {
         deleteOriginalAssets: false, // 不删除源文件
         minRatio: 0.8
       }),
-      new BundleAnalyzerPlugin(),
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'disable',
+        generateStatsFile: true
+      }),
       new webpack.IgnorePlugin(/\.\/locale/, /moment/)
     ],
     externals: {
