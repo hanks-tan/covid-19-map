@@ -30,10 +30,10 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SERVER_SSH_KEY }} 
         ARGS: -avzr --delete
-        SOURCE: ./docs
+        SOURCE: docs/
         REMOTE_HOST: 47.112.141.14
         REMOTE_USER: ${{secrets.ROMETO_USER}}
-        TARGET: ${{secrets.TARGET_FOLDER}} # 远程目录
+        # TARGET: ${{secrets.TARGET_FOLDER}} # 远程目录
 
       # with: 
       #     ACCESS_TOKEN: ${{ secrets.PUBLISH }} # VUE_ADMIN_TEMPLATE 是我的 secret 名称，需要替换成你的
