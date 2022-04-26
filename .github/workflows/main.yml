@@ -30,7 +30,7 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SERVER_SSH_KEY }} 
         ARGS: -rltgoDzvO --delete
-        SOURCE: ./docs
+        SOURCE: /docs
         REMOTE_HOST: gogmap.com
         REMOTE_USER: ${{secrets.ROMETO_USER}}
         TARGET: ${{secrets.TARGET_FOLDER}} # 远程目录
