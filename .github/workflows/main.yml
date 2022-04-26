@@ -31,7 +31,7 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SERVER_SSH_KEY }} 
         ARGS: -avzr --delete
         SOURCE: docs/
-        REMOTE_HOST: ${{secrets.RoMOTE_HOST}}
+        REMOTE_HOST: ${{secrets.ROMETO_HOST}}
         REMOTE_USER: ${{secrets.ROMETO_USER}}
         TARGET: ${{secrets.TARGET_FOLDER}} # 远程目录
 
