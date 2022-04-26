@@ -33,7 +33,7 @@ jobs:
         SOURCE: docs/
         REMOTE_HOST: ${{secrets.ROMETO_HOST}}
         REMOTE_USER: ${{secrets.ROMETO_USER}}
-        TARGET: ${{secrets.TARGET_FOLDER}} # 远程目录
+        TARGET: /home/root/covid # 远程目录
 
       # with: 
       #     ACCESS_TOKEN: ${{ secrets.PUBLISH }} # VUE_ADMIN_TEMPLATE 是我的 secret 名称，需要替换成你的
