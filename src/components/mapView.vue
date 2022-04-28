@@ -7,9 +7,9 @@
           :options="layerTypeOptions"
           :curValue.sync="mapDataOptions.layerType">
         </DataSwitch>
-        <!-- <div>
-          <el-button type="primary" icon="el-icon-edit" circle></el-button>
-        </div> -->
+        <div>
+          <el-button type="primary" icon="el-icon-edit" circle @click="openHistoryHandle"></el-button>
+        </div>
       </div>
       <DataSwitch
         class="data-type-switch"
@@ -19,14 +19,17 @@
       </DataSwitch>
       <!-- 时间轴 -->
       <TimeLine class="timeline-container" v-if="!isLatestData" ref="timeLine"
-        :startDate="date"
+        :startDate.sync="mapDataOptions.date"
         :speed=1
         @changeDate="handleDateChange">
       </TimeLine>
       <!-- 悬浮提示 -->
       <tips ref="tips" :aMap="mapObj"></tips>
       <!-- 排行榜 -->
-      <rank class="rank"></rank>
+      <rank
+        class="rank"
+        :region="region"
+        :date="mapDataOptions.date"></rank>
       <map-legend></map-legend>
     </div>
   </div>
@@ -156,7 +159,8 @@ export default {
       this.changeMap()
     },
     handleDateChange (date) {
-      this.date = date
+      // this.date = date
+      this.mapDataOptions.date = date
       this.$mapEvtBus.$emit('dateChange', date)
     },
     handleFieldTypeChange (fieldType) {
@@ -175,8 +179,13 @@ export default {
         extent = [75, 0, 149, 59]
       }
       return extent
+    },
+    openHistoryHandle () {
+      this.isLatestData = !this.isLatestData
+      if (!this.isLatestData) {
+        this.mapDataOptions.date = covidDataUtil.covidDefaultStartTime
+      }
     }
-
   }
 }
 </script>

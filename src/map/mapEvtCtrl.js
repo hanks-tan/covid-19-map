@@ -29,7 +29,9 @@ class MapEvtCtrl {
       mapObj: this.mapObj,
       name: 'polygon'
     })
-
+    
+    // let curLayer = this._pointLayer
+    // let mapOptions = {}
     this.$mapEvtBus.$on(covidDataUtil.mapEvt.render, async function (params) {
       self._pointLayer.clearData()
       self._polygonLayer.clearData()
@@ -42,13 +44,13 @@ class MapEvtCtrl {
         }
       }
 
-      // TODO 需要根据layerType 和 region 加载范围数据
       let covidDatas
       if (params.region === 'china') {
         covidDatas = query.getDayDataByLevel(date, 1)
       } else {
         covidDatas = query.getDayCountryData(date)
       }
+
       if (covidDatas.size < 1) {
         return
       }
@@ -71,6 +73,8 @@ class MapEvtCtrl {
           fts = new GeoJSON().readFeatures(world)
         }
       }
+
+      console.log('数据', fts)
 
       fts.forEach((ft) => {
         const code = ft.get('code')

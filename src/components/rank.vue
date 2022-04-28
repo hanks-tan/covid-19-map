@@ -29,9 +29,21 @@
 import Vue from 'vue'
 import { Tabs, TabPane } from 'element-ui'
 import query from '../map/data/query'
+import mapUtil from '../utils/mapUtil'
 Vue.use(Tabs)
 Vue.use(TabPane)
+const covidDataUtil = mapUtil.covidDataUtil
 export default {
+  props: {
+    region: {
+      type: String,
+      default: 'china'
+    },
+    date: {
+      type: String,
+      default: covidDataUtil.latestDate
+    }
+  },
   data () {
     return {
       tabs: [
@@ -52,7 +64,6 @@ export default {
       top: 10,
       curField: 'confirmed',
       rankData: [],
-      date: '2020-02-14',
       regionType: 3 // 1 国家，2省，3市
     }
   },
