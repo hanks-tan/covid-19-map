@@ -5,21 +5,39 @@
       <div class="top">
         <DataSwitch
           :options="layerTypeOptions"
-          :curValue.sync="mapDataOptions.layerType">
+          :curValue.sync="layerType">
         </DataSwitch>
-        <div>
-          <el-button type="primary" icon="el-icon-edit" circle @click="openHistoryHandle"></el-button>
+        <div class="history">
+          <el-tooltip content="历史回放" placement="top">
+            <el-button
+            type="primary"
+            icon="el-icon-video-play"
+            circle
+            size="small"
+            @click="openHistoryHandle"></el-button>
+          </el-tooltip>
         </div>
+      </div>
+      <div class="legend">
+        <el-tooltip content="图例" placement="top" v-show="!showMapLegend">
+          <el-button
+          type="primary"
+          icon="el-icon-menu"
+          size="small"
+          @click="showMapLegend = !showMapLegend"
+          circle></el-button>
+        </el-tooltip>
+        <map-legend v-show="showMapLegend"></map-legend>
       </div>
       <DataSwitch
         class="data-type-switch"
         :options="renderFieldList"
-        :curValue.sync="mapDataOptions.renderField"
+        :curValue.sync="renderField"
         borderRadius="1rem">
       </DataSwitch>
       <!-- 时间轴 -->
       <TimeLine class="timeline-container" v-if="!isLatestData" ref="timeLine"
-        :startDate.sync="mapDataOptions.date"
+        :startDate.sync="date"
         :speed=1
         @changeDate="handleDateChange">
       </TimeLine>
@@ -29,15 +47,16 @@
       <rank
         class="rank"
         :region="region"
-        :date="mapDataOptions.date"></rank>
-      <map-legend></map-legend>
+        :date="date">
+      </rank>
     </div>
   </div>
 </template>
 <script>
 import moment from 'moment'
 import AMap from '../map/aMap'
-import MapEvtCtrl from '../map/mapEvtCtrl'
+// import MapEvtCtrl from '../map/mapEvtCtrl'
+import MapRender from '../map/mapRender'
 import mapUtil from '../utils/mapUtil'
 // import timeLine from '@/components/timeLine.vue'
 import mapLegend from '@/components/mapLegend.vue'
@@ -84,11 +103,15 @@ export default {
           value: 'point'
         }
       ],
-      mapDataOptions: {
-        layerType: '', // 显示类型: point/polygon
-        renderField: 'confirmed',
-        date: covidDataUtil.latestDate
-      }
+      // mapDataOptions: {
+      //   layerType: '', // 显示类型: point/polygon
+      //   renderField: 'confirmed',
+      //   date: covidDataUtil.latestDate
+      // }
+      layerType: 'point',
+      renderField: 'confirmed',
+      date: covidDataUtil.latestDate,
+      showMapLegend: false
     }
   },
   components: {
@@ -102,17 +125,35 @@ export default {
     this.initMap()
   },
   watch: {
-    mapDataOptions: {
-      deep: true,
-      handler (val) {
-        this.changeMap()
-      }
+    // mapDataOptions: {
+    //   deep: true,
+    //   handler (val, old) {
+    //     this.changeMap()
+    //     if (val.)
+    //   }
+    // },
+    layerType (val) {
+      this.$mapEvtBus.$emit('layerTypeChange', val)
+    },
+    date (val) {
+      this.$mapEvtBus.$emit('dateChange', val)
+    },
+    renderField (val) {
+      this.$mapEvtBus.$emit('covidDataTypeChange', val)
     },
     region: {
       immediate: true,
       handler (val) {
-        this.changeMap()
+        // this.changeMap()
+        this.$mapEvtBus.$emit('regionChange', val)
         this.setMapView()
+      }
+    },
+    showMapLegend (val) {
+      if (val) {
+        setTimeout(() => {
+          this.showMapLegend = false
+        }, 10000)
       }
     }
   },
@@ -127,11 +168,19 @@ export default {
         // console.log(data)
         this.$refs.tips.setData(evt)
       })
-      this.mapEvtCtrl = new MapEvtCtrl({
+      // this.mapEvtCtrl = new MapEvtCtrl({
+      //   mapObj: this.mapObj,
+      //   $mapEvtBus: this.$mapEvtBus
+      // })
+      this.mapEvtCtrl = new MapRender({
         mapObj: this.mapObj,
-        $mapEvtBus: this.$mapEvtBus
+        $mapEvtBus: this.$mapEvtBus,
+        region: this.region,
+        render: this.layerType,
+        renderField: this.renderField,
+        date: this.date
       })
-      this.mapDataOptions.layerType = 'polygon'
+      // this.mapDataOptions.layerType = 'polygon'
       this.setMapView()
     },
     changeMap () {
@@ -159,8 +208,8 @@ export default {
       this.changeMap()
     },
     handleDateChange (date) {
-      // this.date = date
-      this.mapDataOptions.date = date
+      this.date = date
+      // this.mapDataOptions.date = date
       this.$mapEvtBus.$emit('dateChange', date)
     },
     handleFieldTypeChange (fieldType) {
@@ -183,7 +232,9 @@ export default {
     openHistoryHandle () {
       this.isLatestData = !this.isLatestData
       if (!this.isLatestData) {
-        this.mapDataOptions.date = covidDataUtil.covidDefaultStartTime
+        this.date = covidDataUtil.covidDefaultStartTime
+      } else {
+        this.date = covidDataUtil.latestDate
       }
     }
   }
@@ -191,6 +242,7 @@ export default {
 </script>
 <style lang="less" scoped>
   @import url('~ol/ol.css');
+  @left: 1rem;
   #map{
     height: 100%;
   }
@@ -211,7 +263,8 @@ export default {
     }
   }
   .timeline-container{
-    width: calc(100% - 140px - 20px);
+    // width: calc(100% - 140px - 20px);
+    width: 100%;
     background-color: rgba(54, 16, 22, 0.4);
     position: absolute;
     z-index: 500;
@@ -227,14 +280,25 @@ export default {
   .data-type-switch{
     position: absolute;
     bottom: 5rem;
-    left: 1rem;
+    left: @left;
     z-index: 100;
   }
   .top{
     position: absolute;
-    left: 1rem;
+    left: @left;
     margin-top: 1rem;
     display: inline;
     z-index: 100;
+  }
+  .history{
+    left: 1rem;
+    display: inline;
+    margin-left: 1rem;
+  }
+  .legend{
+    z-index: 100;
+    bottom: 7rem;
+    left: @left;
+    position: absolute;
   }
 </style>

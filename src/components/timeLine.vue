@@ -149,7 +149,7 @@ export default {
 </script>
 <style lang="less">
   .time-line-warp{
-    height: 60px;
+    height: 3rem;
     .left{
       width: 6%;
       display: flex;

@@ -73,49 +73,51 @@ module.exports = {
     }
   },
   chainWebpack: (config) => {
-    config.optimization.minimize(true)
-    config.optimization.splitChunks({
-      chunks: 'all',
-      automaticNameDelimiter: '_',
-      cacheGroups: {
-        vendors: {
-          name: 'chunk-vendors',
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10,
-          chunks: 'all'
-        },
-        common: {
-          name: 'chunk-common',
-          minChunks: 2,
-          priority: -20,
-          chunks: 'initial',
-          reuseExistingChunk: true
-        },
-        // element: {
-        //   chunks: 'all',
-        //   name: 'element-ui',
-        //   test: /[\\/]element-ui[\\/]/,
-        //   priority: 0
-        // },
-        echarts: {
-          chunks: 'all',
-          name: 'chart',
-          test: /[\\/]echarts[\\/]/,
-          priority: 0
+    if (process.env.NODE_ENV === 'production') {
+      config.optimization.minimize(true)
+      config.optimization.splitChunks({
+        chunks: 'all',
+        automaticNameDelimiter: '_',
+        cacheGroups: {
+          vendors: {
+            name: 'chunk-vendors',
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            chunks: 'all'
+          },
+          common: {
+            name: 'chunk-common',
+            minChunks: 2,
+            priority: -20,
+            chunks: 'initial',
+            reuseExistingChunk: true
+          },
+          // element: {
+          //   chunks: 'all',
+          //   name: 'element-ui',
+          //   test: /[\\/]element-ui[\\/]/,
+          //   priority: 0
+          // },
+          echarts: {
+            chunks: 'all',
+            name: 'chart',
+            test: /[\\/]echarts[\\/]/,
+            priority: 0
+          }
+          // time: {
+          //   chunks: 'all',
+          //   name: 'moment',
+          //   test: /[\\/]moment[\\/]/,
+          //   priority: 0
+          // },
+          // map: {
+          //   chunks: 'all',
+          //   name: 'map',
+          //   test: /[\\/]ol[\\/]/,
+          //   priority: 0
+          // }
         }
-        // time: {
-        //   chunks: 'all',
-        //   name: 'moment',
-        //   test: /[\\/]moment[\\/]/,
-        //   priority: 0
-        // },
-        // map: {
-        //   chunks: 'all',
-        //   name: 'map',
-        //   test: /[\\/]ol[\\/]/,
-        //   priority: 0
-        // }
-      }
-    })
+      })
+    }
   }
 }

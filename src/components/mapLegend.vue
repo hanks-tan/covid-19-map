@@ -1,8 +1,10 @@
 <template>
-  <div class="map-legend box">
+  <div class="map-legend">
     <div v-for="item in categoryList" class="legend-item" :key="item.no">
-      <div :style="{backgroundColor:item.color}" @click="handleLegendClick"></div>
-      <span>{{item.level}}</span>
+      <el-tooltip :content="item.level" placement="top">
+        <div :style="{backgroundColor:item.color,height:height}" @click="handleLegendClick"></div>
+        <!-- <div>{{item.level}}</div> -->
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -39,11 +41,14 @@ export default {
       if (index === 0) {
         legendLabel = '0人'
       } else if (index === covidDataUtil.levels.length - 1) {
-        legendLabel = `${covidDataUtil.levels[index]}人以上`
+        let max = covidDataUtil.levels[index]
+        max = max >= 1000 ? `${max / 1000}k` : max
+        legendLabel = `${max}人以上`
       } else {
-        var min = covidDataUtil.levels[index]
+        // var min = covidDataUtil.levels[index]
         var max = covidDataUtil.levels[index + 1]
-        legendLabel = `${min}-${max}人`
+        max = max >= 1000 ? `${max / 1000}k` : max
+        legendLabel = `少于${max}人`
       }
       return legendLabel
     }
@@ -52,20 +57,20 @@ export default {
 </script>
 <style lang="less">
 .map-legend{
-    right: 0;
-    padding: 5px;
-    bottom: 0px;
+    // right: 0;
+    // bottom: 0px;
+    // position: absolute;
     text-align: left;
-    position: absolute;
-    width: 140px;
+    // width: 140px;
+    display: flex;
+    // grid-template-columns: repeat(4, 25%);
     // background-color: rgba(54, 16, 22, 0.4);
     .legend-item{
       color: #bfbebe;
     }
   .legend-item div{
-    margin-right: 10px;
-    width: 20px;
-    height: 10px;
+    width: 2.9rem;
+    height: 1rem;
     display: inline-block;
   }
 }

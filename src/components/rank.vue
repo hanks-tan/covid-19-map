@@ -1,7 +1,12 @@
 <template>
   <div class="rank-container box">
+    <div class="title">疫情趋势</div>
+    <div class="field-selector">
+      <el-radio v-model="curField" label="confirmed">确诊数据</el-radio>
+      <el-radio v-model="curField" label="dead">死亡数据</el-radio>
+    </div>
     <el-tabs type="border-card" v-model="tabsValue" class="tabs">
-      <el-tab-pane v-for="(item, index) in tabs" :key="index" :label="item.title" :name="item.name">
+      <el-tab-pane v-for="(item, index) in tabs" :key="index" :label="item.title + fields[curField]" :name="item.name">
         <div class="rank-header">
           <div class="">
             国家或地区
@@ -46,23 +51,28 @@ export default {
   },
   data () {
     return {
+      fields: {
+        confirmed: '确诊',
+        dead: '死亡'
+      },
+      // TODO 切换
+      curField: 'confirmed',
       tabs: [
         {
-          title: '累计确诊',
+          title: '累计',
           name: 'full'
         },
         {
-          title: '24小时内确诊',
+          title: '24小时内',
           name: '24hours'
         },
         {
-          title: '7日内确诊',
+          title: '7日内',
           name: '7days'
         }
       ],
       tabsValue: 'full',
-      top: 10,
-      curField: 'confirmed',
+      top: 10, // 取前10的数据
       rankData: [],
       regionType: 3 // 1 国家，2省，3市
     }
@@ -72,6 +82,17 @@ export default {
       this.getRankData()
     },
     date () {
+      this.getRankData()
+    },
+    region (val) {
+      if (val === 'china') {
+        this.regionType = 2
+      } else {
+        this.regionType = 1
+      }
+      this.getRankData()
+    },
+    curField (val) {
       this.getRankData()
     }
   },
@@ -83,13 +104,17 @@ export default {
   },
   methods: {
     getRankData () {
+      let data = []
       if (this.tabsValue === 'full') {
-        this.rankData = query.getDeadlineRankData(this.date, this.curField, this.top, this.regionType)
+        data = query.getDeadlineRankData(this.date, this.curField, this.top, this.regionType)
       } else if (this.tabsValue === '24hours') {
-        this.rankData = query.get24HourRankData(this.date, this.curField, this.top, this.regionType)
+        data = query.get24HourRankData(this.date, this.curField, this.top, this.regionType)
       } else {
-        this.rankData = query.get7DayRankData(this.date, this.curField, this.top, this.regionType)
+        data = query.get7DayRankData(this.date, this.curField, this.top, this.regionType)
       }
+      this.rankData = data.filter((item) => {
+        return item.count > 0
+      })
     }
   }
 }
@@ -97,6 +122,17 @@ export default {
 <style lang="less" scoped>
   @bgColor: #565658b3;
   .rank-container{
+    .title{
+      font-size: 1.2rem;
+      text-align: left;
+      color: #e3e6e8;
+    }
+    .field-selector {
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 1rem;
+      padding: 1rem 0;
+    }
     .date{
       color: #ccc;
     }
