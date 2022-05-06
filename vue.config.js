@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
 const ComppressionWebpackPlugin = require('compression-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const { buildDate } = require('./version')
 process.env.VUE_APP_VERSION = buildDate
 
@@ -60,10 +60,10 @@ module.exports = {
         deleteOriginalAssets: false, // 不删除源文件
         minRatio: 0.8
       }),
-      new BundleAnalyzerPlugin({
-        analyzerMode: 'disable',
-        generateStatsFile: true
-      }),
+      // new BundleAnalyzerPlugin({
+      //   analyzerMode: 'disable',
+      //   generateStatsFile: true
+      // }),
       new webpack.IgnorePlugin(/\.\/locale/, /moment/)
     ],
     externals: {

@@ -45,9 +45,9 @@
       <tips ref="tips" :aMap="mapObj"></tips>
       <!-- 排行榜 -->
       <rank
-        class="rank"
         :region="region"
-        :date="date">
+        :date="date"
+        class="rank">
       </rank>
     </div>
   </div>
@@ -111,7 +111,7 @@ export default {
       layerType: 'point',
       renderField: 'confirmed',
       date: covidDataUtil.latestDate,
-      showMapLegend: false
+      showMapLegend: false // 显示图例
     }
   },
   components: {
