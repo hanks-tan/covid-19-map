@@ -49,7 +49,7 @@ const routes = [
     component: () => import('../views/data/IncreaseChart')
   },
   {
-    path: '/shenzhen',
+    path: '/shenzhen2022',
     name: 'shenzhen',
     component: () => import('../views/shenzhen/Index')
   }

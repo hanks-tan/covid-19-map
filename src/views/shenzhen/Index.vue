@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="container">
     <div class="search_wrap">
-      <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+      <el-input placeholder="请输入日期或者地址" v-model="input" class="input-with-select">
         <el-button slot="append" icon="el-icon-search"></el-button>
       </el-input>
     </div>
@@ -10,9 +10,10 @@
         <div
           @click="changeTotalType"
           class="layer_item"
+          :class="{disabled: showTimeLine}"
           >{{totalType.label}}</div>
-        <div @click="showChartHandle(0)" class="layer_item">分布图</div>
-        <div @click="showChartHandle(1)" class="layer_item last_item">趋势图</div>
+        <div @click="showChartHandle(0)" class="layer_item" :class="{disabled: showTimeLine}">分布图</div>
+        <div @click="showChartHandle(1)" class="layer_item" :class="{disabled: showTimeLine}">趋势图</div>
         <div @click="showTimeLineHandle" class="layer_item last_item">时间轴</div>
       </div>
       <div v-show="totalType.code === 'custom'" class="date_picker">
@@ -33,7 +34,7 @@
       :center="mapCenter"
       ref="map">
     </Map>
-    <div class="chart_wrap">
+    <div class="chart_wrap" v-show="!showTimeLine">
       <transition name="chart" mode="out-in">
         <DistributionChart v-if="showChart === 'distributionChart'" :data="szyqData"></DistributionChart>
         <TrendChart v-else-if="showChart === 'trendChart'" :data="szyqData"></TrendChart>
@@ -45,6 +46,7 @@
       :speed=1
       @changeDate="handleDateChange">
     </TimeLine>
+    <div class="datainfo" :class="{move:showTimeLine}">数据时间范围：{{covidDataDate.start}} 至 {{covidDataDate.end}}</div>
   </div>
 </template>
 
@@ -59,6 +61,8 @@ import { Point } from 'ol/geom'
 // import TrendChart from './TrendChart.vue'
 import mixin from './mixin'
 // import TimeLine from 'comps/timeLine'
+import conf from './conf'
+
 export default {
   components: {
     Map,
@@ -76,7 +80,11 @@ export default {
       showChart: '',
       input: '',
       dateRange: '',
-      showTimeLine: false
+      showTimeLine: false,
+      covidDataDate: {
+        start: conf.startDate,
+        end: conf.endDate
+      }
     }
   },
   computed: {
@@ -132,6 +140,9 @@ export default {
       return layer
     },
     changeTotalType () {
+      if (this.showTimeLine) {
+        return
+      }
       this.totalIndex = this.totalIndex >= this.totalTypeList.length - 1 ? 0 : this.totalIndex + 1
     },
     changeMapData (val) {
@@ -141,13 +152,17 @@ export default {
       if (opt.code === 'custom') {
         [start, end] = this.dateRange
       } else {
-        end = moment()
-        start = moment().subtract(opt.value, 'day')
+        end = moment(conf.endDate)
+        start = moment(conf.endDate).subtract(opt.value, 'day')
       }
       const data = this.filterMapDataByDateRange(start, end, this.szyqData)
       this.showHeatmap(data)
     },
     showChartHandle (cmd) {
+      // 时间轴打开时禁用其它的
+      if (this.showTimeLine) {
+        return
+      }
       const chartType = cmd === 0 ? 'distributionChart' : 'trendChart'
       if (this.showChart === chartType) {
         this.showChart = ''
@@ -169,6 +184,10 @@ export default {
   @topMargin:1rem;
   @leftMargin: 1rem;
   @border: 1px solid var(--border-color);
+  .container{
+    height: 100vh;
+    width: 100%;
+  }
   .search_wrap{
     position: absolute;
     top: @topMargin;
@@ -190,20 +209,25 @@ export default {
   .layer_wrap{
     position: absolute;
     top: @topMargin;
-    left: 70%;
+    right: 1rem;
     z-index: 2;
     text-align: left;
     .selector_wrap{
-      background-color: cornflowerblue;
+      background-color: #474545;
       display: inline-flex;
       border-radius: 3px;
       padding: 10px 0;
       .layer_item{
         padding: 0 10px;
         border-right: 1px solid burlywood;
+        cursor: pointer;
       }
       .last_item{
         border-right: 0;
+      }
+      .disabled {
+        color: #918f8f;
+        cursor: not-allowed;
       }
     }
     .date_picker{
@@ -221,5 +245,22 @@ export default {
   }
   .chart-enter, .chart-leave-to{
     opacity: 0;
+  }
+  .timeline-container{
+    width: 100%;
+    background-color: rgba(54, 16, 22, 0.4);
+    position: absolute;
+    z-index: 500;
+    bottom: 0;
+    display: flex;
+  }
+  .datainfo{
+    position: absolute;
+    z-index: 2;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  .move{
+    bottom: 3.5rem;
   }
 </style>

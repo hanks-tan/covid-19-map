@@ -52,6 +52,7 @@ import moment from 'moment'
 import MultiLineChart from 'comps/charts/MultiLineChart.vue'
 import mapUtil from 'utils/mapUtil'
 import mixin from './mixin'
+import conf from './conf'
 export default {
   components: {
     MultiLineChart
@@ -137,8 +138,8 @@ export default {
       if (totalType.code === 'custom') {
         [start, end] = this.dateRange
       } else {
-        end = moment()
-        start = moment().subtract(totalType.value, 'day')
+        end = moment(conf.endDate)
+        start = moment(conf.endDate).subtract(totalType.value, 'day')
       }
       this.createChartData(start, end, this.data)
     },

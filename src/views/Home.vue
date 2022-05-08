@@ -2,6 +2,12 @@
   <el-container>
     <el-header class="header" style="height: 50px">
       <div class="title">
+        <div class="menu" @click="showMenuHandle">
+          <el-tooltip content="菜单" placement="right">
+            <i class="el-icon-menu"></i>
+          </el-tooltip>
+          <!-- <el-button type="primary" icon="el-icon-menu"></el-button> -->
+        </div>
         新冠疫情分布图
       </div>
       <div class="data-switch">
@@ -24,6 +30,9 @@
         >
       </MapView>
     </el-main>
+    <transition name="menu">
+      <Menu v-show="showMenu" class="menulist"></Menu>
+    </transition>
   </el-container>
 </template>
 
@@ -32,17 +41,20 @@
 import MapView from '@/components/mapView'
 import query from '../map/data/query'
 import moment from 'moment'
+import Menu from '@/components/Menu'
 
 export default {
   name: 'Home',
   components: {
-    MapView
+    MapView,
+    Menu
   },
   data () {
     return {
       dataReady: false,
       region: 'china', // china | global
-      curDate: moment().format('YYYY-MM-DD')
+      curDate: moment().format('YYYY-MM-DD'),
+      showMenu: false
     }
   },
   mounted () {
@@ -69,6 +81,9 @@ export default {
           window.cvData = query.parseCSVToMap(res.data)
         })
       })
+    },
+    showMenuHandle () {
+      this.showMenu = !this.showMenu
     }
   }
 }
@@ -79,10 +94,15 @@ export default {
     grid-template-columns: repeat(3, 33.3%);
     background-color: #1b284e;
     align-items: center;
+    padding-left: 0;
     .title{
       justify-self: start;
       font-family: STXinwei;
       font-size: 1.3rem;
+      .menu{
+        display: inline;
+        cursor: pointer;
+      }
     }
     .data-switch{
       .data-switch-item{
@@ -116,5 +136,27 @@ export default {
     .map-container{
       height: 100%;
     }
+  }
+  .menulist{
+    position: absolute;
+    z-index: 100;
+    list-style: none;
+    top: 50px;
+    background-color: #434447;
+    width: 16rem;
+    line-height: 2rem;
+    text-align: left;
+  }
+  // .menu-enter-active, .menu-leave-active {
+  //   transition: opacity .5s;
+  // }
+  // .menu-enter, .menu-leave{
+  //   opacity: 0;
+  // }
+  .menu-enter-active{
+    transition: all .5s;
+  }
+  .menu-enter{
+    transform: scale(0.5, 0.1);
   }
 </style>

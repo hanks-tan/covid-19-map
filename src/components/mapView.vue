@@ -18,7 +18,7 @@
           </el-tooltip>
         </div>
       </div>
-      <div class="legend">
+      <div class="legend" :class="{adjust1: !isLatestData}">
         <el-tooltip content="图例" placement="top" v-show="!showMapLegend">
           <el-button
           type="primary"
@@ -31,6 +31,7 @@
       </div>
       <DataSwitch
         class="data-type-switch"
+        :class="{adjust: !isLatestData}"
         :options="renderFieldList"
         :curValue.sync="renderField"
         borderRadius="1rem">
@@ -279,9 +280,12 @@ export default {
   }
   .data-type-switch{
     position: absolute;
-    bottom: 5rem;
+    bottom: 1rem;
     left: @left;
     z-index: 100;
+  }
+  .adjust{
+    bottom: 5rem;
   }
   .top{
     position: absolute;
@@ -297,8 +301,11 @@ export default {
   }
   .legend{
     z-index: 100;
-    bottom: 7rem;
+    bottom: 3rem;
     left: @left;
     position: absolute;
+  }
+  .adjust1{
+    bottom: 7rem;
   }
 </style>

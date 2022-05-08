@@ -43,7 +43,6 @@
           </BaseBar>
         </div>
       </el-tab-pane>
-      <!-- <el-tab-pane label="用户管理">用户管理</el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -53,6 +52,7 @@ import moment from 'moment'
 import BaseBar from 'comps/charts/BaseBar'
 import mapUtil from 'utils/mapUtil'
 import mixin from './mixin'
+import conf from './conf'
 export default {
   components: {
     BaseBar
@@ -125,8 +125,8 @@ export default {
         if (totalType.code === 'custom') {
           [start, end] = this.dateRange
         } else {
-          end = moment()
-          start = moment().subtract(totalType.value, 'day')
+          end = moment(conf.endDate)
+          start = moment(conf.endDate).subtract(totalType.value, 'day')
         }
         // const today = moment()
         // const otherDay = moment().subtract(totalType.value, 'day')

@@ -1,4 +1,5 @@
 import moment from 'moment'
+import conf from './conf'
 export default {
   data () {
     return {
@@ -50,7 +51,7 @@ export default {
       if (!Array.isArray(data)) {
         return
       }
-      const endDate = moment().subtract(sub, 'day')
+      const endDate = moment(conf.endDate).subtract(sub, 'day')
       const targetData = data.filter((item) => {
         const dataDate = moment(item.date)
         return dataDate.isAfter(endDate)
