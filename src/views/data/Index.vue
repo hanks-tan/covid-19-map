@@ -46,8 +46,11 @@ export default {
     color: black;
     .content{
       margin: 10px;
-      background-color: white;
+      background-color: #939395;
       border-radius: 5px;
+    }
+    /deep/ .el-tabs--border-card>.el-tabs__content{
+      font-size: 1.2rem;
     }
   }
 </style>
