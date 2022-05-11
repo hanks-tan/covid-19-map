@@ -36,6 +36,11 @@ export default {
           name: '城市疫情趋势对比图',
           path: '/increaseChart'
         },
+        {
+          code: 'top10',
+          name: '国内TOP10数据的变化过程',
+          path: '/top10'
+        }
       ]
     }
   }

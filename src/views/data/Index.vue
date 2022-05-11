@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="content box">
+    <div class="content">
       <el-tabs type="border-card">
         <el-tab-pane v-for="(item,i) in tabs" :key="i" :label="item.label">
           <div v-if="item.code === 'domestic'">
@@ -16,7 +16,7 @@
 import DomesticData from './DomesticData.vue'
 export default {
   components: {
-    DomesticData,
+    DomesticData
   },
   data () {
     return {
@@ -46,11 +46,15 @@ export default {
     color: black;
     .content{
       margin: 10px;
-      background-color: #939395;
-      border-radius: 5px;
+      background-color: #f3f3f4;
     }
-    /deep/ .el-tabs--border-card>.el-tabs__content{
-      font-size: 1.2rem;
+    /deep/ .el-tabs--border-card{
+      background: #fff;
+      border: 0;
+      border-radius: 5px;
+      .el-tabs__content{
+        font-size: 1.2rem;
+      }
     }
   }
 </style>

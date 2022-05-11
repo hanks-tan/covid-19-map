@@ -8,6 +8,7 @@
 <style lang="less">
 @import url('./assets/css/main.less');
 @import url('./assets/theme/index.css');
+@import url('./assets/css/ele-ui.less');
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -46,7 +46,11 @@
       :speed=1
       @changeDate="handleDateChange">
     </TimeLine>
-    <div class="datainfo" :class="{move:showTimeLine}">数据时间范围：{{covidDataDate.start}} 至 {{covidDataDate.end}}</div>
+    <div class="datainfo" :class="{move:showTimeLine}">
+      数据时间范围：{{covidDataDate.start}}
+      <span>至</span>
+      {{covidDataDate.end}}
+    </div>
   </div>
 </template>
 
@@ -57,10 +61,7 @@ import Heatmap from 'ol/layer/Heatmap'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
-// import DistributionChart from './DistributionChart.vue'
-// import TrendChart from './TrendChart.vue'
 import mixin from './mixin'
-// import TimeLine from 'comps/timeLine'
 import conf from './conf'
 
 export default {
@@ -155,8 +156,7 @@ export default {
         end = moment(conf.endDate)
         start = moment(conf.endDate).subtract(opt.value, 'day')
       }
-      const data = this.filterMapDataByDateRange(start, end, this.szyqData)
-      this.showHeatmap(data)
+      this.updateDate(start, end)
     },
     showChartHandle (cmd) {
       // 时间轴打开时禁用其它的
@@ -175,6 +175,23 @@ export default {
     },
     showTimeLineHandle () {
       this.showTimeLine = !this.showTimeLine
+    },
+    handleDateChange (date) {
+      console.log('date', date, this.totalTypeList[this.totalIndex])
+      this.changeMapDateForTimeLine(date)
+    },
+    changeMapDateForTimeLine (date) {
+      const opt = this.totalTypeList[this.totalIndex]
+      const dayCount = opt.value || 1
+      const end = date
+      const start = moment(end).subtract(dayCount, 'day')
+      this.updateDate(start, end)
+    },
+    updateDate (start, end) {
+      this.covidDataDate.end = moment(end).format('YYYY-MM-DD')
+      this.covidDataDate.start = moment(start).format('YYYY-MM-DD')
+      const data = this.filterMapDataByDateRange(start, end, this.szyqData)
+      this.showHeatmap(data)
     }
   }
 }
