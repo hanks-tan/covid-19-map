@@ -31,7 +31,6 @@
 import LineRace from '../../components/charts/LineRace.vue'
 import RegionSelector from '../../components/RegionSelector.vue'
 import DataTypeSelector from '../../components/DataTypeSelector.vue'
-import axios from 'axios'
 import mapUtil from '../../utils/mapUtil'
 export default {
   components: {

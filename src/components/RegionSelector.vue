@@ -2,11 +2,13 @@
   <div>
     <span class="col-label">城市</span>
     <el-cascader
+      v-model="model"
       :options="options"
       :props="props"
       clearable
       collapse-tags
       filterable
+      :show-all-levels="false"
       @change="changeHandle"></el-cascader>
   </div>
 </template>
@@ -15,8 +17,14 @@
 export default {
   data () {
     return {
-      props: { multiple: true, value: 'code', label: 'value', checkStrictly: true },
-      options: []
+      props: { multiple: true, value: 'code', label: 'value', checkStrictly: false },
+      options: [],
+      model: ''
+    }
+  },
+  props: {
+    initList: {
+      type: Array
     }
   },
   mounted () {
