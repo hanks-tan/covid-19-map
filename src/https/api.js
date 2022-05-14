@@ -18,7 +18,7 @@ const apiURL = {
   // 免费核酸检查点
   getFreeCheckPoint: './data/checkPoint.json',
   // 深圳疫情数据
-  getSzyzData: './data/sz/all.csv',
+  getSzyzData: 'http://cdn.data.gogmap.com/all.csv',
   // 行政区划数据
   getRegionData: './data/city.json',
   // 中国各省点位数据
