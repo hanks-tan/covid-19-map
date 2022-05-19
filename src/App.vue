@@ -4,7 +4,6 @@
     <router-view></router-view>
   </div>
 </template>
-
 <style lang="less">
 @import url('./assets/css/main.less');
 @import url('./assets/theme/index.css');

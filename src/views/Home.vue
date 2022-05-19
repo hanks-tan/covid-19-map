@@ -1,5 +1,6 @@
 <template>
   <el-container>
+    <GhLink></GhLink>
     <el-header class="header" style="height: 50px">
       <div class="title">
         <div class="menu" @click="showMenuHandle">
@@ -42,12 +43,13 @@ import MapView from '@/components/mapView'
 import query from '../map/data/query'
 import moment from 'moment'
 import Menu from '@/components/Menu'
-
+import GhLink from '@/components/GhLink.vue'
 export default {
   name: 'Home',
   components: {
     MapView,
-    Menu
+    Menu,
+    GhLink
   },
   data () {
     return {
@@ -95,6 +97,7 @@ export default {
     background-color: #1b284e;
     align-items: center;
     padding-left: 0;
+    padding-right: 5rem;
     .title{
       justify-self: start;
       font-family: STXinwei;
