@@ -187,8 +187,30 @@ function dataListToPointsFeature (data, xName, yName) {
   return fts
 }
 
+function formatAge (ageStr) {
+  const reg1 = /^\d+(?=月龄$)/
+  const reg2 = /^\d+(?=岁)/
+  if (reg1.test(ageStr)) {
+    return reg1.exec(ageStr)[0]
+  } else if (reg2.test(ageStr)) {
+    return reg2.exec(ageStr)[0]
+  }
+  return ''
+}
+
+function formatRegion (region) {
+  const reg = /^.{2,}(?=区)/
+  if (reg.test(region)) {
+    return reg.exec(region)[0] + '区'
+  } else {
+    return ''
+  }
+}
+
 export default {
   covidDataUtil,
   readGeoJSON,
-  dataListToPointsFeature
+  dataListToPointsFeature,
+  formatAge,
+  formatRegion
 }

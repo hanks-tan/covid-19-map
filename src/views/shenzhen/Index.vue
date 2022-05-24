@@ -2,8 +2,14 @@
   <div class="container">
     <div class="search_wrap">
       <el-input placeholder="请输入日期或者地址" v-model="input" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click="searchHandle"></el-button>
       </el-input>
+      <Info
+        v-if="searchResult.length > 0"
+        :data="searchResult"
+        class="search_result"
+      >
+      </Info>
     </div>
     <div class="layer_wrap">
       <div class="selector_wrap">
@@ -63,13 +69,15 @@ import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import mixin from './mixin'
 import conf from './conf'
+import Info from './Info.vue'
 
 export default {
   components: {
     Map,
     DistributionChart: () => import('./DistributionChart.vue'),
     TrendChart: () => import('./TrendChart.vue'),
-    TimeLine: () => import('comps/timeLine')
+    TimeLine: () => import('comps/timeLine'),
+    Info
   },
   mixins: [mixin],
   data () {
@@ -85,7 +93,8 @@ export default {
       covidDataDate: {
         start: conf.startDate,
         end: conf.endDate
-      }
+      },
+      searchResult: []
     }
   },
   computed: {
@@ -192,6 +201,15 @@ export default {
       this.covidDataDate.start = moment(start).format('YYYY-MM-DD')
       const data = this.filterMapDataByDateRange(start, end, this.szyqData)
       this.showHeatmap(data)
+    },
+    searchHandle () {
+      // this.input = '2022-03-15'
+      this.searchResult = []
+      if (!this.input) {
+        return ''
+      }
+      const data = this.szyqData.filter((item) => item.date === this.input)
+      this.searchResult = data
     }
   }
 }
@@ -221,6 +239,13 @@ export default {
         background-color: #0d1c3bd4;
         border: @border;
       }
+    }
+    .search_result{
+      margin-top: 1rem;
+      background: #302c2c;
+      text-align: left;
+      padding: 1rem;
+      border-radius: 3px;
     }
   }
   .layer_wrap{

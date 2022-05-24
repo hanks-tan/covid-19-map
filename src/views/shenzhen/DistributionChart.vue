@@ -66,7 +66,7 @@ export default {
           label: '按年龄',
           group: [],
           groupMap: mapUtil.covidDataUtil.ageGroup1,
-          formatValue: this.formatAge
+          formatValue: mapUtil.formatAge
         },
         {
           code: 'sex',
@@ -93,7 +93,7 @@ export default {
             { id: 9, label: '坪山新区', value: '' },
             { id: 10, label: '光明新区', value: '' }
           ],
-          formatValue: this.formatRegion
+          formatValue: mapUtil.formatRegion
         }
       ],
       curTabPane: 'age',
@@ -195,24 +195,6 @@ export default {
       })
 
       return groupList
-    },
-    formatAge (ageStr) {
-      const reg1 = /^\d+(?=月龄$)/
-      const reg2 = /^\d+(?=岁)/
-      if (reg1.test(ageStr)) {
-        return reg1.exec(ageStr)[0]
-      } else if (reg2.test(ageStr)) {
-        return reg2.exec(ageStr)[0]
-      }
-      return ''
-    },
-    formatRegion (region) {
-      const reg = /^.{2,}(?=区)/
-      if (reg.test(region)) {
-        return reg.exec(region)[0] + '区'
-      } else {
-        return ''
-      }
     },
     dataRangeChanged () {
     //   const opt = this.chartList.find((item) => item.code === this.curTabPane)

@@ -51,6 +51,7 @@ export default {
   border-radius: 3px;
   .switch-item{
     padding: .2rem 1rem;
+    cursor: pointer;
   }
   .active{
     // border-radius: 3px;
