@@ -1,18 +1,25 @@
 <template>
   <div>
-    <div @click="showDetailsHandle"
-      class="collapse-item__header"
-      :class="{active: showDetail}">
-    <!-- {{date}} 新增 {{count}} -->
-      <i
-        class="el-icon-arrow-right collapse-item__arrow"
-        :class="{active: showDetail}"></i>
-    </div>
-    <Details
-      v-if="showDetail"
-      :data="data">
+    <template
+      v-if="count > 0">
+      <div
+        @click="showDetailsHandle"
+        class="collapse-item__header"
+        :class="{active: showDetail}">
+        {{date}} 新增病例 {{count}} 例
+        <i
+          class="el-icon-arrow-right collapse-item__arrow"
+          :class="{active: showDetail}"></i>
+      </div>
+      <Details
+        v-if="showDetail"
+        :data="data">
 
-    </Details>
+      </Details>
+    </template>
+    <template v-else>
+      <div>暂时数据</div>
+    </template>
   </div>
 </template>
 
@@ -37,7 +44,7 @@ export default {
       return this.data.length
     },
     date () {
-      return this.data[0].date
+      return this.count ? this.data[0].date : ''
     }
   },
   methods: {

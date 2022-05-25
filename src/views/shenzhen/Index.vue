@@ -1,11 +1,17 @@
 <template>
   <div class="container">
     <div class="search_wrap">
-      <el-input placeholder="请输入日期或者地址" v-model="input" class="input-with-select">
+      <el-input
+        v-model="input"
+        @change="searchHandle"
+        @clear="showSearchResult = false"
+        :clearable="true"
+        placeholder="请输入日期或者地址"
+        class="input-with-select">
         <el-button slot="append" icon="el-icon-search" @click="searchHandle"></el-button>
       </el-input>
       <Info
-        v-if="searchResult.length > 0"
+        v-show="showSearchResult"
         :data="searchResult"
         class="search_result"
       >
@@ -94,7 +100,8 @@ export default {
         start: conf.startDate,
         end: conf.endDate
       },
-      searchResult: []
+      searchResult: [],
+      showSearchResult: false
     }
   },
   computed: {
@@ -208,8 +215,15 @@ export default {
       if (!this.input) {
         return ''
       }
-      const data = this.szyqData.filter((item) => item.date === this.input)
+      this.showSearchResult = true
+      const date = this.formatDate(this.input)
+      const data = this.szyqData.filter((item) => item.date === date)
       this.searchResult = data
+    },
+    formatDate (date) {
+      const f = 'YYYY-MM-DD'
+      const d = date.replace('-')
+      return moment(d).format(f)
     }
   }
 }
@@ -242,7 +256,7 @@ export default {
     }
     .search_result{
       margin-top: 1rem;
-      background: #302c2c;
+      background: #314559;
       text-align: left;
       padding: 1rem;
       border-radius: 3px;

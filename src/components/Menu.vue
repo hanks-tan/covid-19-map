@@ -16,11 +16,11 @@ export default {
           name: '主页',
           path: '/'
         },
-        {
-          code: 'data',
-          name: '每日疫情',
-          path: '/data'
-        },
+        // {
+        //   code: 'data',
+        //   name: '每日疫情',
+        //   path: '/data'
+        // },
         {
           code: 'shenzhen2022',
           name: '深圳2022年春新冠疫情热力图',

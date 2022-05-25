@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="title">数据分布占比</div>
     <div v-for="(gp, i) in groupList" :key="i" class="group-item">
       <div class="item-label">{{gp.prop}}</div>
       <div class="line-bar">
@@ -105,10 +106,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.title{
+  font-size: 1em;
+  font-family: fangsong;
+  font-weight: bold;
+}
 .group-item{
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 5fr;
   margin: .5rem 0;
+  font-family: fangsong;
   .item-label{
     text-align: right;
     margin-right: 1rem;
