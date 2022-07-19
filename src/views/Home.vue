@@ -61,6 +61,7 @@ export default {
   },
   mounted () {
     this.init()
+    console.log('%cauthor%ctangxinbo', 'padding:3px .5rem;;background-color:#212529;color:#FFF;border-radius:3px 0px 0px 3px', 'color:#FFF;background-color:#8BC34A;padding:3px 1rem;border-radius:0px 3px 3px 0')
   },
   methods: {
     init () {
