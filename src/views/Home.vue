@@ -66,19 +66,30 @@ export default {
   methods: {
     init () {
       const loading = this.$loading()
+      // 拉取全量数据
       const png = './data/covid_d_20200411.png'
-      this.$api.getCovidDataFromImg()
+      // this.$api.getCovidDataFromImg()
       this.$api.getCovidPngConfig().then((res) => {
         query.covidPngToJson(png, res.data).then((data) => {
           console.log('data', data)
         })
       })
 
-      this.$api.getLatestCovidData().then((res) => {
-        window.cvData = query.parseCSVToMap(res.data)
-        loading.close()
-        this.dataReady = true
+      // 拉取最近的数据
+      const latestPng = './data/latest.png'
+      this.$api.getLatestPngConfig().then((res) => {
+        query.covidPngToJson(latestPng, res.data).then((data) => {
+          console.log('data', data)
+          loading.close()
+          this.dataReady = true
+        })
       })
+
+      // this.$api.getLatestCovidData().then((res) => {
+      //   window.cvData = query.parseCSVToMap(res.data)
+      //   loading.close()
+      //   this.dataReady = true
+      // })
       setTimeout(() => {
         this.$api.getCovidData().then((res) => {
           window.cvData = query.parseCSVToMap(res.data)

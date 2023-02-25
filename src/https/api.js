@@ -1,14 +1,21 @@
 import http from './http'
 
-const apiURL = {
+export const apiURL = {
   // 获取covid全量数据
-  getCovidData: process.env.NODE_ENV === 'production' ? 'http://cdn.data.gogmap.com/Wuhan-2019-nCoV.csv' : '/data/Wuhan-2019-nCoV.csv',
+  getCovidData: process.env.NODE_ENV === 'production' ? 'http://cdn.data.gogmap.com/covid/Wuhan-2019-nCoV.csv' : '/data/Wuhan-2019-nCoV.csv',
   // 最近的数据（2020.4.11）
-  getLatestCovidData: '/data/latest.csv',
+  getLatestCovidData: 'http://cdn.data.gogmap.com/covid/data/latest.csv',
+
+  // 最近数据图对应的配置
+  latestPngConfig: 'http://cdn.data.gogmap.com/covid/latest.json',
+
+  // 最近数据图
+  latestPng: 'http://cdn.data.gogmap.com/covid/latest.png',
+
   // 获取covid全量数据图
-  getCovidImg: 'http://cdn.data.gogmap.com/covid_d_20200411.png',
+  getCovidImg: 'http://cdn.data.gogmap.com/covid/covid_d_20200411.png',
   // 全量数据图对应的配置
-  allDataPngConfig: './data/covid_d_20200411.json',
+  allDataPngConfig: 'http://cdn.data.gogmap.com/covid/covid_d_20200411.json',
   // 检测站
   getStation: './data/station.geojson',
   // 自费检测点
@@ -18,7 +25,7 @@ const apiURL = {
   // 免费核酸检查点
   getFreeCheckPoint: './data/checkPoint.json',
   // 深圳疫情数据
-  getSzyzData: 'http://cdn.data.gogmap.com/all.csv',
+  getSzyzData: 'http://cdn.data.gogmap.com/covid/all.csv',
   // 行政区划数据
   getRegionData: './data/city.json',
   // 中国各省点位数据
@@ -73,6 +80,9 @@ const api = {
   },
   getCovidPngConfig () {
     return http(apiURL.allDataPngConfig)
+  },
+  getLatestPngConfig () {
+    return http(apiURL.latestPngConfig)
   }
 }
 
